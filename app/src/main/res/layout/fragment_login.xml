@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.antsmasher.tikakl.tikalantsmasher.ui.views.LoginFragment"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/login_name"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:hint="@string/login_name_hint"
+        android:text="@string/login_name" />
+
+    <Button
+        android:id="@+id/enter"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/start_smashing_ants"
+        android:onClick="loginCompleted"/>
+
+</LinearLayout>
