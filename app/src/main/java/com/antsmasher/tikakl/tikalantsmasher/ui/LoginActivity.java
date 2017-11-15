@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
-import com.antsmasher.tikakl.tikalantsmasher.R;
+import javax.inject.Inject;
+
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsConstants;
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
 import com.antsmasher.tikakl.tikalantsmasher.ui.presenters.MainPresenter;
 import com.antsmasher.tikakl.tikalantsmasher.ui.views.LoginFragment;
-
-import javax.inject.Inject;
+import com.tikalk.antsmasher.R;
 
 /**
  * A login screen that offers login via email/password.

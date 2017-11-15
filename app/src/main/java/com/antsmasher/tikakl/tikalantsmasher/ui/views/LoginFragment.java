@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.antsmasher.tikakl.tikalantsmasher.R;
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
 import com.antsmasher.tikakl.tikalantsmasher.ui.presenters.MainPresenter;
+import com.tikalk.antsmasher.R;
 
 import javax.inject.Inject;
 
