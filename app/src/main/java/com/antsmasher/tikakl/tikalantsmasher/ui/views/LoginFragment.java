@@ -10,14 +10,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import javax.inject.Inject;
+
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
 import com.antsmasher.tikakl.tikalantsmasher.ui.presenters.MainPresenter;
 import com.tikalk.antsmasher.R;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Activities that contain this fragment must implement the
@@ -109,7 +110,8 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void loginCompleted(){
+    @OnClick(R.id.enter)
+    protected void loginCompleted(){
         signInCompleted ();
     }
 }

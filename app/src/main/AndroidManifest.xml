@@ -27,7 +27,7 @@
         </activity>
 
         <activity
-            android:name=".TeamsActivity"
+            android:name=".teams.TeamsActivity"
             android:label="@string/teams">
 
         </activity>
