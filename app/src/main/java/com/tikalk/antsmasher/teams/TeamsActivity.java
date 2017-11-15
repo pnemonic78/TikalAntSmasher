@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
 
 import static com.tikalk.graphics.ImageUtils.tintImage;
 
-public class TeamsActivity extends AppCompatActivity {
+public class TeamsActivity extends AppCompatActivity implements TeamViewHolder.TeamViewHolderListener {
 
     @BindView(android.R.id.list)
     protected RecyclerView listView;
@@ -37,10 +38,20 @@ public class TeamsActivity extends AppCompatActivity {
         data.add(new Team(10, "Army", tintImage(ant, Color.GREEN)));
         data.add(new Team(20, "Fire", tintImage(ant, Color.RED)));
         data.add(new Team(30, "Black", tintImage(ant, Color.BLACK)));
-        adapter = new TeamAdapter();
+        adapter = new TeamAdapter(this);
         adapter.setData(data);
 
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onTeamClick(Team team) {
+        joinTeam(team);
+    }
+
+    private void joinTeam(Team team) {
+        Toast.makeText(this, "Team joined: " + team.getName(), Toast.LENGTH_SHORT).show();
+        //TODO tell the ViewModel, and it will send REST call.
     }
 }

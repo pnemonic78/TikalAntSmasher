@@ -19,15 +19,17 @@ import com.tikalk.antsmasher.model.Team;
 public class TeamAdapter extends RecyclerView.Adapter<TeamViewHolder> {
 
     private final List<Team> data = new ArrayList<>();
+    private final TeamViewHolder.TeamViewHolderListener listener;
 
-    public TeamAdapter() {
+    public TeamAdapter(TeamViewHolder.TeamViewHolderListener listener) {
+        this.listener = listener;
         setHasStableIds(true);
     }
 
     @Override
     public TeamViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_team, parent, false);
-        return new TeamViewHolder(view);
+        return new TeamViewHolder(view, listener);
     }
 
     @Override
