@@ -7,25 +7,29 @@ import android.graphics.drawable.Drawable;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.annotations.NonNull;
+
 /**
- * @author moshe on 2017/11/15.
+ * Team with players.
  */
 
 public class Team {
 
     private long id;
     private String name;
-    private Drawable icon;
+    private String avatarUri;
+    private Drawable avatar;
     private final List<Player> players = new ArrayList<>();
+    private AntSpecies antSpecies;
 
     public Team(long id, String name) {
         this(id, name, (Drawable) null);
     }
 
-    public Team(long id, String name, Drawable icon) {
+    public Team(long id, String name, Drawable avatar) {
         setId(id);
         setName(name);
-        setIcon(icon);
+        setAvatar(avatar);
     }
 
     public Team(long id, String name, Bitmap icon) {
@@ -48,12 +52,20 @@ public class Team {
         this.name = name;
     }
 
-    public Drawable getIcon() {
-        return icon;
+    public String getAvatarUri() {
+        return avatarUri;
     }
 
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+    public void setAvatarUri(String avatarUri) {
+        this.avatarUri = avatarUri;
+    }
+
+    public Drawable getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Drawable icon) {
+        this.avatar = icon;
     }
 
     public List<Player> getPlayers() {
@@ -65,5 +77,21 @@ public class Team {
         if (players != null) {
             this.players.addAll(players);
         }
+    }
+
+    @NonNull
+    public AntSpecies getAntSpecies() {
+        if (antSpecies == null) {
+            antSpecies = new AntSpecies();
+        }
+        return antSpecies;
+    }
+
+    public void setAntSpecies(AntSpecies antSpecies) {
+        this.antSpecies = antSpecies;
+    }
+
+    public List<Ant> getAnts() {
+        return getAntSpecies().getAnts();
     }
 }
