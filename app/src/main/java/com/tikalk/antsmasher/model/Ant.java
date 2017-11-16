@@ -12,16 +12,16 @@ public class Ant {
     private static final float HEADING_DOWN = 0f;
     private static final double RADIANS_TO_DEGREES = 180.0 / Math.PI;
 
-    private long id;
+    private int id;
     private final RectF location = new RectF();
     private final PointF endLocation = new PointF();
     private float headingDegrees = HEADING_DOWN;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

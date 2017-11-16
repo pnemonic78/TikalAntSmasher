@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.model;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,11 @@ public class Team {
         this.antSpecies = antSpecies;
     }
 
-    public List<Ant> getAnts() {
+    public SparseArray<Ant> getAnts() {
         return getAntSpecies().getAnts();
+    }
+
+    public List<Ant> getAllAnts() {
+        return getAntSpecies().getAllAnts();
     }
 }

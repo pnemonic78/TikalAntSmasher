@@ -1,8 +1,10 @@
 package com.tikalk.antsmasher.model;
 
 import android.graphics.drawable.Drawable;
+import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ public class AntSpecies {
     private String name;
     private String imageUri;
     private Drawable image;
-    private final List<Ant> ants = new ArrayList<>();
+    private final SparseArray<Ant> ants = new SparseArray<>();
 
     public long getId() {
         return id;
@@ -49,7 +51,30 @@ public class AntSpecies {
         this.image = image;
     }
 
-    public List<Ant> getAnts() {
+    public SparseArray<Ant> getAnts() {
         return ants;
+    }
+
+    public List<Ant> getAllAnts() {
+        final int size = ants.size();
+        List<Ant> all = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            all.add(ants.valueAt(i));
+        }
+        return all;
+    }
+
+    public void setAnts(Collection<Ant> ants) {
+        this.ants.clear();
+
+        if (ants != null) {
+            for (Ant ant : ants) {
+                addAnt(ant);
+            }
+        }
+    }
+
+    public void addAnt(Ant ant) {
+        this.ants.append(ant.getId(), ant);
     }
 }
