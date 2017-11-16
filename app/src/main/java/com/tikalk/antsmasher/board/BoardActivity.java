@@ -2,6 +2,8 @@ package com.tikalk.antsmasher.board;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -11,6 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BaseTarget;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.ViewTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Game;
 
@@ -45,6 +54,17 @@ public class BoardActivity extends AppCompatActivity implements
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+        // Set the background dynamically to have it resized.
+        Glide.with(this)
+                .asDrawable()
+                .load("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.board)
+                .into(new ViewTarget<BoardView, Drawable>(boardView) {
+                    @Override
+                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                        getView().setBackground(resource);
+                    }
+                });
 
         presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
         presenter.setView(this);
