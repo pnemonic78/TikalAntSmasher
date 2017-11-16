@@ -1,6 +1,6 @@
-package com.antsmasher.tikakl.tikalantsmasher.ui.views;
+package com.tikalk.antsmasher;
 
-import com.antsmasher.tikakl.tikalantsmasher.ui.base.MvpView;
+import com.tikalk.antsmasher.base.MvpView;
 
 /**
  * Created by tamirnoach on 23/10/2017.

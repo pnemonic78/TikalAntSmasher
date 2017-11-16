@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.ui.base;
+package com.tikalk.antsmasher.base;
 
 /**
  * Created by tamirnoach on 23/10/2017.

@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.ui.views;
+package com.tikalk.antsmasher.login_screen;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -10,15 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import javax.inject.Inject;
-
-import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
-import com.antsmasher.tikakl.tikalantsmasher.ui.presenters.MainPresenter;
+import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.SigninMvpView;
 import com.tikalk.antsmasher.R;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Activities that contain this fragment must implement the
@@ -33,7 +32,7 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
     private OnFragmentInteractionListener mListener;
 
     @Inject
-    MainPresenter mMainPresenter;
+    SplashPresenter mSplashPresenter;
 
     @Inject
     PrefsHelper mPrefsHelper;
@@ -110,8 +109,7 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
         void onFragmentInteraction(Uri uri);
     }
 
-    @OnClick(R.id.enter)
-    protected void loginCompleted(){
+    public void loginCompleted(){
         signInCompleted ();
     }
 }
