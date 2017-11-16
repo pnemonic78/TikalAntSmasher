@@ -25,11 +25,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".teams.TeamsActivity"
-            android:label="@string/teams">
-
+            android:label="@string/teams"></activity>
+        <activity
+            android:name=".board.BoardActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_board"
+            android:parentActivityName=".teams.TeamsActivity"
+            android:theme="@style/FullscreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tikalk.antsmasher.teams.TeamsActivity"/>
         </activity>
     </application>
 

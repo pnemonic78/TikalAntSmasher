@@ -2,16 +2,17 @@ package com.tikalk.antsmasher.teams;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.model.Team;
 
 import butterknife.BindView;
@@ -54,8 +55,7 @@ public class TeamsActivity extends AppCompatActivity implements
     }
 
     public void onTeamJoined(Team team) {
-        Toast.makeText(this, "Team joined: " + team.getName(), Toast.LENGTH_SHORT).show();
-        //TODO startActivity(new Intent(this, GameActivity.class));
+        startActivity(new Intent(this, BoardActivity.class));
         finish();
     }
 }

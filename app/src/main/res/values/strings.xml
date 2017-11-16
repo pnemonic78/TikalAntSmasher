@@ -23,4 +23,9 @@
         <item quantity="one">%d player</item>
         <item quantity="other">%d players</item>
     </plurals>
+
+    <!-- Board -->
+    <string name="title_activity_board">Ant Smasher</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
