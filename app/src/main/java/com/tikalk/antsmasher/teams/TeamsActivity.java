@@ -56,6 +56,6 @@ public class TeamsActivity extends AppCompatActivity implements
 
     public void onTeamJoined(Team team) {
         startActivity(new Intent(this, BoardActivity.class));
-        finish();
+        //finish();
     }
 }
