@@ -18,7 +18,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.antsmasher.tikakl.tikalantsmasher.R;
+import com.tikalk.antsmasher.R;
+
 
 /**
  * Created by motibartov on 15/11/2017.

@@ -1,19 +1,15 @@
 package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.antsmasher.tikakl.tikalantsmasher.MyApplication;
-import com.antsmasher.tikakl.tikalantsmasher.R;
+import com.tikalk.antsmasher.MyApplication;
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsConstants;
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.R;
 
 import javax.inject.Inject;
 
@@ -35,10 +31,6 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_login);
         Log.i(TAG, "onCreate: ");
-
-        SplashScreenComponent component = DaggerSplashScreenComponent.builder().applicationComponent(MyApplication.get(this).getComponent()).build();
-        component.injectSplashScreen(this);
-
 
 
         if(mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null){

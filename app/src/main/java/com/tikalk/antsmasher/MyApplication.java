@@ -20,10 +20,6 @@ public class MyApplication extends Application {
         super.onCreate();
     }
 
-    public static MyApplication get(Context context) {
-        return (MyApplication) context.getApplicationContext();
-    }
-
     public ApplicationComponent getComponent() {
         if (mApplicationComponent == null) {
             mApplicationComponent = DaggerApplicationComponent.builder()
