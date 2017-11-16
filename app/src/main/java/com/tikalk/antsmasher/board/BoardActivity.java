@@ -1,22 +1,28 @@
 package com.tikalk.antsmasher.board;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.model.Game;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * Game board activity.
  */
-public class BoardActivity extends AppCompatActivity {
+public class BoardActivity extends AppCompatActivity implements
+        BoardViewModel.View,
+        Observer<Game> {
 
     private BoardView boardView;
+    private BoardViewModel presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,10 @@ public class BoardActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+        presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
+        presenter.setView(this);
+        presenter.getGame().observe(this, this);
     }
 
     @Override
@@ -50,5 +60,13 @@ public class BoardActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onChanged(@Nullable Game game) {
+        if (game != null) {
+            //TODO update the board.
+            Toast.makeText(this, "Game started!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

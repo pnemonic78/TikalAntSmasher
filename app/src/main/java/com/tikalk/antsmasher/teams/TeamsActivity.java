@@ -26,7 +26,7 @@ public class TeamsActivity extends AppCompatActivity implements
     @BindView(android.R.id.list)
     protected RecyclerView listView;
 
-    private TeamViewModel model;
+    private TeamViewModel presenter;
     private TeamAdapter adapter;
 
     @Override
@@ -39,9 +39,9 @@ public class TeamsActivity extends AppCompatActivity implements
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(adapter);
 
-        model = ViewModelProviders.of(this).get(TeamViewModel.class);
-        model.setView(this);
-        model.getTeams(this).observe(this, this);
+        presenter = ViewModelProviders.of(this).get(TeamViewModel.class);
+        presenter.setView(this);
+        presenter.getTeams(this).observe(this, this);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class TeamsActivity extends AppCompatActivity implements
 
     @Override
     public void onTeamClick(Team team) {
-        model.teamClicked(team);
+        presenter.teamClicked(team);
     }
 
     public void onTeamJoined(Team team) {
