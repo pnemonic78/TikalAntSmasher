@@ -9,24 +9,26 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 
-    ApplicationComponent mApplicationComponent;
+    static ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mApplicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule (this))
+                .build();
     }
 
     public ApplicationComponent getComponent() {
         if (mApplicationComponent == null) {
-            mApplicationComponent = DaggerApplicationComponent.builder()
-                    .applicationModule(new ApplicationModule (this))
-                    .build();
+
         }
         return mApplicationComponent;
     }
 
     // Needed to replace the component with a test specific one
-    public void setComponent(ApplicationComponent applicationComponent) {
-        mApplicationComponent = applicationComponent;
+
+    public static ApplicationComponent getmApplicationComponent(){
+        return mApplicationComponent;
     }
 }

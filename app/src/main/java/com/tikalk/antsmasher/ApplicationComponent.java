@@ -10,7 +10,6 @@ import dagger.Component;
 public interface ApplicationComponent {
     //    Context context();
 
-    void injectViewModel(LoginActivity loginActivity);
-
+    void injectLoginScreen(LoginActivity loginActivity);
 
 }

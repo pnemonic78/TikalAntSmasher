@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.tikalk.antsmasher.DaggerApplicationComponent;
+import com.tikalk.antsmasher.MyApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsConstants;
 
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         setContentView (R.layout.activity_login);
         Log.i(TAG, "onCreate: ");
 
+        MyApplication.getmApplicationComponent().injectLoginScreen(this);
 
         if(mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null){
 

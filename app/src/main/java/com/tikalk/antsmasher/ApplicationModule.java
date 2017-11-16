@@ -16,27 +16,21 @@ import dagger.Provides;
  */
 @Module
 public class ApplicationModule {
-    protected final Application mApplication;
-    protected final SharedPreferences mPrefsHelper;
+    protected final Context mContext;
 
-    public ApplicationModule(Application application) {
-        mApplication = application;
-        mPrefsHelper = application.getSharedPreferences (PrefsConstants.SHARED_PREFS_FILE,Context.MODE_PRIVATE);
+    public ApplicationModule(Context context) {
+        mContext = context;
     }
 
-    @Provides
-    Application provideApplication() {
-        return mApplication;
-    }
 
     @Provides
     Context provideContext() {
-        return mApplication;
+        return mContext;
     }
 
     @Provides
-    SharedPreferences providePrefsHelper() {
-        return mApplication.getSharedPreferences (PrefsConstants.SHARED_PREFS_FILE,Context.MODE_PRIVATE);
+    PrefsHelper providePrefsHelper() {
+        return new PrefsHelper(mContext);
     }
 
 }
