@@ -17,6 +17,13 @@ public class Ant {
     private final PointF endLocation = new PointF();
     private float headingDegrees = HEADING_DOWN;
 
+    public Ant() {
+    }
+
+    public Ant(int id) {
+        setId(id);
+    }
+
     public int getId() {
         return id;
     }

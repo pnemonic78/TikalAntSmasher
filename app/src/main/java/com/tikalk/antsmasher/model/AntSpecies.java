@@ -1,6 +1,7 @@
 package com.tikalk.antsmasher.model;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -15,9 +16,16 @@ public class AntSpecies {
 
     private long id;
     private String name;
-    private String imageUri;
-    private Drawable image;
+    @ColorInt
+    private int tint = Color.BLACK;
     private final SparseArray<Ant> ants = new SparseArray<>();
+
+    public AntSpecies() {
+    }
+
+    public AntSpecies(long id) {
+        setId(id);
+    }
 
     public long getId() {
         return id;
@@ -35,20 +43,13 @@ public class AntSpecies {
         this.name = name;
     }
 
-    public String getImageUri() {
-        return imageUri;
+    @ColorInt
+    public int getTint() {
+        return tint;
     }
 
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
-    }
-
-    public Drawable getImage() {
-        return image;
-    }
-
-    public void setImage(Drawable image) {
-        this.image = image;
+    public void setTint(@ColorInt int tint) {
+        this.tint = tint;
     }
 
     public SparseArray<Ant> getAnts() {
