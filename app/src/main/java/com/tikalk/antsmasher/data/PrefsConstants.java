@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.data;
+package com.tikalk.antsmasher.data;
 
 /**
  * Created by tamirnoach on 24/10/2017.
