@@ -6,13 +6,13 @@ package com.tikalk.antsmasher.model;
 
 public class AntLocation {
 
+    public final String id;
     public final float x;
     public final float y;
-    public final String id;
 
-    public AntLocation(float x, float y, String id) {
+    public AntLocation(String id, float x, float y) {
+        this.id = id;
         this.x = x;
         this.y = y;
-        this.id = id;
     }
 }
