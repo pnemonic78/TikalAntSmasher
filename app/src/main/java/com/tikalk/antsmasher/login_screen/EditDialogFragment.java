@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
+package com.tikalk.antsmasher.login_screen;
 
 import android.app.Dialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
+package com.tikalk.antsmasher.login_screen;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

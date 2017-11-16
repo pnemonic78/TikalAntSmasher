@@ -1,7 +1,7 @@
-package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
+package com.tikalk.antsmasher.login_screen;
 
-import com.antsmasher.tikakl.tikalantsmasher.ui.base.BasePresenter;
-import com.antsmasher.tikakl.tikalantsmasher.ui.views.SigninMvpView;
+import com.tikalk.antsmasher.base.BasePresenter;
+import com.tikalk.antsmasher.SigninMvpView;
 
 import javax.inject.Inject;
 

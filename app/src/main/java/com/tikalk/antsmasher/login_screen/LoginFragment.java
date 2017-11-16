@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
+package com.tikalk.antsmasher.login_screen;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
-import com.antsmasher.tikakl.tikalantsmasher.ui.views.SigninMvpView;
+import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.SigninMvpView;
 import com.tikalk.antsmasher.R;
 
 import javax.inject.Inject;

@@ -6,7 +6,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
-    tools:context="com.antsmasher.tikakl.tikalantsmasher.splash_signin.LoginActivity">
+    tools:context=".login_screen.LoginActivity">
 
 
     <ImageView

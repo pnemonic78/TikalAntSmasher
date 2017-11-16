@@ -1,11 +1,7 @@
-package com.antsmasher.tikakl.tikalantsmasher;
+package com.tikalk.antsmasher;
 
 import android.app.Application;
-import android.content.Context;
 
-import com.antsmasher.tikakl.tikalantsmasher.injection.component.ApplicationComponent;
-import com.antsmasher.tikakl.tikalantsmasher.injection.component.DaggerApplicationComponent;
-import com.antsmasher.tikakl.tikalantsmasher.injection.module.ApplicationModule;
 
 /**
  * Created by tamirnoach on 24/10/2017.

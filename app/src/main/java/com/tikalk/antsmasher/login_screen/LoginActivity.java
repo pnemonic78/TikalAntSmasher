@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
+package com.tikalk.antsmasher.login_screen;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -6,10 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.tikalk.antsmasher.MyApplication;
-import com.antsmasher.tikakl.tikalantsmasher.data.PrefsConstants;
-import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.data.PrefsConstants;
 
 import javax.inject.Inject;
 
@@ -24,7 +22,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     SplashPresenter mSplashPresenter;
 
     @Inject
-    PrefsHelper mPrefsHelper;
+    com.tikalk.antsmasher.data.PrefsHelper mPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

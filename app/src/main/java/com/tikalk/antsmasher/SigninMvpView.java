@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.ui.views;
+package com.tikalk.antsmasher;
 
 import com.tikalk.antsmasher.base.MvpView;
 

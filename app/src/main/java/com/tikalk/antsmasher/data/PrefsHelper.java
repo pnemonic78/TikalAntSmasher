@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.data;
+package com.tikalk.antsmasher.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
