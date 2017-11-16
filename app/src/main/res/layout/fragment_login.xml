@@ -2,25 +2,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.antsmasher.tikakl.tikalantsmasher.ui.views.LoginFragment"
-    android:orientation="vertical">
+    tools:context="com.antsmasher.tikakl.tikalantsmasher.splash_signin.LoginFragment"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background">
 
     <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_launcher"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/small_padding"/>
+
+        <TextView
+            android:id="@+id/dialogHeader"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="@dimen/small_padding"
+            android:gravity="center_vertical"
+            android:text="Login"
+            android:drawablePadding="@dimen/large_padding"
+            android:background="@color/colorPrimary"
+            />
+    </LinearLayout>
+
+
     <EditText
         android:id="@+id/login_name"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/tiny_padding"
         android:gravity="center_vertical"
-        android:hint="@string/login_name_hint"
-        android:text="@string/login_name" />
+        android:hint="@string/login_name_hint" />
 
     <Button
         android:id="@+id/enter"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/start_smashing_ants"
-        android:onClick="loginCompleted"/>
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right"
+        android:layout_margin="@dimen/small_padding"
+        android:text="OK"
+        android:theme="@style/PrimaryFlatButton" />
 
 </LinearLayout>

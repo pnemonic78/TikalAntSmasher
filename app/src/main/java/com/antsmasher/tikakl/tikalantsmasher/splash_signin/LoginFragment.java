@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.ui.views;
+package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.antsmasher.tikakl.tikalantsmasher.R;
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
-import com.antsmasher.tikakl.tikalantsmasher.ui.presenters.MainPresenter;
+import com.antsmasher.tikakl.tikalantsmasher.ui.views.SigninMvpView;
 
 import javax.inject.Inject;
 
@@ -32,7 +32,7 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
     private OnFragmentInteractionListener mListener;
 
     @Inject
-    MainPresenter mMainPresenter;
+    SplashPresenter mSplashPresenter;
 
     @Inject
     PrefsHelper mPrefsHelper;

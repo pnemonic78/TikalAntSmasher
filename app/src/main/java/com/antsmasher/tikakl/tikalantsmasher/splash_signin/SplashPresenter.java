@@ -1,4 +1,4 @@
-package com.antsmasher.tikakl.tikalantsmasher.ui.presenters;
+package com.antsmasher.tikakl.tikalantsmasher.splash_signin;
 
 import android.support.annotation.NonNull;
 
@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by tamirnoach on 23/10/2017.
  */
 
-public class MainPresenter extends BasePresenter<SigninMvpView> {
+public class SplashPresenter extends BasePresenter<SigninMvpView> {
 
     private Disposable mDisposable;
 
@@ -27,7 +27,7 @@ public class MainPresenter extends BasePresenter<SigninMvpView> {
     }
 
     @Inject
-    public MainPresenter() {
+    public SplashPresenter() {
     }
 
     @Override

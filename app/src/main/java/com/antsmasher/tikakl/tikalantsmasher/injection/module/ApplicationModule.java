@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsConstants;
 import com.antsmasher.tikakl.tikalantsmasher.data.PrefsHelper;
+import com.antsmasher.tikakl.tikalantsmasher.injection.component.ApplicationScope;
 
 
 import javax.inject.Singleton;
@@ -27,16 +28,19 @@ public class ApplicationModule {
     }
 
     @Provides
+    @ApplicationScope
     Application provideApplication() {
         return mApplication;
     }
 
     @Provides
+    @ApplicationScope
     Context provideContext() {
         return mApplication;
     }
 
-    @Provides @Singleton
+    @Provides
+    @ApplicationScope
     SharedPreferences providePrefsHelper() {
         return mApplication.getSharedPreferences (PrefsConstants.SHARED_PREFS_FILE,Context.MODE_PRIVATE);
     }
