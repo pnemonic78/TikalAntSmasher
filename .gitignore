@@ -5,5 +5,10 @@
 /.idea/libraries
 .DS_Store
 /build
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
+/gradlew
+/gradlew.bat
 /captures
 .externalNativeBuild
+app/src/main/java/com/antsmasher/tikakl/tikalantsmasher/ui/presenters/
