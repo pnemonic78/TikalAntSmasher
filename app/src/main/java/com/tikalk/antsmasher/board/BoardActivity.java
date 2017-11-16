@@ -16,7 +16,7 @@ import com.tikalk.antsmasher.R;
  */
 public class BoardActivity extends AppCompatActivity {
 
-    private ImageView boardView;
+    private BoardView boardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

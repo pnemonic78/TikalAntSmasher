@@ -33,6 +33,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_board"
             android:parentActivityName=".teams.TeamsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
