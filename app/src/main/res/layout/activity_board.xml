@@ -4,14 +4,12 @@
     android:layout_height="match_parent"
     tools:context="com.tikalk.antsmasher.board.BoardActivity">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
     <com.tikalk.antsmasher.board.BoardView
         android:id="@+id/board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="@drawable/board"
-        android:keepScreenOn="true"/>
+        android:background="@color/board"
+        android:keepScreenOn="true"
+        tools:background="@drawable/board"/>
 
 </FrameLayout>

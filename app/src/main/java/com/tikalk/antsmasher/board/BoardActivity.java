@@ -56,17 +56,6 @@ public class BoardActivity extends AppCompatActivity implements
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         boardView.setAntListener(this);
 
-        //FIXME move to BoardView onMeasure.
-        Glide.with(this)
-                .asDrawable()
-                .load("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.board)
-                .into(new ViewTarget<BoardView, Drawable>(boardView) {
-                    @Override
-                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                        getView().setBackground(resource);
-                    }
-                });
-
         presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
         presenter.setView(this);
         presenter.getGame().observe(this, this);

@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -29,6 +30,8 @@ public class BoardView extends View {
         void onAntTouch(@Nullable Integer antId);
     }
 
+    int bgWidth = 0;
+    int bgHeight = 0;
     int antWidth;
     int antHeight;
     int antDeadWidth;
@@ -178,6 +181,26 @@ public class BoardView extends View {
             rect.alive = false;
             rect.offset((antWidth - antDeadWidth) / 2, (antHeight - antDeadHeight) / 2);
             postInvalidate();
+        }
+    }
+
+    @Override
+    protected void onSizeChanged(final int w, final int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        if ((w != oldw) && (h != oldh)) {
+            final Resources res = getResources();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            if ((bgWidth == 0) || (bgHeight == 0)) {
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeResource(res, R.drawable.board, options);
+                bgWidth = options.outWidth;
+                bgHeight = options.outHeight;
+                options.inJustDecodeBounds = false;
+            }
+            options.inSampleSize = Math.max(1, Math.min(bgWidth / w, bgHeight / h));
+            Bitmap bg = BitmapFactory.decodeResource(res, R.drawable.board, options);
+            setBackground(new BitmapDrawable(res, bg));
         }
     }
 }
