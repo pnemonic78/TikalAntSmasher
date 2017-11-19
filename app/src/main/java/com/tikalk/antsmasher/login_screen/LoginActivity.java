@@ -1,5 +1,6 @@
 package com.tikalk.antsmasher.login_screen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import com.tikalk.antsmasher.DaggerApplicationComponent;
 import com.tikalk.antsmasher.MyApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsConstants;
+import com.tikalk.antsmasher.teams.TeamsActivity;
 
 import javax.inject.Inject;
 
@@ -75,6 +77,10 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     }
 
     private void doAfterLogin() {
+
+        Intent intent = new Intent(this, TeamsActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 }
