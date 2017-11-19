@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Color;
+import android.graphics.PointF;
 
 import java.util.List;
 import java.util.Random;
@@ -20,11 +21,24 @@ import com.tikalk.antsmasher.model.Team;
 public class BoardViewModel extends ViewModel {
 
     public interface View {
-        void moveAntBy(Ant ant, float dxPercent, float dyPercent);
+        /**
+         * Move the ant to another location.
+         *
+         * @param ant      the ant to move.
+         * @param xPercent the horizontal coordinate percentage.
+         * @param yPercent the vertical coordinate percentage.
+         */
+        void moveAntTo(Ant ant, float xPercent, float yPercent);
 
+        /**
+         * Repaint the board.
+         */
         void paint();
 
-        void stopGame();
+        /**
+         * Notification that the game has finished.
+         */
+        void onGameFinished();
     }
 
     private View view;
@@ -87,13 +101,14 @@ public class BoardViewModel extends ViewModel {
     }
 
     private static void populateSpecies(AntSpecies species) {
-        final int size = 10 + random.nextInt(10);
+        final int size = 5 + random.nextInt(5);
         final int antIdBase = species.getId() * 1000;
         Ant ant;
         for (int i = 0; i < size; i++) {
             ant = new Ant(antIdBase + i);
             ant.setSpecies(species);
-            ant.setLocation(i / 10f, 0f);
+            ant.setLocation(random.nextFloat(), random.nextFloat());
+            ant.setLocation(i / (float) size, species.getId() / 10f);//±!@
             species.addAnt(ant);
         }
     }
@@ -103,27 +118,38 @@ public class BoardViewModel extends ViewModel {
 
             @Override
             public void run() {
+                view.paint();
+
                 final List<Ant> ants = game.getAllAnts();
                 final int size = ants.size();
                 boolean visible;
                 Ant ant;
+                float dx;
+                float dy;
+                float x;
+                float y;
+                PointF location;
+
                 do {
+                    try {
+                        sleep(1L);
+                    } catch (InterruptedException e) {
+                    }
                     visible = false;
                     for (int i = 0; i < size; i++) {
-                        float dx = (random.nextBoolean() ? +1f : -1f) * random.nextFloat() / 100f;
-                        float dy = random.nextFloat() / 100f;
                         ant = ants.get(i);
-                        ant.moveBy(dx, dy);
-                        view.moveAntBy(ant, dx, dy);
+                        dx = (random.nextBoolean() ? +1f : -1f) * random.nextFloat() * 0.001f;
+                        dy = random.nextFloat() * 0.001f;
+                        location = ant.getLocation();
+                        x = location.x + dx;
+                        y = location.y + dy;
+                        ant.setLocation(x, y);
+                        view.moveAntTo(ant, x, y);
                         visible |= ant.isVisible();
                     }
                     view.paint();
-                    try {
-                        sleep(50L);
-                    } catch (InterruptedException e) {
-                    }
                 } while (visible && isAlive() && !isInterrupted());
-                view.stopGame();
+                view.onGameFinished();
             }
         };
         thread.start();

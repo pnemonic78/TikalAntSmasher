@@ -6,10 +6,10 @@ package com.tikalk.antsmasher.model;
 
 public class AntSmash {
 
-    public final String id;
+    public final int id;
     public final long timestamp;
 
-    public AntSmash(String id, long timestamp) {
+    public AntSmash(int id, long timestamp) {
         this.id = id;
         this.timestamp = timestamp;
     }

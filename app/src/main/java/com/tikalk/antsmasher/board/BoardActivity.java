@@ -97,8 +97,8 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void moveAntBy(Ant ant, float dxPercent, float dyPercent) {
-        boardView.moveAntBy(ant, dxPercent, dyPercent);
+    public void moveAntTo(Ant ant, float xPercent, float yPercent) {
+        boardView.moveTo(ant, xPercent, yPercent);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void stopGame() {
+    public void onGameFinished() {
         runOnUiThread(() -> {
             Toast.makeText(BoardActivity.this, "Game finished", Toast.LENGTH_SHORT).show();
             finish();

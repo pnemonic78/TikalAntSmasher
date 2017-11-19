@@ -76,12 +76,17 @@ public class BoardView extends View {
         final int size = ants.size();
         AntRect ant;
         Bitmap bitmap;
+        float angle;
+        float px, py;
         for (int i = 0; i < size; i++) {
             ant = ants.valueAt(i);
             bitmap = bitmaps.get(ant.speciesId);
-            canvas.rotate(ant.angle);
+            angle = ant.angle;
+            px = ant.left;
+            py = ant.top;
+            canvas.rotate(angle, px, py);
             canvas.drawBitmap(bitmap, ant.left, ant.top, null);
-            canvas.rotate(-ant.angle);
+            canvas.rotate(-angle, px, py);
         }
     }
 
@@ -117,10 +122,10 @@ public class BoardView extends View {
         }
     }
 
-    public void moveAntBy(Ant ant, float dxPercent, float dyPercent) {
+    public void moveTo(Ant ant, float dxPercent, float dyPercent) {
         AntRect rect = ants.get(ant.getId());
         if (rect != null) {
-            rect.offset(dxPercent * getWidth(), dyPercent * getHeight());
+            rect.set(dxPercent * getWidth(), dyPercent * getHeight());
         }
     }
 }
