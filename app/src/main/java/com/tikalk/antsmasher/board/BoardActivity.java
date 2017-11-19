@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
@@ -83,7 +84,7 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onChanged(@Nullable Game game) {
         if (game != null) {
-            boardView.stop();
+            boardView.clear();
             AntSpecies species;
             for (Team team : game.getTeams()) {
                 species = team.getAntSpecies();
@@ -92,7 +93,24 @@ public class BoardActivity extends AppCompatActivity implements
                     boardView.addAnt(ant);
                 }
             }
-            boardView.start();
         }
+    }
+
+    @Override
+    public void moveAntBy(Ant ant, float dxPercent, float dyPercent) {
+        boardView.moveAntBy(ant, dxPercent, dyPercent);
+    }
+
+    @Override
+    public void paint() {
+        boardView.postInvalidate();
+    }
+
+    @Override
+    public void stopGame() {
+        runOnUiThread(() -> {
+            Toast.makeText(BoardActivity.this, "Game finished", Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 }

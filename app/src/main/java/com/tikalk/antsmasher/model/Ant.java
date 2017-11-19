@@ -93,4 +93,12 @@ public class Ant {
     public void setSpecies(AntSpecies species) {
         this.species = species;
     }
+
+    public boolean isVisible() {
+        return (location.x >= 0f) && (location.x < 1f) && (location.y >= 0f) && (location.y < 1f);
+    }
+
+    public void moveBy(float dx, float dy) {
+        location.offset(dx, dy);
+    }
 }

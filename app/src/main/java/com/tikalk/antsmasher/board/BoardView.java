@@ -14,8 +14,6 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
-import java.util.Random;
-
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
@@ -30,7 +28,6 @@ public class BoardView extends View {
 
     private SparseArray<Bitmap> bitmaps = new SparseArray<>();
     private SparseArray<AntRect> ants = new SparseArray<>();
-    private Thread thread;
     private final Paint paintLine = new Paint();
 
     public BoardView(Context context) {
@@ -50,46 +47,7 @@ public class BoardView extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void start() {
-        thread = new Thread() {
-
-            private final Random random = new Random();
-
-            @Override
-            public void run() {
-                final float width = getWidth();
-                final float height = getHeight();
-                final int size = ants.size();
-                boolean visible;
-                AntRect ant;
-                do {
-                    visible = false;
-                    for (int i = 0; i < size; i++) {
-                        float dx = (random.nextBoolean() ? +1f : -1f) * random.nextFloat() * 10f;
-                        float dy = random.nextFloat() * 10f;
-                        ant = ants.valueAt(i);
-                        ant.offset(dx, dy);
-                        visible |= ant.isVisible(width, height);
-                    }
-                    postInvalidate();
-                    try {
-                        sleep(50L);
-                    } catch (InterruptedException e) {
-                    }
-                } while (visible && isAlive() && !isInterrupted());
-            }
-        };
-        thread.start();
-    }
-
-    public void stop() {
-        if (thread != null) {
-            thread.interrupt();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-            }
-        }
+    public void clear() {
         ants.clear();
         bitmaps.clear();
     }
@@ -156,6 +114,13 @@ public class BoardView extends View {
             antNormal = Bitmap.createScaledBitmap(antNormal, antWidth, antHeight, false);
             bitmap = tintImage(antNormal, species.getTint());
             bitmaps.put(speciesId, bitmap);
+        }
+    }
+
+    public void moveAntBy(Ant ant, float dxPercent, float dyPercent) {
+        AntRect rect = ants.get(ant.getId());
+        if (rect != null) {
+            rect.offset(dxPercent * getWidth(), dyPercent * getHeight());
         }
     }
 }

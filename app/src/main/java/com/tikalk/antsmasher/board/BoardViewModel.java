@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Color;
 
+import java.util.List;
 import java.util.Random;
 
 import com.tikalk.antsmasher.model.Ant;
@@ -19,11 +20,17 @@ import com.tikalk.antsmasher.model.Team;
 public class BoardViewModel extends ViewModel {
 
     public interface View {
+        void moveAntBy(Ant ant, float dxPercent, float dyPercent);
+
+        void paint();
+
+        void stopGame();
     }
 
     private View view;
     private MutableLiveData<Game> game;
     private Random random;
+    private Thread thread;
 
     public void setView(View view) {
         this.view = view;
@@ -43,6 +50,7 @@ public class BoardViewModel extends ViewModel {
         populateGame(data);//TODO delete me!
 
         game.postValue(data);
+        start(data);
     }
 
     private void populateGame(Game game) {
@@ -90,6 +98,50 @@ public class BoardViewModel extends ViewModel {
             ant.setSpecies(species);
             ant.setLocation(i / 10f, species.getId() / 10f);
             species.addAnt(ant);
+        }
+    }
+
+    public void start(final Game game) {
+        thread = new Thread() {
+
+            @Override
+            public void run() {
+                if (random == null) {
+                    random = new Random();
+                }
+                final List<Ant> ants = game.getAllAnts();
+                final int size = ants.size();
+                boolean visible;
+                Ant ant;
+                do {
+                    visible = false;
+                    for (int i = 0; i < size; i++) {
+                        float dx = (random.nextBoolean() ? +1f : -1f) * random.nextFloat() / 100f;
+                        float dy = random.nextFloat() / 100f;
+                        ant = ants.get(i);
+                        ant.moveBy(dx, dy);
+                        view.moveAntBy(ant, dx, dy);
+                        visible |= ant.isVisible();
+                    }
+                    view.paint();
+                    try {
+                        sleep(50L);
+                    } catch (InterruptedException e) {
+                    }
+                } while (visible && isAlive() && !isInterrupted());
+                view.stopGame();
+            }
+        };
+        thread.start();
+    }
+
+    public void stop() {
+        if (thread != null) {
+            thread.interrupt();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+            }
         }
     }
 }
