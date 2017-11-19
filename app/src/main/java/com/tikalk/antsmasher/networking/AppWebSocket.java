@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.tikalk.antsmasher.model.SocketMessage;
 import com.tikalk.antsmasher.model.SocketMessageSerializer;
 
@@ -90,7 +91,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
             mSocket = null;
         }
 
-        if(pingDisposable != null){
+        if (pingDisposable != null) {
             pingDisposable.dispose();
             pingDisposable = null;
             Log.i(TAG, "closeConnection: ping stopped for " + socketBaseUrl);
@@ -106,7 +107,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
                         (l) -> {
 //                            Log.i(TAG, "startTimer: onNext " + l);
 //                            observableRoadUsersList.subscribe(roadUserObserver);
-                            if(socketOpened && weakContext.get() != null){
+                            if (socketOpened && weakContext.get() != null) {
                                 webSocket.send("[\"{\\\"type\\\":\\\"ping\\\"}\"]");
                             }
                             Log.i(TAG, "ping socket: " + socketBaseUrl);

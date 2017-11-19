@@ -39,12 +39,9 @@ public class EditDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        eventListener = (EditDialogEventListener)getActivity();
+        eventListener = (EditDialogEventListener) getActivity();
         return buildDialog(getActivity());
     }
-
-
 
 
     public AlertDialog buildDialog(Context context) {
@@ -123,9 +120,7 @@ public class EditDialogFragment extends DialogFragment {
         return alert.create();
     }
 
-
-
-    public interface EditDialogEventListener{
+    public interface EditDialogEventListener {
         void onEditDone(String comment);
     }
 

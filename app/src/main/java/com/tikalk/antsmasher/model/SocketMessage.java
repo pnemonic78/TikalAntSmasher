@@ -15,7 +15,7 @@ public class SocketMessage {
     @SerializedName("address")
     public String address;
 
-    public SocketMessage(String type, String address){
+    public SocketMessage(String type, String address) {
         this.type = type;
         this.address = address;
     }
@@ -28,7 +28,7 @@ public class SocketMessage {
                 '}';
     }
 
-    public String toSockJs(){
+    public String toSockJs() {
         return "[\"{\\\"type\\\":\\\"" + type + "\\\",\\\"address\\\":\\\"" + address + "\\\"";
     }
 }

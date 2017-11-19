@@ -1,9 +1,7 @@
 package com.tikalk.antsmasher.model;
 
 
-
-public class AntSocketMessage extends SocketMessage{
-
+public class AntSocketMessage extends SocketMessage {
 
     String antLocation;
 

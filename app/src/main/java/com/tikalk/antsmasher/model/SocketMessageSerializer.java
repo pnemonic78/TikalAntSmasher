@@ -18,7 +18,7 @@ public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
         JsonObject body = null;
 
-        if(body != null){
+        if (body != null) {
             user.add("body", body);
         }
         user.add("headers", new JsonObject());

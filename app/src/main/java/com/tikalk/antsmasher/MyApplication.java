@@ -15,7 +15,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mApplicationComponent = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule (this))
+                .applicationModule(new ApplicationModule(this))
                 .build();
     }
 
@@ -28,7 +28,7 @@ public class MyApplication extends Application {
 
     // Needed to replace the component with a test specific one
 
-    public static ApplicationComponent getmApplicationComponent(){
+    public static ApplicationComponent getmApplicationComponent() {
         return mApplicationComponent;
     }
 }

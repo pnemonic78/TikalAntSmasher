@@ -25,11 +25,11 @@ public class PrefsHelper {
     }
 
     public void saveUserName(final String userName) {
-        mPref.edit ().putString (PrefsConstants.USER_NAME,userName).commit ();
+        mPref.edit().putString(PrefsConstants.USER_NAME, userName).commit();
     }
 
 
     public String getString(String key) {
-        return mPref.getString (key,null);
+        return mPref.getString(key, null);
     }
 }

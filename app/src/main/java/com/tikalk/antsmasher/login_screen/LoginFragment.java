@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class LoginFragment extends DialogFragment implements SigninMvpView {
 
-    public static final String MY_TAG = LoginFragment.class.getSimpleName ();
+    public static final String MY_TAG = LoginFragment.class.getSimpleName();
     private OnFragmentInteractionListener mListener;
 
     @Inject
@@ -37,11 +37,13 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
     @Inject
     PrefsHelper mPrefsHelper;
 
-    @BindView(R.id.login_name) EditText name;
-    @BindView(R.id.enter) Button enter;
+    @BindView(R.id.login_name)
+    EditText name;
+    @BindView(R.id.enter)
+    Button enter;
 
     public static DialogFragment newInstance() {
-        LoginFragment frag = new LoginFragment ();
+        LoginFragment frag = new LoginFragment();
         Bundle args = new Bundle();
         frag.setArguments(args);
         return frag;
@@ -49,8 +51,8 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate (savedInstanceState);
-        if (getArguments ( ) != null) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
         }
     }
 
@@ -58,7 +60,7 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
-        ButterKnife.bind (this,v);
+        ButterKnife.bind(this, v);
         EditText name = v.findViewById(R.id.login_name);
 
         return v;
@@ -67,31 +69,31 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction (uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach (context);
+        super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException (context.toString ( )
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
     public void onDetach() {
-        super.onDetach ( );
+        super.onDetach();
         mListener = null;
     }
 
     @Override
     public void signInCompleted() {
-        mPrefsHelper.saveUserName (name.getText ().toString ());
-        dismiss ();
+        mPrefsHelper.saveUserName(name.getText().toString());
+        dismiss();
     }
 
     /**
@@ -109,7 +111,7 @@ public class LoginFragment extends DialogFragment implements SigninMvpView {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void loginCompleted(){
-        signInCompleted ();
+    public void loginCompleted() {
+        signInCompleted();
     }
 }

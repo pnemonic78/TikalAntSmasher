@@ -16,18 +16,18 @@ public class NetworkManager {
     Set<AppWebSocket> webSockets;
     io.reactivex.Observable<AppWebSocket> socketsObservable;
 
-    public NetworkManager(){
+    public NetworkManager() {
         webSockets = new ConcurrentSkipListSet<>();
         socketsObservable = io.reactivex.Observable.fromIterable(webSockets);
         socketsObservable.subscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public boolean add(AppWebSocket webSocket){
+    public boolean add(AppWebSocket webSocket) {
         return webSockets.add(webSocket);
     }
 
-    public boolean remove(AppWebSocket webSocket){
+    public boolean remove(AppWebSocket webSocket) {
         webSocket.closeConnection();
         boolean status = webSockets.remove(webSocket);
         return status;
