@@ -87,6 +87,7 @@ public class BoardViewModel extends ViewModel {
         Ant ant;
         for (int i = 0; i < size; i++) {
             ant = new Ant(antIdBase + i);
+            ant.setSpecies(species);
             ant.setLocation(i / 10f, species.getId() / 10f);
             species.addAnt(ant);
         }

@@ -17,8 +17,6 @@ import android.view.View;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
-import com.tikalk.antsmasher.model.Game;
-import com.tikalk.antsmasher.model.Team;
 
 import static com.tikalk.graphics.ImageUtils.tintImage;
 
@@ -31,6 +29,7 @@ public class BoardView extends View {
     private SparseArray<Bitmap> bitmaps = new SparseArray<>();
     private SparseArray<AntRect> ants = new SparseArray<>();
     private Thread thread;
+    private final Paint paintLine = new Paint();
 
     public BoardView(Context context) {
         super(context);
@@ -49,48 +48,7 @@ public class BoardView extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void start(Game game) {
-        final float width = getWidth();
-        final float height = getHeight();
-
-        ants.clear();
-
-        Resources res = getResources();
-        final int antWidth = 100;
-        final int antHeight = 100;
-        Bitmap antNormal = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
-        antNormal = Bitmap.createScaledBitmap(antNormal, antWidth, antHeight, false);
-        Bitmap bitmap;
-        AntSpecies species;
-        int speciesId;
-        AntRect rect;
-        float x, y;
-        float left;
-        float top;
-        float right;
-        float bottom;
-
-        for (Team team : game.getTeams()) {
-            species = team.getAntSpecies();
-            speciesId = species.getId();
-            bitmap = tintImage(antNormal, species.getTint());
-            bitmaps.put(speciesId, bitmap);
-
-            for (Ant ant : species.getAllAnts()) {
-                rect = new AntRect();
-                rect.id = ant.getId();
-                rect.speciesId = speciesId;
-                x = ant.getLocation().x * width;
-                y = ant.getLocation().y * height;
-                left = x - (antWidth / 2);
-                top = y - (antHeight / 2);
-                right = left + antWidth;
-                bottom = top + antHeight;
-                rect.set(left, top, right, bottom);
-                ants.put(rect.id, rect);
-            }
-        }
-
+    public void start() {
         thread = new Thread() {
             @Override
             public void run() {
@@ -108,6 +66,8 @@ public class BoardView extends View {
             } catch (InterruptedException e) {
             }
         }
+        ants.clear();
+        bitmaps.clear();
     }
 
     @Override
@@ -143,5 +103,35 @@ public class BoardView extends View {
         }
     }
 
-    private final Paint paintLine = new Paint();
+    public void addAnt(Ant ant) {
+        final float width = getWidth();
+        final float height = getHeight();
+
+        final Resources res = getResources();
+        final int antWidth = 100;
+        final int antHeight = 100;
+
+        final AntSpecies species = ant.getSpecies();
+        final int speciesId = species.getId();
+
+        float x = ant.getLocation().x * width;
+        float y = ant.getLocation().y * height;
+        float left = x - (antWidth / 2);
+        float top = y - (antHeight / 2);
+        float right = left + antWidth;
+        float bottom = top + antHeight;
+        final AntRect rect = new AntRect();
+        rect.id = ant.getId();
+        rect.speciesId = speciesId;
+        rect.set(left, top, right, bottom);
+        ants.put(rect.id, rect);
+
+        Bitmap bitmap = bitmaps.get(speciesId);
+        if (bitmap == null) {
+            Bitmap antNormal = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
+            antNormal = Bitmap.createScaledBitmap(antNormal, antWidth, antHeight, false);
+            bitmap = tintImage(antNormal, species.getTint());
+            bitmaps.put(speciesId, bitmap);
+        }
+    }
 }

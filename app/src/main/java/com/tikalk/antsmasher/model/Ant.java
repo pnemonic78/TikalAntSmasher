@@ -15,6 +15,7 @@ public class Ant {
     private final PointF location = new PointF();
     private final PointF endLocation = new PointF();
     private float headingDegrees = HEADING_DOWN;
+    private AntSpecies species;
 
     public Ant() {
     }
@@ -83,5 +84,13 @@ public class Ant {
     public void moveTo(float x, float y) {
         endLocation.set(x, y);
         calculateHeading();
+    }
+
+    public AntSpecies getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(AntSpecies species) {
+        this.species = species;
     }
 }

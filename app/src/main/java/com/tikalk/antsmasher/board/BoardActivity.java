@@ -2,7 +2,6 @@ package com.tikalk.antsmasher.board;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,17 +10,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BaseTarget;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.model.Ant;
+import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.model.Team;
 
 /**
  * Game board activity.
@@ -85,8 +83,16 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onChanged(@Nullable Game game) {
         if (game != null) {
-            //TODO update the board.
-            boardView.start(game);
+            boardView.stop();
+            AntSpecies species;
+            for (Team team : game.getTeams()) {
+                species = team.getAntSpecies();
+
+                for (Ant ant : species.getAllAnts()) {
+                    boardView.addAnt(ant);
+                }
+            }
+            boardView.start();
         }
     }
 }
