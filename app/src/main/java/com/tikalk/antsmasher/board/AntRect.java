@@ -15,4 +15,8 @@ public class AntRect extends RectF {
     public boolean isHit(float x, float y) {
         return contains(x, y);
     }
+
+    public boolean isVisible(float screenWidth, float screenHeight) {
+        return (left >= 0) && (left < screenWidth) && (top >= 0) && (top < screenHeight);
+    }
 }

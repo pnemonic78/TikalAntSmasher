@@ -14,6 +14,8 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
+import java.util.Random;
+
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
@@ -50,9 +52,31 @@ public class BoardView extends View {
 
     public void start() {
         thread = new Thread() {
+
+            private final Random random = new Random();
+
             @Override
             public void run() {
-                //TODO move ants.
+                final float width = getWidth();
+                final float height = getHeight();
+                final int size = ants.size();
+                boolean visible;
+                AntRect ant;
+                do {
+                    visible = false;
+                    for (int i = 0; i < size; i++) {
+                        float dx = (random.nextBoolean() ? +1f : -1f) * random.nextFloat() * 10f;
+                        float dy = random.nextFloat() * 10f;
+                        ant = ants.valueAt(i);
+                        ant.offset(dx, dy);
+                        visible |= ant.isVisible(width, height);
+                    }
+                    postInvalidate();
+                    try {
+                        sleep(50L);
+                    } catch (InterruptedException e) {
+                    }
+                } while (visible && isAlive() && !isInterrupted());
             }
         };
         thread.start();
