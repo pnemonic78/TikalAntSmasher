@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 import java.util.Random;
@@ -166,5 +167,10 @@ public class BoardViewModel extends ViewModel {
             } catch (InterruptedException e) {
             }
         }
+    }
+
+    public void onAntTouch(@Nullable Integer antId) {
+        //TODO send hit/miss to server via socket.
+        System.out.println("±!@ onAntTouch " + antId);
     }
 }

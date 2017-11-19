@@ -27,7 +27,8 @@ import com.tikalk.antsmasher.model.Team;
  */
 public class BoardActivity extends AppCompatActivity implements
         BoardViewModel.View,
-        Observer<Game> {
+        Observer<Game>,
+        BoardView.AntListener {
 
     private BoardView boardView;
     private BoardViewModel presenter;
@@ -53,6 +54,7 @@ public class BoardActivity extends AppCompatActivity implements
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        boardView.setAntListener(this);
 
         // Set the background dynamically to have it resized.
         Glide.with(this)
@@ -112,5 +114,10 @@ public class BoardActivity extends AppCompatActivity implements
             Toast.makeText(BoardActivity.this, "Game finished", Toast.LENGTH_SHORT).show();
             finish();
         });
+    }
+
+    @Override
+    public void onAntTouch(@Nullable Integer antId) {
+        presenter.onAntTouch(antId);
     }
 }

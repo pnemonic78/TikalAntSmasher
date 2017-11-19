@@ -6,12 +6,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.tikalk.antsmasher.R;
@@ -26,9 +25,13 @@ import static com.tikalk.graphics.ImageUtils.tintImage;
 
 public class BoardView extends View {
 
+    interface AntListener {
+        void onAntTouch(@Nullable Integer antId);
+    }
+
     private SparseArray<Bitmap> bitmaps = new SparseArray<>();
     private SparseArray<AntRect> ants = new SparseArray<>();
-    private final Paint paintLine = new Paint();
+    private AntListener antListener;
 
     public BoardView(Context context) {
         super(context);
@@ -55,23 +58,6 @@ public class BoardView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        paintLine.setStyle(Paint.Style.STROKE);
-        final float width = getWidth();
-        final float width10 = width / 10f;
-        final float height = getHeight();
-        final float height10 = height / 10f;
-        float x, y;
-        paintLine.setColor(Color.BLUE);
-        for (int i = 0; i <= 10; i++) {
-            y = height10 * i;
-            canvas.drawLine(0, y, width, y, paintLine);
-        }
-        paintLine.setColor(Color.MAGENTA);
-        for (int i = 0; i <= 10; i++) {
-            x = width10 * i;
-            canvas.drawLine(x, 0, x, height, paintLine);
-        }
 
         final int size = ants.size();
         AntRect ant;
@@ -129,5 +115,38 @@ public class BoardView extends View {
             float dyPercent = ant.getLocation().y;
             rect.moveTo(dxPercent * getWidth(), dyPercent * getHeight());
         }
+    }
+
+    public void setAntListener(AntListener antListener) {
+        this.antListener = antListener;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int action = event.getActionMasked();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                final AntListener listener = antListener;
+                if (listener != null) {
+                    final float x = event.getX();
+                    final float y = event.getY();
+                    final int size = ants.size();
+                    AntRect ant;
+                    for (int i = 0; i < size; i++) {
+                        ant = ants.valueAt(i);
+                        if (ant.isHit(x, y)) {
+                            listener.onAntTouch(ant.id);
+                            return true;
+                        }
+                    }
+                    listener.onAntTouch(null);
+                    return true;
+                }
+                break;
+        }
+
+        return super.onTouchEvent(event);
     }
 }
