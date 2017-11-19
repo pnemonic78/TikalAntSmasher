@@ -86,7 +86,7 @@ public class BoardActivity extends AppCompatActivity implements
     public void onChanged(@Nullable Game game) {
         if (game != null) {
             //TODO update the board.
-            Toast.makeText(this, "Game started!", Toast.LENGTH_SHORT).show();
+            boardView.start(game);
         }
     }
 }

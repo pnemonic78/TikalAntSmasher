@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 
 import java.util.Random;
 
@@ -66,10 +65,13 @@ public class BoardViewModel extends ViewModel {
         final long id = team.getId();
         AntSpecies species = team.getAntSpecies();
         if (id == 10) {
+            species.setId(1);
             species.setTint(Color.GREEN);
         } else if (id == 20) {
+            species.setId(2);
             species.setTint(Color.RED);
         } else if (id == 30) {
+            species.setId(3);
             species.setTint(Color.BLACK);
         }
 
@@ -80,11 +82,12 @@ public class BoardViewModel extends ViewModel {
         if (random == null) {
             random = new Random();
         }
-        final int size = 10 + random.nextInt(10);
-        final int speciesId = (int) (species.getId() * 100);
+        final int size = 10;//TODO + random.nextInt(10);
+        final int antIdBase = species.getId() * 1000;
         Ant ant;
         for (int i = 0; i < size; i++) {
-            ant = new Ant(speciesId + i);
+            ant = new Ant(antIdBase + i);
+            ant.setLocation(i / 10f, species.getId() / 10f);
             species.addAnt(ant);
         }
     }

@@ -1,7 +1,6 @@
 package com.tikalk.antsmasher.model;
 
 import android.graphics.PointF;
-import android.graphics.RectF;
 
 /**
  * Ant.
@@ -13,7 +12,7 @@ public class Ant {
     private static final double RADIANS_TO_DEGREES = 180.0 / Math.PI;
 
     private int id;
-    private final RectF location = new RectF();
+    private final PointF location = new PointF();
     private final PointF endLocation = new PointF();
     private float headingDegrees = HEADING_DOWN;
 
@@ -32,7 +31,7 @@ public class Ant {
         this.id = id;
     }
 
-    public RectF getLocation() {
+    public PointF getLocation() {
         return location;
     }
 
@@ -41,19 +40,17 @@ public class Ant {
     }
 
     public void setLocation(float x, float y) {
-        final float width2 = location.width() / 2;
-        final float height2 = location.height() / 2;
-        location.set(x - width2, y - width2, x + width2, y + height2);
+        location.set(x, y);
         calculateHeading();
     }
 
     public void setSize(float width, float height) {
-        final float x = location.left + (location.width() / 2);
-        final float y = location.top + (location.height() / 2);
-        final float width2 = width / 2;
-        final float height2 = height / 2;
-        location.set(x - width2, y - width2, x + width2, y + height2);
-        calculateHeading();
+//        final float x = location.left + (location.width() / 2);
+//        final float y = location.top + (location.height() / 2);
+//        final float width2 = width / 2;
+//        final float height2 = height / 2;
+        //location.set(x - width2, y - width2, x + width2, y + height2);
+//        calculateHeading();
     }
 
     /**
@@ -67,14 +64,14 @@ public class Ant {
     }
 
     private void calculateHeading() {
-        final float x1 = location.left + (location.width() / 2);
-        final float y1 = location.top + (location.height() / 2);
-        final float x2 = endLocation.x;
-        final float y2 = endLocation.y;
-        final float dx = x2 - x1;
-        final float dy = y2 - y1;
-        final double theta = Math.atan2(dy, dx) * RADIANS_TO_DEGREES;
-        this.headingDegrees = (float) (90.0 - theta);
+//        final float x1 = location.left + (location.width() / 2);
+//        final float y1 = location.top + (location.height() / 2);
+//        final float x2 = endLocation.x;
+//        final float y2 = endLocation.y;
+//        final float dx = x2 - x1;
+//        final float dy = y2 - y1;
+//        final double theta = Math.atan2(dy, dx) * RADIANS_TO_DEGREES;
+//        this.headingDegrees = (float) (90.0 - theta);
     }
 
     /**
@@ -86,9 +83,5 @@ public class Ant {
     public void moveTo(float x, float y) {
         endLocation.set(x, y);
         calculateHeading();
-    }
-
-    public boolean isHit(float x, float y) {
-        return location.contains(x, y);
     }
 }
