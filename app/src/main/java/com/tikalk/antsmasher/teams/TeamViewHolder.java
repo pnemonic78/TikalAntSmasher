@@ -1,13 +1,12 @@
 package com.tikalk.antsmasher.teams;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Team;
 
@@ -38,21 +37,12 @@ public class TeamViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         this.listener = listener;
     }
 
-    public void bind(Team team) {
+    public void bind(Team team, Bitmap icon) {
         this.team = team;
         final Context context = itemView.getContext();
 
         nameView.setText(team.getName());
-        Drawable avatar = team.getAvatar();
-        if (avatar != null) {
-            iconView.setImageDrawable(avatar);
-        } else {
-            Glide.with(context)
-                    .asDrawable()
-                    .load(team.getAvatarUri())
-                    .into(iconView);
-        }
-
+        iconView.setImageBitmap(icon);
 
         final int count = team.getPlayers().size();
         countView.setText(context.getResources().getQuantityString(R.plurals.player_count, count, count));

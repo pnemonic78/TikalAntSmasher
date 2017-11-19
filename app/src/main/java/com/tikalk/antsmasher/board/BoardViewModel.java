@@ -29,7 +29,7 @@ public class BoardViewModel extends ViewModel {
 
     private View view;
     private MutableLiveData<Game> game;
-    private Random random;
+    private static final Random random = new Random();
     private Thread thread;
 
     public void setView(View view) {
@@ -53,7 +53,7 @@ public class BoardViewModel extends ViewModel {
         start(data);
     }
 
-    private void populateGame(Game game) {
+    public static void populateGame(Game game) {
         game.setId(1);
 
         Team team = new Team(10, "Army");
@@ -69,7 +69,7 @@ public class BoardViewModel extends ViewModel {
         game.getTeams().add(team);
     }
 
-    private void populateTeam(Team team) {
+    public static void populateTeam(Team team) {
         final long id = team.getId();
         AntSpecies species = team.getAntSpecies();
         if (id == 10) {
@@ -86,17 +86,14 @@ public class BoardViewModel extends ViewModel {
         populateSpecies(species);
     }
 
-    private void populateSpecies(AntSpecies species) {
-        if (random == null) {
-            random = new Random();
-        }
-        final int size = 10;//TODO + random.nextInt(10);
+    private static void populateSpecies(AntSpecies species) {
+        final int size = 10 + random.nextInt(10);
         final int antIdBase = species.getId() * 1000;
         Ant ant;
         for (int i = 0; i < size; i++) {
             ant = new Ant(antIdBase + i);
             ant.setSpecies(species);
-            ant.setLocation(i / 10f, species.getId() / 10f);
+            ant.setLocation(i / 10f, 0f);
             species.addAnt(ant);
         }
     }
@@ -106,9 +103,6 @@ public class BoardViewModel extends ViewModel {
 
             @Override
             public void run() {
-                if (random == null) {
-                    random = new Random();
-                }
                 final List<Ant> ants = game.getAllAnts();
                 final int size = ants.size();
                 boolean visible;

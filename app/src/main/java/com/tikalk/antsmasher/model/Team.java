@@ -1,8 +1,5 @@
 package com.tikalk.antsmasher.model;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -16,32 +13,21 @@ import io.reactivex.annotations.NonNull;
 
 public class Team {
 
-    private long id;
+    private int id;
     private String name;
-    private String avatarUri;
-    private Drawable avatar;
     private final List<Player> players = new ArrayList<>();
     private AntSpecies antSpecies;
 
-    public Team(long id, String name) {
-        this(id, name, (Drawable) null);
-    }
-
-    public Team(long id, String name, Drawable avatar) {
+    public Team(int id, String name) {
         setId(id);
         setName(name);
-        setAvatar(avatar);
     }
 
-    public Team(long id, String name, Bitmap icon) {
-        this(id, name, new BitmapDrawable(icon));
-    }
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -51,22 +37,6 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAvatarUri() {
-        return avatarUri;
-    }
-
-    public void setAvatarUri(String avatarUri) {
-        this.avatarUri = avatarUri;
-    }
-
-    public Drawable getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(Drawable icon) {
-        this.avatar = icon;
     }
 
     public List<Player> getPlayers() {
