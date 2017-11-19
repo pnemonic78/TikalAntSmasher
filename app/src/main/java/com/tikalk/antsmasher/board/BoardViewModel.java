@@ -24,11 +24,9 @@ public class BoardViewModel extends ViewModel {
         /**
          * Move the ant to another location.
          *
-         * @param ant      the ant to move.
-         * @param xPercent the horizontal coordinate percentage.
-         * @param yPercent the vertical coordinate percentage.
+         * @param ant the ant to move.
          */
-        void moveAntTo(Ant ant, float xPercent, float yPercent);
+        void moveAnt(Ant ant);
 
         /**
          * Repaint the board.
@@ -114,11 +112,16 @@ public class BoardViewModel extends ViewModel {
     }
 
     public void start(final Game game) {
+        view.paint();
+
         thread = new Thread() {
 
             @Override
             public void run() {
-                view.paint();
+                try {
+                    sleep(1000L);
+                } catch (InterruptedException e) {
+                }
 
                 final List<Ant> ants = game.getAllAnts();
                 final int size = ants.size();
@@ -144,7 +147,7 @@ public class BoardViewModel extends ViewModel {
                         x = location.x + dx;
                         y = location.y + dy;
                         ant.setLocation(x, y);
-                        view.moveAntTo(ant, x, y);
+                        view.moveAnt(ant);
                         visible |= ant.isVisible();
                     }
                     view.paint();

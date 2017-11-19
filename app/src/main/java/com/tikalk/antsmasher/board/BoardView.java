@@ -82,8 +82,8 @@ public class BoardView extends View {
             ant = ants.valueAt(i);
             bitmap = bitmaps.get(ant.speciesId);
             angle = ant.angle;
-            px = ant.left;
-            py = ant.top;
+            px = ant.x();
+            py = ant.y();
             canvas.rotate(angle, px, py);
             canvas.drawBitmap(bitmap, ant.left, ant.top, null);
             canvas.rotate(-angle, px, py);
@@ -122,10 +122,12 @@ public class BoardView extends View {
         }
     }
 
-    public void moveTo(Ant ant, float dxPercent, float dyPercent) {
+    public void moveTo(Ant ant) {
         AntRect rect = ants.get(ant.getId());
         if (rect != null) {
-            rect.set(dxPercent * getWidth(), dyPercent * getHeight());
+            float dxPercent = ant.getLocation().x;
+            float dyPercent = ant.getLocation().y;
+            rect.moveTo(dxPercent * getWidth(), dyPercent * getHeight());
         }
     }
 }

@@ -24,39 +24,34 @@ public class AntRect extends RectF {
     }
 
     private void calculateHeading(final float x2, final float y2) {
-        final float x1 = left;
-        final float y1 = top;
+        final float x1 = x();
+        final float y1 = y();
         final float dx = x2 - x1;
         final float dy = y2 - y1;
         final double theta = Math.atan2(dy, dx) * RADIANS_TO_DEGREES;
-//        this.angle = (float) (90.0 - theta);
+        this.angle = (float) (270f + theta);
     }
 
     /**
      * Move the ant to another target location.
      *
-     * @param left the horizontal coordinate.
-     * @param top  the vertical coordinate.
+     * @param x the horizontal coordinate, in the middle of the ant.
+     * @param y the vertical coordinate, in the middle of the ant.
      */
-    public void set(float left, float top) {
-        final float w = width();
-        final float h = height();
-        set(left, top, left + w, top + h);
+    public void moveTo(float x, float y) {
+        final float w2 = width() / 2;
+        final float h2 = height() / 2;
+        final float x1 = x - w2;
+        final float y1 = y - h2;
+        calculateHeading(x, y);
+        offsetTo(x1, y1);
     }
 
-    @Override
-    public void offset(float dx, float dy) {
-        final float x2 = left + dx;
-        final float y2 = top + dy;
-        calculateHeading(x2, y2);
-        super.offset(dx, dy);
+    public float x() {
+        return left + (width() / 2);
     }
 
-    @Override
-    public void set(float left, float top, float right, float bottom) {
-        final float x2 = left;
-        final float y2 = top;
-        calculateHeading(x2, y2);
-        super.set(left, top, right, bottom);
+    public float y() {
+        return top + (height() / 2);
     }
 }

@@ -97,8 +97,8 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void moveAntTo(Ant ant, float xPercent, float yPercent) {
-        boardView.moveTo(ant, xPercent, yPercent);
+    public void moveAnt(Ant ant) {
+        boardView.moveTo(ant);
     }
 
     @Override
