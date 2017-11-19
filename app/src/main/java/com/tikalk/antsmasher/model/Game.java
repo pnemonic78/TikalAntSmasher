@@ -1,5 +1,6 @@
 package com.tikalk.antsmasher.model;
 
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -22,10 +23,12 @@ public class Game {
         this.id = id;
     }
 
+    @NonNull
     public List<Team> getTeams() {
         return teams;
     }
 
+    @NonNull
     public List<Ant> getAllAnts() {
         final List<Ant> ants = new ArrayList<>();
         for (Team team : teams) {
@@ -34,6 +37,7 @@ public class Game {
         return ants;
     }
 
+    @NonNull
     public SparseArray<Ant> getAnts() {
         final SparseArray<Ant> ants = new SparseArray<>();
         SparseArray<Ant> teamAnts;

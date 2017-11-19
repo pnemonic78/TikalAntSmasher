@@ -14,9 +14,10 @@ public class AntRect extends RectF {
     public int id;
     public float angle = HEADING_DOWN;
     public int speciesId;
+    public boolean alive = true;
 
     public boolean isHit(float x, float y) {
-        return contains(x, y);
+        return alive && contains(x, y);
     }
 
     public boolean isVisible(float screenWidth, float screenHeight) {

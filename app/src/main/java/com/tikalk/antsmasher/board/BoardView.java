@@ -29,30 +29,48 @@ public class BoardView extends View {
         void onAntTouch(@Nullable Integer antId);
     }
 
-    private SparseArray<Bitmap> bitmaps = new SparseArray<>();
+    int antWidth;
+    int antHeight;
+    int antDeadWidth;
+    int antDeadHeight;
+    private SparseArray<Bitmap> bitmapsAlive = new SparseArray<>();
+    private SparseArray<Bitmap> bitmapsDead = new SparseArray<>();
     private SparseArray<AntRect> ants = new SparseArray<>();
     private AntListener antListener;
 
     public BoardView(Context context) {
         super(context);
+        init(context);
     }
 
     public BoardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init(context);
+    }
+
+    private void init(Context context) {
+        final Resources res = context.getResources();
+        antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+        antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
+        antDeadWidth = res.getDimensionPixelSize(R.dimen.ant_dead_width);
+        antDeadHeight = res.getDimensionPixelSize(R.dimen.ant_ded_height);
     }
 
     public void clear() {
         ants.clear();
-        bitmaps.clear();
+        bitmapsAlive.clear();
+        bitmapsDead.clear();
     }
 
     @Override
@@ -66,7 +84,7 @@ public class BoardView extends View {
         float px, py;
         for (int i = 0; i < size; i++) {
             ant = ants.valueAt(i);
-            bitmap = bitmaps.get(ant.speciesId);
+            bitmap = ant.alive ? bitmapsAlive.get(ant.speciesId) : bitmapsDead.get(ant.speciesId);
             angle = ant.angle;
             px = ant.x();
             py = ant.y();
@@ -79,10 +97,6 @@ public class BoardView extends View {
     public void addAnt(Ant ant) {
         final float width = getWidth();
         final float height = getHeight();
-
-        final Resources res = getResources();
-        final int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
-        final int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
 
         final AntSpecies species = ant.getSpecies();
         final int speciesId = species.getId();
@@ -97,14 +111,22 @@ public class BoardView extends View {
         rect.id = ant.getId();
         rect.speciesId = speciesId;
         rect.set(left, top, right, bottom);
+        rect.alive = ant.isAlive();
         ants.put(rect.id, rect);
 
-        Bitmap bitmap = bitmaps.get(speciesId);
+        Bitmap bitmap = bitmapsAlive.get(speciesId);
         if (bitmap == null) {
+            final Resources res = getResources();
+
             Bitmap antNormal = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
             antNormal = Bitmap.createScaledBitmap(antNormal, antWidth, antHeight, false);
             bitmap = tintImage(antNormal, species.getTint());
-            bitmaps.put(speciesId, bitmap);
+            bitmapsAlive.put(speciesId, bitmap);
+
+            Bitmap antSmashed = BitmapFactory.decodeResource(res, R.drawable.ant_squashed);
+            antSmashed = Bitmap.createScaledBitmap(antSmashed, antDeadWidth, antDeadHeight, false);
+            bitmap = tintImage(antSmashed, species.getTint());
+            bitmapsDead.put(speciesId, bitmap);
         }
     }
 
@@ -148,5 +170,14 @@ public class BoardView extends View {
         }
 
         return super.onTouchEvent(event);
+    }
+
+    public void smashAnt(Ant ant) {
+        AntRect rect = ants.get(ant.getId());
+        if (rect != null) {
+            rect.alive = false;
+            rect.offset((antWidth - antDeadWidth) / 2, (antHeight - antDeadHeight) / 2);
+            postInvalidate();
+        }
     }
 }

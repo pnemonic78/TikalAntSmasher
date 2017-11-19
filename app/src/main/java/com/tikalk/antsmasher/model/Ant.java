@@ -11,6 +11,7 @@ public class Ant {
     private int id;
     private final PointF location = new PointF();
     private AntSpecies species;
+    private boolean alive = true;
 
     public Ant() {
     }
@@ -45,5 +46,13 @@ public class Ant {
 
     public boolean isVisible() {
         return (location.x >= 0f) && (location.x < 1f) && (location.y >= 0f) && (location.y < 1f);
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

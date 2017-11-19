@@ -38,6 +38,8 @@ public class BoardViewModel extends ViewModel {
          * Notification that the game has finished.
          */
         void onGameFinished();
+
+        void smashAnt(Ant ant);
     }
 
     private View view;
@@ -107,7 +109,7 @@ public class BoardViewModel extends ViewModel {
             ant = new Ant(antIdBase + i);
             ant.setSpecies(species);
             ant.setLocation(random.nextFloat(), random.nextFloat());
-            ant.setLocation(i / (float) size, species.getId() / 10f);//±!@
+            //ant.setLocation(i / (float) size, species.getId() / 10f);//TODO ±!@
             species.addAnt(ant);
         }
     }
@@ -142,6 +144,9 @@ public class BoardViewModel extends ViewModel {
                     visible = false;
                     for (int i = 0; i < size; i++) {
                         ant = ants.get(i);
+                        if (!ant.isAlive()) {
+                            continue;
+                        }
                         dx = (random.nextBoolean() ? +1f : -1f) * random.nextFloat() * 0.001f;
                         dy = random.nextFloat() * 0.001f;
                         location = ant.getLocation();
@@ -171,6 +176,10 @@ public class BoardViewModel extends ViewModel {
 
     public void onAntTouch(@Nullable Integer antId) {
         //TODO send hit/miss to server via socket.
-        System.out.println("±!@ onAntTouch " + antId);
+        if (antId != null) {
+            Ant ant = game.getValue().getAnts().get(antId);
+            ant.setAlive(false);
+            view.smashAnt(ant);
+        }
     }
 }

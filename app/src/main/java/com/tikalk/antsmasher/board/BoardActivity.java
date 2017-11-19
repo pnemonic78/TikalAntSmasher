@@ -56,7 +56,7 @@ public class BoardActivity extends AppCompatActivity implements
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         boardView.setAntListener(this);
 
-        // Set the background dynamically to have it resized.
+        //FIXME move to BoardView onMeasure.
         Glide.with(this)
                 .asDrawable()
                 .load("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.board)
@@ -119,5 +119,11 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onAntTouch(@Nullable Integer antId) {
         presenter.onAntTouch(antId);
+    }
+
+    @Override
+    public void smashAnt(Ant ant) {
+        //TODO mini-vibrate
+        boardView.smashAnt(ant);
     }
 }
