@@ -108,8 +108,8 @@ public class BoardView extends View {
         final float height = getHeight();
 
         final Resources res = getResources();
-        final int antWidth = 100;
-        final int antHeight = 100;
+        final int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+        final int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
 
         final AntSpecies species = ant.getSpecies();
         final int speciesId = species.getId();
