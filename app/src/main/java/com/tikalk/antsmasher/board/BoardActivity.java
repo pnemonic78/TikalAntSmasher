@@ -34,7 +34,7 @@ public class BoardActivity extends AppCompatActivity implements
         BoardView.AntListener,
         AppService.AppServiceEventListener {
 
-    public static final String TAG = "TAG_" + BoardActivity.class.getSimpleName();
+    private static final String TAG = "BoardActivity";
 
     private BoardView boardView;
     private BoardViewModel presenter;
