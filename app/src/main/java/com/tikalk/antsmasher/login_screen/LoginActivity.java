@@ -7,10 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.tikalk.antsmasher.DaggerApplicationComponent;
 import com.tikalk.antsmasher.MyApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsConstants;
+import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
 
 import javax.inject.Inject;
@@ -21,6 +21,8 @@ import javax.inject.Inject;
 public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener {
 
     public static final String TAG = "TAG_" + LoginActivity.class.getSimpleName();
+    public static final long SPLASH_TIMEOUT = 3000;
+    public static final long SPLASH_EDIT_TIMEOUT = 1000;
 
     @Inject
     SplashPresenter mSplashPresenter;
@@ -42,12 +44,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
 
             showLoginDialog ();
         }else{
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doAfterLogin();
-                }
-            }, 3000);
+            splash(SPLASH_TIMEOUT);
         }
     }
 
@@ -73,15 +70,18 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     public void onEditDone(String value) {
 
         mPrefsHelper.saveUserName(value);
-        doAfterLogin();
+        splash(SPLASH_EDIT_TIMEOUT);
     }
 
-    private void doAfterLogin() {
+    void splash(long splashTimeout){
+        Intent service = new Intent(LoginActivity.this, AppService.class);
+        startService(service);
 
-        Intent intent = new Intent(this, TeamsActivity.class);
-        startActivity(intent);
-        finish();
-
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(LoginActivity.this, TeamsActivity.class);
+            startActivity(intent);
+            finish();
+        }, splashTimeout);
     }
-}
+   }
 
