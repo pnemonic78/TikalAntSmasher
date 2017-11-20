@@ -3,7 +3,7 @@ package com.tikalk.antsmasher.model;
 
 public class AntSocketMessage extends SocketMessage {
 
-    private AntLocation antLocation;
+    private final AntLocation antLocation;
 
     public AntSocketMessage(String type, String address, AntLocation location) {
         super(type, address);

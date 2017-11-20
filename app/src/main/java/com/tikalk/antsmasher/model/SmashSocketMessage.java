@@ -3,7 +3,7 @@ package com.tikalk.antsmasher.model;
 import com.google.gson.annotations.SerializedName;
 
 
-public class SmashSocketMessage extends SocketMessage{
+public class SmashSocketMessage extends SocketMessage {
 
     @SerializedName("body")
     private AntSmash antSmash;

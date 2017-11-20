@@ -17,14 +17,13 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 
 
-
 public class MockWebSocket extends AppWebSocket {
 
-    public static final String TAG = "TAG_" + MockWebSocket.class.getSimpleName();
-    private static final Random random = new Random();
+    private static final String TAG = "MockWebSocket";
+
     private static final long moveDuration = 2000;
     private static final long jumpDuration = 500;
-    private ValueAnimator upDownAnim =  ValueAnimator.ofFloat(0f , 1.0f);
+    private ValueAnimator upDownAnim = ValueAnimator.ofFloat(0f, 1.0f);
     private ValueAnimator sideAnimation = ValueAnimator.ofFloat(-0.4f, 0.6f);
     private AnimatorSet animatorSet = new AnimatorSet();
 
@@ -32,12 +31,13 @@ public class MockWebSocket extends AppWebSocket {
     private float yVal = 0.0f;
 
     private Ant ant;
+
     public MockWebSocket(String baseUrl, String deviceId, Context context) {
         super(baseUrl, deviceId, context);
 
         yVal = 0.5f;
         ant = new Ant();
-        ant.setId(1);
+        ant.setId("1");
         ant.setAlive(true);
 
         upDownAnim.setDuration(moveDuration).setInterpolator(new LinearInterpolator());
@@ -61,7 +61,7 @@ public class MockWebSocket extends AppWebSocket {
 
     @Override
     public void setMessageListener(AppService.AppServiceEventListener mServiceListener) {
-        Log.i(TAG, "setMessageListener: starting animation..." );
+        Log.i(TAG, "setMessageListener: starting animation...");
         socketMessageListener = mServiceListener;
         animatorSet.playTogether(upDownAnim, sideAnimation);
         animatorSet.start();
@@ -69,26 +69,18 @@ public class MockWebSocket extends AppWebSocket {
 
     @Override
     protected void handleSocketOpen(WebSocket webSocket, Response response) {
-
-
     }
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-
-
-
     }
 
     @Override
     protected void handleSocketFailure(WebSocket webSocket, Throwable t, Response response) {
-
     }
 
     @Override
     protected void handleSocketClose(WebSocket webSocket, int code, String reason) {
-
     }
-
 
 }

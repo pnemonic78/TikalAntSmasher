@@ -31,7 +31,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 
 public abstract class AppWebSocket implements Comparable<AppWebSocket> {
-    private static final String TAG = "GM_" + AppWebSocket.class.getSimpleName();
+
+    private static final String TAG = "AppWebSocket";
+
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private boolean internetConnected = false;
 

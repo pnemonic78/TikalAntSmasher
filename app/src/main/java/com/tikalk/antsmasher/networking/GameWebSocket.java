@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.networking;
 import android.content.Context;
 
 import com.google.gson.Gson;
+
 import com.tikalk.antsmasher.model.AntLocation;
 import com.tikalk.antsmasher.model.AntSocketMessage;
 import com.tikalk.antsmasher.service.AppService;
@@ -35,10 +36,10 @@ public class GameWebSocket extends AppWebSocket {
     protected void handleNewMessage(WebSocket socket, String message) {
         AntSocketMessage socketMessage = antLocationGson.fromJson(message, AntSocketMessage.class);
 
-        if(messageListener != null){
+        if (messageListener != null) {
             messageListener.onAntMoved(socketMessage.getAntLocation());
         }
-  }
+    }
 
     @Override
     protected void handleSocketFailure(WebSocket webSocket, Throwable t, Response response) {
