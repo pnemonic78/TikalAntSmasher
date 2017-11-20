@@ -4,14 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Team;
@@ -26,7 +27,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamViewHolder> {
 
     private final List<Team> data = new ArrayList<>();
     private final TeamViewHolder.TeamViewHolderListener listener;
-    private final SparseArray<Bitmap> icons = new SparseArray<>();
+    private final Map<String, Bitmap> icons = new HashMap<>();
 
     public TeamAdapter(TeamViewHolder.TeamViewHolderListener listener) {
         this.listener = listener;
@@ -42,7 +43,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamViewHolder> {
     @Override
     public void onBindViewHolder(TeamViewHolder holder, int position) {
         Team team = data.get(position);
-        final int id = team.getId();
+        final String id = team.getId();
         Bitmap icon = icons.get(id);
         if (icon == null) {
             icon = createIcon(holder, team.getAntSpecies().getTint());
@@ -58,7 +59,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamViewHolder> {
 
     @Override
     public long getItemId(int position) {
-        return data.get(position).getId();
+        return data.get(position).getId().hashCode();
     }
 
     public void clear() {

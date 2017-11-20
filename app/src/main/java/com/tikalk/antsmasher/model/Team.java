@@ -13,21 +13,21 @@ import io.reactivex.annotations.NonNull;
 
 public class Team {
 
-    private int id;
+    private String id;
     private String name;
     private final List<Player> players = new ArrayList<>();
     private AntSpecies antSpecies;
 
-    public Team(int id, String name) {
+    public Team(String id, String name) {
         setId(id);
         setName(name);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

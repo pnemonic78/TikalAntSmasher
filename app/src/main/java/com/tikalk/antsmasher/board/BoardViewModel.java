@@ -70,33 +70,36 @@ public class BoardViewModel extends ViewModel {
     }
 
     public static void populateGame(Game game) {
-        game.setId(1);
+        game.setId("1");
 
-        Team team = new Team(10, "Army");
+        Team team = new Team("10", "Army");
         populateTeam(team);
         game.getTeams().add(team);
 
-        team = new Team(20, "Fire");
+        team = new Team("20", "Fire");
         populateTeam(team);
         game.getTeams().add(team);
 
-        team = new Team(30, "Black");
+        team = new Team("30", "Black");
         populateTeam(team);
         game.getTeams().add(team);
     }
 
     public static void populateTeam(Team team) {
-        final long id = team.getId();
         AntSpecies species = team.getAntSpecies();
-        if (id == 10) {
-            species.setId(1);
-            species.setTint(Color.GREEN);
-        } else if (id == 20) {
-            species.setId(2);
-            species.setTint(Color.RED);
-        } else if (id == 30) {
-            species.setId(3);
-            species.setTint(Color.BLACK);
+        switch (team.getId()) {
+            case "10":
+                species.setId(1);
+                species.setTint(Color.GREEN);
+                break;
+            case "20":
+                species.setId(2);
+                species.setTint(Color.RED);
+                break;
+            case "30":
+                species.setId(3);
+                species.setTint(Color.BLACK);
+                break;
         }
 
         populateSpecies(species);

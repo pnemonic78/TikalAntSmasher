@@ -1,26 +1,29 @@
 package com.tikalk.antsmasher.model;
 
-import android.graphics.drawable.Drawable;
-
 /**
  * Player.
  */
 
 public class Player {
 
-    private long id;
+    private String id;
     private String name;
     private String avatarUri;
 
     public Player(String name) {
+        this(null, name);
+    }
+
+    public Player(String id, String name) {
+        setId(id);
         setName(name);
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
