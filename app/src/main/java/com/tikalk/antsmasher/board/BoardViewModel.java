@@ -89,15 +89,15 @@ public class BoardViewModel extends ViewModel {
         AntSpecies species = team.getAntSpecies();
         switch (team.getId()) {
             case "10":
-                species.setId(1);
+                species.setId("1");
                 species.setTint(Color.GREEN);
                 break;
             case "20":
-                species.setId(2);
+                species.setId("2");
                 species.setTint(Color.RED);
                 break;
             case "30":
-                species.setId(3);
+                species.setId("3");
                 species.setTint(Color.BLACK);
                 break;
         }
@@ -107,7 +107,7 @@ public class BoardViewModel extends ViewModel {
 
     private static void populateSpecies(AntSpecies species) {
         final int size = 5 + random.nextInt(5);
-        final int antIdBase = species.getId() * 1000000;
+        final int antIdBase = species.getId().hashCode() * 1000000;
         Ant ant;
         for (int i = 0; i < size; i++) {
             ant = new Ant(antIdBase + i);

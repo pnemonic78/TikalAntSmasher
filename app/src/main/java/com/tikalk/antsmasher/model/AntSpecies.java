@@ -14,24 +14,25 @@ import java.util.List;
 
 public class AntSpecies {
 
-    private int id;
+    private String id;
     private String name;
     @ColorInt
     private int tint = Color.BLACK;
     private final SparseArray<Ant> ants = new SparseArray<>();
 
     public AntSpecies() {
+        this(null);
     }
 
-    public AntSpecies(int id) {
+    public AntSpecies(String id) {
         setId(id);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

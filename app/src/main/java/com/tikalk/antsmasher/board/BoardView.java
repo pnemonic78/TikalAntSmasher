@@ -14,6 +14,9 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
@@ -36,8 +39,8 @@ public class BoardView extends View {
     int antHeight;
     int antDeadWidth;
     int antDeadHeight;
-    private SparseArray<Bitmap> bitmapsAlive = new SparseArray<>();
-    private SparseArray<Bitmap> bitmapsDead = new SparseArray<>();
+    private Map<String, Bitmap> bitmapsAlive = new HashMap<>();
+    private Map<String, Bitmap> bitmapsDead = new HashMap<>();
     private SparseArray<AntRect> ants = new SparseArray<>();
     private AntListener antListener;
 
@@ -102,7 +105,7 @@ public class BoardView extends View {
         final float height = getHeight();
 
         final AntSpecies species = ant.getSpecies();
-        final int speciesId = species.getId();
+        final String speciesId = species.getId();
 
         float x = ant.getLocation().x * width;
         float y = ant.getLocation().y * height;
