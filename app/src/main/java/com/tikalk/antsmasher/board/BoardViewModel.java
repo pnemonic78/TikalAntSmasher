@@ -127,35 +127,38 @@ public class BoardViewModel extends ViewModel {
                 final Game game = BoardViewModel.this.game.getValue();
                 final List<Ant> ants = game.getAllAnts();
                 final int size = ants.size();
-                boolean visible;
                 Ant ant;
-                float dx;
                 float dy;
                 float x;
                 float y;
-                PointF location;
+                double t = 0;
+                final double T = Math.PI * 2 * 3;
+                final double dt = T / 300;
+                float[] antX = new float[size];
+
+                for (int i = 0; i < size; i++) {
+                    ant = ants.get(i);
+                    antX[i] = ant.getLocation().x;
+                }
 
                 do {
                     try {
-                        sleep(1L);
+                        sleep(10L);
                     } catch (InterruptedException e) {
                     }
-                    visible = false;
                     for (int i = 0; i < size; i++) {
                         ant = ants.get(i);
                         if (!ant.isAlive()) {
                             continue;
                         }
-                        dx = (random.nextBoolean() ? +1f : -1f) * random.nextFloat() * 0.001f;
-                        dy = random.nextFloat() * 0.001f;
-                        location = ant.getLocation();
-                        x = location.x + dx;
-                        y = location.y + dy;
+                        dy = random.nextFloat() * 0.01f;
+                        x = antX[i] + (float) (Math.sin(t) / 10);
+                        y = ant.getLocation().y + dy;
                         onAntMoved(new AntLocation(ant.getId(), x, y));
-                        visible |= ant.isVisible();
                     }
                     view.paint();
-                } while (visible && isAlive() && !isInterrupted());
+                    t += dt;
+                } while ((t <= T) && isAlive() && !isInterrupted());
                 view.onGameFinished();
             }
         };
@@ -176,7 +179,7 @@ public class BoardViewModel extends ViewModel {
         //TODO send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
 
-        if(view != null){
+        if (view != null) {
             view.sendSmash(event);
         }
     }
