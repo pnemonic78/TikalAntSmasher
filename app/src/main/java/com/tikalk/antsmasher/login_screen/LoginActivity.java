@@ -9,8 +9,7 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
-import com.tikalk.antsmasher.ApplicationModule;
-import com.tikalk.antsmasher.DaggerApplicationComponent;
+import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
@@ -39,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         setContentView(R.layout.activity_login);
         Log.i(TAG, "onCreate: ");
 
-        DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build().inject(this);
+        ((AntApplication) getApplication()).getApplicationComponent().inject(this);
 
         if (mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null) {
 

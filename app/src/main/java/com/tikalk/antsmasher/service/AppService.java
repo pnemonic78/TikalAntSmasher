@@ -12,8 +12,7 @@ import android.util.Log;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.tikalk.antsmasher.ApplicationModule;
-import com.tikalk.antsmasher.DaggerApplicationComponent;
+import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.AntLocation;
@@ -47,7 +46,7 @@ public class AppService extends Service {
         super.onCreate();
         Log.i(TAG, "onCreate");
         networkManager = new NetworkManager();
-        DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build().inject(this);
+        ((AntApplication) getApplication()).getApplicationComponent().inject(this);
         userName = mPrefsHelper.getString(PrefsConstants.USER_NAME);
     }
 
@@ -83,7 +82,6 @@ public class AppService extends Service {
     public void startWebSockets() {
         gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
     }
-
 
     @Override
     public void onDestroy() {
