@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Color;
-import android.graphics.PointF;
 
 import java.util.List;
 import java.util.Random;
@@ -142,22 +141,22 @@ public class BoardViewModel extends ViewModel {
                 }
 
                 do {
-                    try {
-                        sleep(10L);
-                    } catch (InterruptedException e) {
-                    }
                     for (int i = 0; i < size; i++) {
                         ant = ants.get(i);
                         if (!ant.isAlive()) {
                             continue;
                         }
-                        dy = random.nextFloat() * 0.01f;
+                        dy = random.nextFloat() * 0.02f;
                         x = antX[i] + (float) (Math.sin(t) / 10);
                         y = ant.getLocation().y + dy;
-                        onAntMoved(new AntLocation(ant.getId(), x, y));
+                        onAntMoved(new AntLocation(ant.getId(), ant.getSpecies().getId(), x, y));
                         if (!ant.isVisible()) {
                             //TODO game.removeAnt(ant);
                             //TODO view.removeAnt(ant);
+                        }
+                        try {
+                            sleep(1);
+                        } catch (InterruptedException e) {
                         }
                     }
                     view.paint();

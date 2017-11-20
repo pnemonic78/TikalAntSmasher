@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -145,7 +146,11 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void paint() {
-        boardView.postInvalidate();
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            boardView.invalidate();
+        } else {
+            boardView.postInvalidate();
+        }
     }
 
     @Override
