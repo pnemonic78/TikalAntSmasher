@@ -7,18 +7,21 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.tikalk.antsmasher.MyApplication;
 import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.AntLocation;
-import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.model.AntSmash;
+import com.tikalk.antsmasher.model.AntSmashMessage;
+import com.tikalk.antsmasher.model.AntSocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.GameWebSocket;
 import com.tikalk.antsmasher.networking.NetworkManager;
 
 import javax.inject.Inject;
-
+import javax.inject.Named;
 
 
 public class AppService extends Service {
@@ -34,11 +37,13 @@ public class AppService extends Service {
     @Inject
     PrefsHelper mPrefsHelper;
 
+    @Inject @Named("SocketMessageGson")
+    Gson socketMessageGson;
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "onCreate");
-
         networkManager = new NetworkManager();
         MyApplication.getmApplicationComponent().injectAppService(this);
         userName = mPrefsHelper.getString(PrefsConstants.USER_NAME);
@@ -69,13 +74,20 @@ public class AppService extends Service {
     }
 
 
-    public interface AppServiceEventListener {
-        void onAntMoved(AntLocation antLocation);
-    }
 
+    public void smashAnt(AntSmash smash){
+        AntSmashMessage antSocketMessage = new AntSmashMessage(smash);
+        gameWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
+    }
 
     public void startWebSockets(){
         gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
+    }
+
+
+    public interface AppServiceEventListener {
+        void onAntMoved(AntLocation antLocation);
+        void onAntSmashed(AntSmash smashed);
     }
 
 }

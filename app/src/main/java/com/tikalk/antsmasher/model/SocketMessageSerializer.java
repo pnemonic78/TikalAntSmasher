@@ -12,17 +12,21 @@ public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
     @Override
     public JsonElement serialize(SocketMessage src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject user = new JsonObject();
-        user.add("type", context.serialize(src.type));
-        user.add("address", context.serialize(src.address));
+        JsonObject message = new JsonObject();
+        message.add("type", context.serialize(src.type));
+        message.add("address", context.serialize(src.address));
 
-        JsonObject body = null;
+        JsonObject body;
 
-        if (body != null) {
-            user.add("body", body);
+        if (src instanceof SmashSocketMessage) {
+            body = new JsonObject();
+            body.addProperty("id" , ((SmashSocketMessage)src).getAntSmash().id);
+            body.addProperty("timestamp" , ((SmashSocketMessage)src).getAntSmash().timestamp);
+            message.add("body", body);
         }
-        user.add("headers", new JsonObject());
-        return user;
+
+        message.add("headers", new JsonObject());
+        return message;
     }
 
 }
