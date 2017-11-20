@@ -27,8 +27,8 @@ import com.tikalk.antsmasher.networking.NetworkManager;
 
 public class AppService extends Service {
 
+    private static final String TAG = "AppService";
 
-    private static final String TAG = "TAG_" + AppService.class.getSimpleName();
     NetworkManager networkManager;
     AppServiceEventListener serviceEventListener;
     AppWebSocket gameWebSocket;
@@ -74,7 +74,6 @@ public class AppService extends Service {
         this.serviceEventListener = serviceEventListener;
         ((GameWebSocket) gameWebSocket).setMessageListener(serviceEventListener);
     }
-
 
     public void smashAnt(AntSmash smash) {
         AntSmashMessage antSocketMessage = new AntSmashMessage(smash);

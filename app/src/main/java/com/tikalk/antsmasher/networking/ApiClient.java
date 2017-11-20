@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String TAG = "TAG_" + ApiClient.class.getSimpleName();
+    private static final String TAG = "ApiClient";
 
     //    private static final String BASE_URL = "https://planet.tikalk.com/timetracker/time.php/";
     private RestApiService restApiService;

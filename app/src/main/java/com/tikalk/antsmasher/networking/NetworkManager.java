@@ -12,7 +12,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class NetworkManager {
 
-    public static final String TAG = "TAG_" + NetworkManager.class.getSimpleName();
+    private static final String TAG = "NetworkManager";
+
     Set<AppWebSocket> webSockets;
     io.reactivex.Observable<AppWebSocket> socketsObservable;
 

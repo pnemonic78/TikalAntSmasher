@@ -22,9 +22,10 @@ import com.tikalk.antsmasher.teams.TeamsActivity;
  */
 public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener {
 
-    public static final String TAG = "TAG_" + LoginActivity.class.getSimpleName();
-    public static final long SPLASH_TIMEOUT = 3000;
-    public static final long SPLASH_EDIT_TIMEOUT = 1000;
+    private static final String TAG = "LoginActivity";
+
+    private static final long SPLASH_TIMEOUT = 300;
+    private static final long SPLASH_EDIT_TIMEOUT = 1000;
 
     @Inject
     SplashPresenter mSplashPresenter;
