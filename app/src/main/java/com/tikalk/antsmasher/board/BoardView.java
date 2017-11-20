@@ -10,11 +10,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.tikalk.antsmasher.R;
@@ -30,7 +31,7 @@ import static com.tikalk.graphics.ImageUtils.tintImage;
 public class BoardView extends View {
 
     interface AntListener {
-        void onAntTouch(@Nullable Integer antId);
+        void onAntTouch(@Nullable String antId);
     }
 
     int bgWidth = 0;
@@ -41,7 +42,8 @@ public class BoardView extends View {
     int antDeadHeight;
     private Map<String, Bitmap> bitmapsAlive = new HashMap<>();
     private Map<String, Bitmap> bitmapsDead = new HashMap<>();
-    private SparseArray<AntRect> ants = new SparseArray<>();
+    private final List<AntRect> ants = new ArrayList<>();
+    private final Map<String, AntRect> antsById = new HashMap<>();
     private AntListener antListener;
 
     public BoardView(Context context) {
@@ -83,13 +85,10 @@ public class BoardView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        final int size = ants.size();
-        AntRect ant;
         Bitmap bitmap;
         float angle;
         float px, py;
-        for (int i = 0; i < size; i++) {
-            ant = ants.valueAt(i);
+        for (AntRect ant : ants) {
             bitmap = ant.alive ? bitmapsAlive.get(ant.speciesId) : bitmapsDead.get(ant.speciesId);
             angle = ant.angle;
             px = ant.x();
@@ -118,7 +117,8 @@ public class BoardView extends View {
         rect.speciesId = speciesId;
         rect.set(left, top, right, bottom);
         rect.alive = ant.isAlive();
-        ants.put(rect.id, rect);
+        antsById.put(rect.id, rect);
+        ants.add(rect);
 
         Bitmap bitmap = bitmapsAlive.get(speciesId);
         if (bitmap == null) {
@@ -137,7 +137,7 @@ public class BoardView extends View {
     }
 
     public void moveTo(Ant ant) {
-        AntRect rect = ants.get(ant.getId());
+        AntRect rect = antsById.get(ant.getId());
         if (rect != null) {
             float dxPercent = ant.getLocation().x;
             float dyPercent = ant.getLocation().y;
@@ -160,16 +160,16 @@ public class BoardView extends View {
                 if (listener != null) {
                     final float x = event.getX();
                     final float y = event.getY();
-                    final int size = ants.size();
-                    AntRect ant;
-                    for (int i = 0; i < size; i++) {
-                        ant = ants.valueAt(i);
+                    boolean hit = false;
+                    for (AntRect ant : ants) {
                         if (ant.isHit(x, y)) {
+                            hit = true;
                             listener.onAntTouch(ant.id);
-                            return true;
                         }
                     }
-                    listener.onAntTouch(null);
+                    if (!hit) {
+                        listener.onAntTouch(null);
+                    }
                     return true;
                 }
                 break;
@@ -179,7 +179,7 @@ public class BoardView extends View {
     }
 
     public void smashAnt(Ant ant) {
-        AntRect rect = ants.get(ant.getId());
+        AntRect rect = antsById.get(ant.getId());
         if (rect != null) {
             rect.alive = false;
             rect.offset((antWidth - antDeadWidth) / 2, (antHeight - antDeadHeight) / 2);

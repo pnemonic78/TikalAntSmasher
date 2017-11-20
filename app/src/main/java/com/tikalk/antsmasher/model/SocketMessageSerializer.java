@@ -20,7 +20,7 @@ public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
         if (src instanceof SmashSocketMessage) {
             body = new JsonObject();
-            body.addProperty("id" , ((SmashSocketMessage)src).getAntSmash().id);
+            body.addProperty("antId" , ((SmashSocketMessage)src).getAntSmash().id);
             body.addProperty("timestamp" , ((SmashSocketMessage)src).getAntSmash().timestamp);
             message.add("body", body);
         }

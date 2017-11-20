@@ -1,10 +1,11 @@
 package com.tikalk.antsmasher.model;
 
 import android.support.annotation.NonNull;
-import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Game with teams.
@@ -38,21 +39,15 @@ public class Game {
     }
 
     @NonNull
-    public SparseArray<Ant> getAnts() {
-        final SparseArray<Ant> ants = new SparseArray<>();
-        SparseArray<Ant> teamAnts;
-        int size;
+    public Map<String, Ant> getAnts() {
+        final Map<String, Ant> ants = new HashMap<>();
         for (Team team : teams) {
-            teamAnts = team.getAnts();
-            size = teamAnts.size();
-            for (int i = 0; i < size; i++) {
-                ants.append(teamAnts.keyAt(i), teamAnts.valueAt(i));
-            }
+            ants.putAll(team.getAnts());
         }
         return ants;
     }
 
-    public Ant getAnt(int id) {
+    public Ant getAnt(String id) {
         return getAnts().get(id);
     }
 }

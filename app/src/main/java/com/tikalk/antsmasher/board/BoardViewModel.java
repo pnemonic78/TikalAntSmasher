@@ -107,10 +107,10 @@ public class BoardViewModel extends ViewModel {
 
     private static void populateSpecies(AntSpecies species) {
         final int size = 5 + random.nextInt(5);
-        final int antIdBase = species.getId().hashCode() * 1000000;
+        final int antIdBase = species.getId().hashCode() * 100000;
         Ant ant;
         for (int i = 0; i < size; i++) {
-            ant = new Ant(antIdBase + i);
+            ant = new Ant(String.valueOf(antIdBase + i));
             ant.setSpecies(species);
             ant.setLocation(random.nextFloat(), 0f);
             species.addAnt(ant);
@@ -125,6 +125,11 @@ public class BoardViewModel extends ViewModel {
 
             @Override
             public void run() {
+                try {
+                    // wait for View to start drawing.
+                    sleep(500L);
+                } catch (InterruptedException e) {
+                }
                 final View view = BoardViewModel.this.view;
                 final Game game = BoardViewModel.this.game.getValue();
                 final List<Ant> ants = game.getAllAnts();
@@ -181,7 +186,7 @@ public class BoardViewModel extends ViewModel {
         }
     }
 
-    public void onAntTouch(int antId) {
+    public void onAntTouch(String antId) {
         //TODO send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
 
@@ -208,7 +213,7 @@ public class BoardViewModel extends ViewModel {
     public void onAntMoved(AntLocation event) {
         Game game = getGame().getValue();
         if (game != null) {
-            Ant ant = game.getAnt(event.id);
+            Ant ant = game.getAnt(event.antId);
             ant.setLocation(event.xPercent, event.yPercent);
             if (view != null) {
                 view.moveAnt(ant);

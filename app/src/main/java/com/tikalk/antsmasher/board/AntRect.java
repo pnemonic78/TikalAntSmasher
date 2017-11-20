@@ -11,7 +11,7 @@ public class AntRect extends RectF {
     private static final float HEADING_DOWN = 0f;
     private static final double RADIANS_TO_DEGREES = 180.0 / Math.PI;
 
-    public int id;
+    public String id;
     public float angle = HEADING_DOWN;
     public String speciesId;
     public boolean alive = true;

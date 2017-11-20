@@ -2,11 +2,12 @@ package com.tikalk.antsmasher.model;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
-import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Ant species.
@@ -18,7 +19,8 @@ public class AntSpecies {
     private String name;
     @ColorInt
     private int tint = Color.BLACK;
-    private final SparseArray<Ant> ants = new SparseArray<>();
+    private final Map<String, Ant> antsById = new HashMap<>();
+    private final List<Ant> ants = new ArrayList<>();
 
     public AntSpecies() {
         this(null);
@@ -53,17 +55,12 @@ public class AntSpecies {
         this.tint = tint;
     }
 
-    public SparseArray<Ant> getAnts() {
-        return ants;
+    public Map<String, Ant> getAnts() {
+        return antsById;
     }
 
     public List<Ant> getAllAnts() {
-        final int size = ants.size();
-        List<Ant> all = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            all.add(ants.valueAt(i));
-        }
-        return all;
+        return ants;
     }
 
     public void setAnts(Collection<Ant> ants) {
@@ -77,6 +74,7 @@ public class AntSpecies {
     }
 
     public void addAnt(Ant ant) {
-        this.ants.append(ant.getId(), ant);
+        ants.add(ant);
+        antsById.put(ant.getId(), ant);
     }
 }

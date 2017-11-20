@@ -40,7 +40,7 @@ public class BoardActivity extends AppCompatActivity implements
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
-    private AppService appService;
+    private AppService appService;//FIXME move to BoardViewModel
     private boolean isServiceBounded = false;
     private Intent mServiceIntent;
 
@@ -162,8 +162,8 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onAntTouch(@Nullable Integer antId) {
-        presenter.onAntTouch(antId != null ? antId : 0);
+    public void onAntTouch(@Nullable String antId) {
+        presenter.onAntTouch(antId);
     }
 
     @Override
@@ -182,7 +182,6 @@ public class BoardActivity extends AppCompatActivity implements
     public void sendSmash(AntSmash event) {
         appService.smashAnt(event);
     }
-
 
     ServiceConnection mConnection = new ServiceConnection() {
         @Override

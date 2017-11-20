@@ -8,7 +8,7 @@ import android.graphics.PointF;
 
 public class Ant {
 
-    private int id;
+    private String id;
     private final PointF location = new PointF();
     private AntSpecies species;
     private boolean alive = true;
@@ -16,15 +16,15 @@ public class Ant {
     public Ant() {
     }
 
-    public Ant(int id) {
+    public Ant(String id) {
         setId(id);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

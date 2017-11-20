@@ -4,6 +4,7 @@ import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.annotations.NonNull;
 
@@ -62,7 +63,7 @@ public class Team {
         this.antSpecies = antSpecies;
     }
 
-    public SparseArray<Ant> getAnts() {
+    public Map<String, Ant> getAnts() {
         return getAntSpecies().getAnts();
     }
 

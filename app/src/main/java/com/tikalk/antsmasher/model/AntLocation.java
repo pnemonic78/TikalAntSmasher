@@ -6,13 +6,13 @@ package com.tikalk.antsmasher.model;
 
 public class AntLocation {
 
-    public final int id;
+    public final String antId;
     public final String speciesId;
     public final float xPercent;
     public final float yPercent;
 
-    public AntLocation(int id, String speciesId, float xPercent, float yPercent) {
-        this.id = id;
+    public AntLocation(String antId, String speciesId, float xPercent, float yPercent) {
+        this.antId = antId;
         this.speciesId = speciesId;
         this.xPercent = xPercent;
         this.yPercent = yPercent;
