@@ -22,6 +22,7 @@ import dagger.Provides;
  * Provide application-level dependencies.
  */
 @Module
+@Singleton
 class ApplicationModule {
     private final Context mContext;
 

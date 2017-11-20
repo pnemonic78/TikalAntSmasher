@@ -9,7 +9,7 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 
-    static ApplicationComponent mApplicationComponent;
+    ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
@@ -19,16 +19,9 @@ public class MyApplication extends Application {
                 .build();
     }
 
-    public ApplicationComponent getComponent() {
-        if (mApplicationComponent == null) {
-
-        }
-        return mApplicationComponent;
-    }
-
     // Needed to replace the component with a test specific one
 
-    public static ApplicationComponent getmApplicationComponent() {
+    public ApplicationComponent getmApplicationComponent() {
         return mApplicationComponent;
     }
 }

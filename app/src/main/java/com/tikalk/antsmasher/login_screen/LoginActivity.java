@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         setContentView (R.layout.activity_login);
         Log.i(TAG, "onCreate: ");
 
-        MyApplication.getmApplicationComponent().injectLoginScreen(this);
+        ((MyApplication)getApplication()).getmApplicationComponent().injectLoginScreen(this);
 
         if(mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null){
 
