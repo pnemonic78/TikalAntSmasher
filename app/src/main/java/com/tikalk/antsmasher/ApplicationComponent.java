@@ -12,9 +12,9 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 @Singleton
 public interface ApplicationComponent {
-    //    Context context();
+    
+    void inject(LoginActivity loginActivity);
 
-    void injectLoginScreen(LoginActivity loginActivity);
-    void injectAppService(AppService appService);
+    void inject(AppService appService);
 
 }

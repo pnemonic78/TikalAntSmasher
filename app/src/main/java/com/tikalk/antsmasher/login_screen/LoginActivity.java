@@ -10,6 +10,7 @@ import android.util.Log;
 import com.tikalk.antsmasher.MyApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsConstants;
+import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
 
@@ -28,7 +29,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     SplashPresenter mSplashPresenter;
 
     @Inject
-    com.tikalk.antsmasher.data.PrefsHelper mPrefsHelper;
+    PrefsHelper mPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         setContentView (R.layout.activity_login);
         Log.i(TAG, "onCreate: ");
 
-        MyApplication.getmApplicationComponent().injectLoginScreen(this);
+        MyApplication.getmApplicationComponent().inject(this);
 
         if(mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null){
 
