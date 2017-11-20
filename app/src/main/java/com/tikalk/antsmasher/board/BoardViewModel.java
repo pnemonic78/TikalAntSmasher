@@ -65,7 +65,6 @@ public class BoardViewModel extends ViewModel {
         populateGame(data);//TODO delete me!
 
         game.postValue(data);
-        start(data);
     }
 
     public static void populateGame(Game game) {
@@ -103,29 +102,24 @@ public class BoardViewModel extends ViewModel {
 
     private static void populateSpecies(AntSpecies species) {
         final int size = 5 + random.nextInt(5);
-        final int antIdBase = species.getId() * 1000;
+        final int antIdBase = species.getId() * 1000000;
         Ant ant;
         for (int i = 0; i < size; i++) {
             ant = new Ant(antIdBase + i);
             ant.setSpecies(species);
-            ant.setLocation(random.nextFloat(), random.nextFloat());
-            //ant.setLocation(i / (float) size, species.getId() / 10f);//TODO ±!@
+            ant.setLocation(random.nextFloat(), 0f);
             species.addAnt(ant);
         }
     }
 
-    public void start(final Game game) {
+    public void start() {
         view.paint();
 
         thread = new Thread() {
 
             @Override
             public void run() {
-                try {
-                    sleep(1000L);
-                } catch (InterruptedException e) {
-                }
-
+                final Game game = BoardViewModel.this.game.getValue();
                 final List<Ant> ants = game.getAllAnts();
                 final int size = ants.size();
                 boolean visible;
@@ -181,5 +175,15 @@ public class BoardViewModel extends ViewModel {
             ant.setAlive(false);
             view.smashAnt(ant);
         }
+    }
+
+    public void onBoardReady() {
+        if (allowStart()) {
+            start();
+        }
+    }
+
+    public boolean allowStart() {
+        return (game.getValue() != null) && ((thread == null) || thread.isInterrupted() || !thread.isAlive());
     }
 }

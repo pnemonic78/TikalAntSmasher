@@ -14,9 +14,7 @@ import android.widget.Toast;
 
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
-import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
-import com.tikalk.antsmasher.model.Team;
 
 /**
  * Game board activity.
@@ -58,6 +56,15 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            presenter.onBoardReady();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -72,13 +79,13 @@ public class BoardActivity extends AppCompatActivity implements
     public void onChanged(@Nullable Game game) {
         if (game != null) {
             boardView.clear();
-            AntSpecies species;
-            for (Team team : game.getTeams()) {
-                species = team.getAntSpecies();
 
-                for (Ant ant : species.getAllAnts()) {
-                    boardView.addAnt(ant);
-                }
+            for (Ant ant : game.getAllAnts()) {
+                boardView.addAnt(ant);
+            }
+
+            if (hasWindowFocus()) {
+                presenter.onBoardReady();
             }
         }
     }
