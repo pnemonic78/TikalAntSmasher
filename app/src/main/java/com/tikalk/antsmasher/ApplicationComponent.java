@@ -2,6 +2,7 @@ package com.tikalk.antsmasher;
 
 
 import com.tikalk.antsmasher.login_screen.LoginActivity;
+import com.tikalk.antsmasher.service.AppService;
 
 import dagger.Component;
 
@@ -11,5 +12,6 @@ public interface ApplicationComponent {
     //    Context context();
 
     void injectLoginScreen(LoginActivity loginActivity);
+    void injectAppService(AppService appService);
 
 }

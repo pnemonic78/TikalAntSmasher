@@ -41,6 +41,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tikalk.antsmasher.teams.TeamsActivity"/>
         </activity>
+
+        <service android:name=".service.AppService"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>
