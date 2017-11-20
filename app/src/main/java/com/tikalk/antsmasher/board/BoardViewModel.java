@@ -5,13 +5,13 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Color;
 import android.graphics.PointF;
-import android.support.annotation.Nullable;
 
 import java.util.List;
 import java.util.Random;
 
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntLocation;
+import com.tikalk.antsmasher.model.AntSmash;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Team;
@@ -40,7 +40,7 @@ public class BoardViewModel extends ViewModel {
          */
         void onGameFinished();
 
-        void smashAnt(Ant ant);
+        void smashAnt(Ant ant, boolean user);
     }
 
     private View view;
@@ -116,10 +116,12 @@ public class BoardViewModel extends ViewModel {
     public void start() {
         view.paint();
 
+        // fake movements from the server.
         thread = new Thread() {
 
             @Override
             public void run() {
+                final View view = BoardViewModel.this.view;
                 final Game game = BoardViewModel.this.game.getValue();
                 final List<Ant> ants = game.getAllAnts();
                 final int size = ants.size();
@@ -168,13 +170,12 @@ public class BoardViewModel extends ViewModel {
         }
     }
 
-    public void onAntTouch(@Nullable Integer antId) {
+    public void onAntTouch(int antId) {
         //TODO send hit/miss to server via socket.
-        if (antId != null) {
-            Ant ant = game.getValue().getAnts().get(antId);
-            ant.setAlive(false);
-            view.smashAnt(ant);
-        }
+        AntSmash event = new AntSmash(antId, true);
+
+        // fake response from server.
+        onAntSmashed(event);
     }
 
     public void onBoardReady() {
@@ -187,12 +188,37 @@ public class BoardViewModel extends ViewModel {
         return (game.getValue() != null) && ((thread == null) || thread.isInterrupted() || !thread.isAlive());
     }
 
-    public void onAntMoved(AntLocation location) {
+    /**
+     * Notification from the server that the ant has been moved.
+     *
+     * @param event the location event.
+     */
+    public void onAntMoved(AntLocation event) {
         Game game = getGame().getValue();
         if (game != null) {
-            Ant ant = game.getAnt(location.id);
-            ant.setLocation(location.xPercent, location.yPercent);
-            view.moveAnt(ant);
+            Ant ant = game.getAnt(event.id);
+            ant.setLocation(event.xPercent, event.yPercent);
+            if (view != null) {
+                view.moveAnt(ant);
+            }
+        }
+    }
+
+    /**
+     * Notification from the server that the ant has been smashed.
+     *
+     * @param event the smash event.
+     */
+    public void onAntSmashed(AntSmash event) {
+        Game game = getGame().getValue();
+        if (game != null) {
+            Ant ant = game.getAnt(event.id);
+            if (ant != null) {
+                ant.setAlive(false);
+                if (view != null) {
+                    view.smashAnt(ant, event.user);
+                }
+            }
         }
     }
 }

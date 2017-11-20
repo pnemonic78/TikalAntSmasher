@@ -112,17 +112,23 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onAntTouch(@Nullable Integer antId) {
-        presenter.onAntTouch(antId);
+        presenter.onAntTouch(antId != null ? antId : 0);
     }
 
     @Override
-    public void smashAnt(Ant ant) {
-        if (ant != null) {
+    public void smashAnt(Ant ant, boolean user) {
+        if (user && (ant != null)) {
             Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             if ((vibrator != null) && vibrator.hasVibrator()) {
                 vibrator.vibrate(10L);
             }
         }
         boardView.smashAnt(ant);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.stop();
     }
 }
