@@ -26,6 +26,7 @@ public class BoardActivity extends AppCompatActivity implements
 
     private BoardView boardView;
     private BoardViewModel presenter;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class BoardActivity extends AppCompatActivity implements
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && (game != null)) {
             presenter.onBoardReady();
         }
     }
@@ -77,6 +78,7 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onChanged(@Nullable Game game) {
+        this.game = game;
         if (game != null) {
             boardView.clear();
 
