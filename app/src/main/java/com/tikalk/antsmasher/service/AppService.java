@@ -14,7 +14,6 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.AntLocation;
 import com.tikalk.antsmasher.model.AntSmash;
 import com.tikalk.antsmasher.model.AntSmashMessage;
-import com.tikalk.antsmasher.model.AntSocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.GameWebSocket;
@@ -45,7 +44,7 @@ public class AppService extends Service {
         super.onCreate();
         Log.i(TAG, "onCreate");
         networkManager = new NetworkManager();
-        MyApplication.getmApplicationComponent().injectAppService(this);
+        MyApplication.getmApplicationComponent().inject(this);
         userName = mPrefsHelper.getString(PrefsConstants.USER_NAME);
     }
 
