@@ -41,6 +41,8 @@ public class BoardViewModel extends ViewModel {
         void onGameFinished();
 
         void smashAnt(Ant ant, boolean user);
+
+        void sendSmash(AntSmash event);
     }
 
     private View view;
@@ -174,8 +176,9 @@ public class BoardViewModel extends ViewModel {
         //TODO send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
 
-        // fake response from server.
-        onAntSmashed(event);
+        if(view != null){
+            view.sendSmash(event);
+        }
     }
 
     public void onBoardReady() {

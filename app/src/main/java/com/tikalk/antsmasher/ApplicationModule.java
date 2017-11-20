@@ -41,16 +41,14 @@ class ApplicationModule {
     }
 
 
-    @Provides
+    @Provides @Named("PlainGson")
     @Singleton
-    @Named("PlainGson")
     Gson providePlainGson(){
         return new Gson();
     }
 
-    @Provides
+    @Provides @Named("SocketMessageGson")
     @Singleton
-    @Named("SocketMessageGson")
     Gson provideSocketGson(){
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(SocketMessage.class, new SocketMessageSerializer());

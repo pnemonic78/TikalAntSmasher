@@ -1,8 +1,13 @@
 package com.tikalk.antsmasher.board;
 
+import android.app.Service;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -14,7 +19,10 @@ import android.widget.Toast;
 
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
+import com.tikalk.antsmasher.model.AntLocation;
+import com.tikalk.antsmasher.model.AntSmash;
 import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.service.AppService;
 
 /**
  * Game board activity.
@@ -22,11 +30,15 @@ import com.tikalk.antsmasher.model.Game;
 public class BoardActivity extends AppCompatActivity implements
         BoardViewModel.View,
         Observer<Game>,
-        BoardView.AntListener {
+        BoardView.AntListener,
+        AppService.AppServiceEventListener {
 
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
+    private AppService appService;
+    private boolean isServiceBounded = false;
+    private Intent mServiceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +66,14 @@ public class BoardActivity extends AppCompatActivity implements
         presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
         presenter.setView(this);
         presenter.getGame().observe(this, this);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mServiceIntent = new Intent(this, AppService.class);
+        bindService(mServiceIntent, mConnection, Service.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -124,6 +144,41 @@ public class BoardActivity extends AppCompatActivity implements
             }
         }
         boardView.smashAnt(ant);
+
+    }
+
+    @Override
+    public void sendSmash(AntSmash event) {
+        appService.smashAnt(event);
+    }
+
+
+    ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            AppService.LocalBinder binder = (AppService.LocalBinder) iBinder;
+
+            appService = binder.getService();
+            if (appService != null) {
+                isServiceBounded = true;
+                appService.registerServiceEventListener(BoardActivity.this);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+
+    @Override
+    public void onAntMoved(AntLocation locationEvent) {
+        presenter.onAntMoved(locationEvent);
+    }
+
+    @Override
+    public void onAntSmashed(AntSmash smashEvent) {
+        presenter.onAntSmashed(smashEvent);
     }
 
     @Override
