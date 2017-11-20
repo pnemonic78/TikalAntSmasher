@@ -49,7 +49,7 @@ public class AppService extends Service {
         Log.i(TAG, "onCreate");
         networkManager = new NetworkManager();
 
-        ((MyApplication)getApplication()).getmApplicationComponent().injectAppService(this);
+        ((MyApplication)getApplication()).getmApplicationComponent().inject(this);
         userName = mPrefsHelper.getString(PrefsConstants.USER_NAME);
 
         startWebSockets();
@@ -77,7 +77,6 @@ public class AppService extends Service {
     public void registerServiceEventListener(AppServiceEventListener serviceEventListener){
         this.serviceEventListener = serviceEventListener;
         if(gameWebSocket != null){
-
              gameWebSocket.setMessageListener(serviceEventListener);
         }
     }
@@ -95,7 +94,6 @@ public class AppService extends Service {
         if(BuildConfig.DEBUG){
             Log.i(TAG, "Debug, creating mock web socket");
             gameWebSocket = new MockWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
-            gameWebSocket.setMessageListener(serviceEventListener);
         }else{
             Log.i(TAG, "Debug, real web socket");
             gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);

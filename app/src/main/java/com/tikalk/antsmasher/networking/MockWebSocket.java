@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.networking;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
@@ -19,6 +20,7 @@ import okhttp3.WebSocket;
 
 public class MockWebSocket extends AppWebSocket {
 
+    public static final String TAG = "TAG_" + MockWebSocket.class.getSimpleName();
     private static final Random random = new Random();
     private static final long moveDuration = 2000;
     private static final long jumpDuration = 500;
@@ -42,22 +44,26 @@ public class MockWebSocket extends AppWebSocket {
         upDownAnim.addUpdateListener(valueAnimator -> {
             yVal = (float) valueAnimator.getAnimatedValue();
             ant.setLocation(xVal, yVal);
-            if(socketMessageListener != null){
-                socketMessageListener.onAntMoved(new AntLocation(ant
-                        .getId(), ant.getLocation().x, ant.getLocation().y));
-            }
+
+            Log.i(TAG, "MockWebSocket: ant location = " + ant.getLocation());
+//            if(socketMessageListener != null){
+//                socketMessageListener.onAntMoved(new AntLocation(ant
+//                        .getId(), ant.getLocation().x, ant.getLocation().y));
+//            }
         });
+        upDownAnim.setRepeatMode(ValueAnimator.RESTART);
 
         sideAnimation.setDuration(jumpDuration).setInterpolator(new AccelerateInterpolator(1.5f));
         sideAnimation.addUpdateListener(valueAnimator -> xVal = (float) valueAnimator.getAnimatedValue());
-        upDownAnim.setRepeatMode(ValueAnimator.RESTART);
-
-        animatorSet.playTogether(upDownAnim, sideAnimation);
+        sideAnimation.setRepeatMode(ValueAnimator.REVERSE);
+        sideAnimation.setRepeatCount(ValueAnimator.INFINITE);
     }
 
     @Override
     public void setMessageListener(AppService.AppServiceEventListener mServiceListener) {
+        Log.i(TAG, "setMessageListener: starting animation..." );
         socketMessageListener = mServiceListener;
+        animatorSet.playTogether(upDownAnim, sideAnimation);
         animatorSet.start();
     }
 

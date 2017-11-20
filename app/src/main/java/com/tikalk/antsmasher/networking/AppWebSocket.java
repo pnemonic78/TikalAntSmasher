@@ -47,7 +47,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     boolean socketOpened = false;
 
     private WeakReference<Context> weakContext;
-    private String socketBaseUrl;
+    String socketBaseUrl;
     private Disposable pingDisposable;
 
     AppService.AppServiceEventListener socketMessageListener;
