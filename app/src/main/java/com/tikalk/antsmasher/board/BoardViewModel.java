@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.tikalk.antsmasher.model.Ant;
+import com.tikalk.antsmasher.model.AntLocation;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Team;
@@ -146,8 +147,7 @@ public class BoardViewModel extends ViewModel {
                         location = ant.getLocation();
                         x = location.x + dx;
                         y = location.y + dy;
-                        ant.setLocation(x, y);
-                        view.moveAnt(ant);
+                        onAntMoved(new AntLocation(ant.getId(), x, y));
                         visible |= ant.isVisible();
                     }
                     view.paint();
@@ -185,5 +185,14 @@ public class BoardViewModel extends ViewModel {
 
     public boolean allowStart() {
         return (game.getValue() != null) && ((thread == null) || thread.isInterrupted() || !thread.isAlive());
+    }
+
+    public void onAntMoved(AntLocation location) {
+        Game game = getGame().getValue();
+        if (game != null) {
+            Ant ant = game.getAnt(location.id);
+            ant.setLocation(location.xPercent, location.yPercent);
+            view.moveAnt(ant);
+        }
     }
 }

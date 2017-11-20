@@ -51,4 +51,8 @@ public class Game {
         }
         return ants;
     }
+
+    public Ant getAnt(int id) {
+        return getAnts().get(id);
+    }
 }
