@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -32,6 +33,8 @@ public class BoardActivity extends AppCompatActivity implements
         Observer<Game>,
         BoardView.AntListener,
         AppService.AppServiceEventListener {
+
+    public static final String TAG = "TAG_" + BoardActivity.class.getSimpleName();
 
     private BoardView boardView;
     private BoardViewModel presenter;
@@ -75,6 +78,29 @@ public class BoardActivity extends AppCompatActivity implements
         mServiceIntent = new Intent(this, AppService.class);
         bindService(mServiceIntent, mConnection, Service.BIND_AUTO_CREATE);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isChangingConfigurations()) {
+            //This means that onStop called due to screen rotation, therefore it's crucial to unbind
+            //the service and clean its reference to insure that the destroyed Activity reference will be released.
+            //Service will rebound in onStart after mActivity recreation.
+            //If this is not due to screen rotation service will be killed in onDestroy ( stopService() ).
+            unbindService(mConnection); //This will not stop the service as it started with startService()
+            isServiceBounded = false;
+            appService = null;
+        } else {
+            /*
+            *This means that onStop called due 2 possible reasons:
+             1. Activity is going down because user hit the back button ( --> destroyed)
+             The Service will be cleaned and stopped in onDestroy()
+             2. The user is leaving to another mActivity such as web browser, a phone call, or hit the home button (--> stopped)
+             The service will keep running in background until activity resumes
+            * */
+        }
+    }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -167,7 +193,9 @@ public class BoardActivity extends AppCompatActivity implements
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-
+            Log.i(TAG, "onServiceDisconnected: ");
+            isServiceBounded = false;
+            appService = null;
         }
     };
 
@@ -183,6 +211,13 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
+        if (isFinishing()) {
+            Log.i(TAG, "onDestroy: exiting...");
+            if (appService != null && isServiceBounded) {
+                unbindService(mConnection);
+                stopService(mServiceIntent);
+            }
+        }
         super.onDestroy();
         presenter.stop();
     }

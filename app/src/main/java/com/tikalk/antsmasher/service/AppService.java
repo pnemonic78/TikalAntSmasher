@@ -85,6 +85,12 @@ public class AppService extends Service {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        networkManager.clear();
+    }
+
     public interface AppServiceEventListener {
         void onAntMoved(AntLocation antLocation);
         void onAntSmashed(AntSmash smashed);
