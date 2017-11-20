@@ -1,12 +1,10 @@
 package com.tikalk.antsmasher;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.tikalk.antsmasher.data.PrefsConstants;
+
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.SocketMessage;
 import com.tikalk.antsmasher.model.SocketMessageSerializer;
@@ -22,34 +20,34 @@ import dagger.Provides;
  * Provide application-level dependencies.
  */
 @Module
-class ApplicationModule {
-    private final Context mContext;
+public class ApplicationModule {
+    private final Context context;
 
-    ApplicationModule(Context context) {
-        mContext = context;
+    public ApplicationModule(Context context) {
+        this.context = context.getApplicationContext();
     }
-
 
     @Provides
     Context provideContext() {
-        return mContext;
+        return context;
     }
 
     @Provides
     PrefsHelper providePrefsHelper() {
-        return new PrefsHelper(mContext);
+        return new PrefsHelper(context);
     }
 
-
-    @Provides @Named("PlainGson")
+    @Provides
+    @Named("PlainGson")
     @Singleton
-    Gson providePlainGson(){
+    Gson providePlainGson() {
         return new Gson();
     }
 
-    @Provides @Named("SocketMessageGson")
+    @Provides
+    @Named("SocketMessageGson")
     @Singleton
-    Gson provideSocketGson(){
+    Gson provideSocketGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(SocketMessage.class, new SocketMessageSerializer());
         return gsonBuilder.create();

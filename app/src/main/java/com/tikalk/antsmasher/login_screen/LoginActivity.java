@@ -7,14 +7,15 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.tikalk.antsmasher.MyApplication;
+import javax.inject.Inject;
+
+import com.tikalk.antsmasher.ApplicationModule;
+import com.tikalk.antsmasher.DaggerApplicationComponent;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
-
-import javax.inject.Inject;
 
 /**
  * A login screen that offers login via email/password.
@@ -33,18 +34,18 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate (savedInstanceState);
-        setContentView (R.layout.activity_login);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         Log.i(TAG, "onCreate: ");
 
-        MyApplication.getmApplicationComponent().inject(this);
+        DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build().inject(this);
 
-        if(mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null){
+        if (mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null) {
 
             Log.i(TAG, "About to open dialog");
 
-            showLoginDialog ();
-        }else{
+            showLoginDialog();
+        } else {
             splash(SPLASH_TIMEOUT);
         }
     }
@@ -74,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         splash(SPLASH_EDIT_TIMEOUT);
     }
 
-    void splash(long splashTimeout){
+    void splash(long splashTimeout) {
         Intent service = new Intent(LoginActivity.this, AppService.class);
         startService(service);
 
@@ -84,5 +85,5 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
             finish();
         }, splashTimeout);
     }
-   }
+}
 

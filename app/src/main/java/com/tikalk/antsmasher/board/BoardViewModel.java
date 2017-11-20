@@ -155,6 +155,10 @@ public class BoardViewModel extends ViewModel {
                         x = antX[i] + (float) (Math.sin(t) / 10);
                         y = ant.getLocation().y + dy;
                         onAntMoved(new AntLocation(ant.getId(), x, y));
+                        if (!ant.isVisible()) {
+                            //TODO game.removeAnt(ant);
+                            //TODO view.removeAnt(ant);
+                        }
                     }
                     view.paint();
                     t += dt;

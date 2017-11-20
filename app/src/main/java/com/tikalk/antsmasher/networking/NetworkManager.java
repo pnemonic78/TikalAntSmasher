@@ -22,7 +22,6 @@ public class NetworkManager {
         socketsObservable.subscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread());
     }
 
-
     public boolean add(AppWebSocket webSocket) {
         return webSockets.add(webSocket);
     }

@@ -1,5 +1,7 @@
 package com.tikalk.antsmasher.service;
 
+import com.google.gson.Gson;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -7,8 +9,11 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.tikalk.antsmasher.MyApplication;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import com.tikalk.antsmasher.ApplicationModule;
+import com.tikalk.antsmasher.DaggerApplicationComponent;
 import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.AntLocation;
@@ -18,9 +23,6 @@ import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.GameWebSocket;
 import com.tikalk.antsmasher.networking.NetworkManager;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 
 public class AppService extends Service {
@@ -36,7 +38,8 @@ public class AppService extends Service {
     @Inject
     PrefsHelper mPrefsHelper;
 
-    @Inject @Named("SocketMessageGson")
+    @Inject
+    @Named("SocketMessageGson")
     Gson socketMessageGson;
 
     @Override
@@ -44,7 +47,7 @@ public class AppService extends Service {
         super.onCreate();
         Log.i(TAG, "onCreate");
         networkManager = new NetworkManager();
-        MyApplication.getmApplicationComponent().inject(this);
+        DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build().inject(this);
         userName = mPrefsHelper.getString(PrefsConstants.USER_NAME);
     }
 
@@ -67,19 +70,18 @@ public class AppService extends Service {
         }
     }
 
-    public void registerServiceEventListener(AppServiceEventListener serviceEventListener){
+    public void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
         this.serviceEventListener = serviceEventListener;
-        ((GameWebSocket)gameWebSocket).setMessageListener(serviceEventListener);
+        ((GameWebSocket) gameWebSocket).setMessageListener(serviceEventListener);
     }
 
 
-
-    public void smashAnt(AntSmash smash){
+    public void smashAnt(AntSmash smash) {
         AntSmashMessage antSocketMessage = new AntSmashMessage(smash);
         gameWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
     }
 
-    public void startWebSockets(){
+    public void startWebSockets() {
         gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
     }
 
@@ -92,6 +94,7 @@ public class AppService extends Service {
 
     public interface AppServiceEventListener {
         void onAntMoved(AntLocation antLocation);
+
         void onAntSmashed(AntSmash smashed);
     }
 
