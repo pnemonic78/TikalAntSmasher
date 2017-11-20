@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 
 import com.tikalk.antsmasher.model.SocketMessage;
 import com.tikalk.antsmasher.model.SocketMessageSerializer;
+import com.tikalk.antsmasher.service.AppService;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
@@ -30,28 +31,30 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 
 public abstract class AppWebSocket implements Comparable<AppWebSocket> {
-    public static final String TAG = "GM_" + AppWebSocket.class.getSimpleName();
-    public static final int NORMAL_CLOSURE_STATUS = 1000;
-    boolean internetConnected = false;
+    private static final String TAG = "GM_" + AppWebSocket.class.getSimpleName();
+    private static final int NORMAL_CLOSURE_STATUS = 1000;
+    private boolean internetConnected = false;
 
-    WebSocket mSocket;
-    Request mRequest;
-    OkHttpClient client;
-    OkHttpClient.Builder okHttpClientBuilder;
-    String deviceId;
+    private WebSocket mSocket;
+    private Request mRequest;
+    private OkHttpClient client;
+    private OkHttpClient.Builder okHttpClientBuilder;
+    private String deviceId;
 
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    Gson mSocketMessageGson;
+    private GsonBuilder gsonBuilder = new GsonBuilder();
+    private Gson mSocketMessageGson;
 
     boolean socketOpened = false;
 
-    WeakReference<Context> weakContext;
-    String socketBaseUrl;
-    Disposable pingDisposable;
+    private WeakReference<Context> weakContext;
+    private String socketBaseUrl;
+    private Disposable pingDisposable;
+
+    AppService.AppServiceEventListener socketMessageListener;
 
     static Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public AppWebSocket(String baseUrl, String deviceId, Context context) {
+    AppWebSocket(String baseUrl, String deviceId, Context context) {
         Log.i(TAG, "AppWebSocket created.. url: " + baseUrl);
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(baseUrl).appendPath("11").appendPath("xyz_" + deviceId).appendPath("websocket");
@@ -167,6 +170,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     protected abstract void handleSocketClose(WebSocket webSocket, int code, String reason);
 
+    public abstract void setMessageListener(AppService.AppServiceEventListener messageListener);
 
     @Override
     public int compareTo(@NonNull AppWebSocket webSocket) {

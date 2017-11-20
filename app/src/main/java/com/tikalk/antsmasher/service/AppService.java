@@ -1,7 +1,5 @@
 package com.tikalk.antsmasher.service;
 
-import com.google.gson.Gson;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -9,25 +7,30 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import com.tikalk.antsmasher.AntApplication;
+import com.google.gson.Gson;
+import com.tikalk.antsmasher.BuildConfig;
+import com.tikalk.antsmasher.MyApplication;
 import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.login_screen.LoginActivity;
 import com.tikalk.antsmasher.model.AntLocation;
 import com.tikalk.antsmasher.model.AntSmash;
 import com.tikalk.antsmasher.model.AntSmashMessage;
+import com.tikalk.antsmasher.model.AntSocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.GameWebSocket;
+import com.tikalk.antsmasher.networking.MockWebSocket;
 import com.tikalk.antsmasher.networking.NetworkManager;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 
 public class AppService extends Service {
 
-    private static final String TAG = "AppService";
 
+    private static final String TAG = "TAG_" + AppService.class.getSimpleName();
     NetworkManager networkManager;
     AppServiceEventListener serviceEventListener;
     AppWebSocket gameWebSocket;
@@ -37,8 +40,7 @@ public class AppService extends Service {
     @Inject
     PrefsHelper mPrefsHelper;
 
-    @Inject
-    @Named("SocketMessageGson")
+    @Inject @Named("SocketMessageGson")
     Gson socketMessageGson;
 
     @Override
@@ -46,8 +48,11 @@ public class AppService extends Service {
         super.onCreate();
         Log.i(TAG, "onCreate");
         networkManager = new NetworkManager();
-        ((AntApplication) getApplication()).getApplicationComponent().inject(this);
+
+        ((MyApplication)getApplication()).getmApplicationComponent().injectAppService(this);
         userName = mPrefsHelper.getString(PrefsConstants.USER_NAME);
+
+        startWebSockets();
     }
 
     @Override
@@ -69,19 +74,34 @@ public class AppService extends Service {
         }
     }
 
-    public void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
+    public void registerServiceEventListener(AppServiceEventListener serviceEventListener){
         this.serviceEventListener = serviceEventListener;
-        ((GameWebSocket) gameWebSocket).setMessageListener(serviceEventListener);
+        if(gameWebSocket != null){
+
+             gameWebSocket.setMessageListener(serviceEventListener);
+        }
     }
 
-    public void smashAnt(AntSmash smash) {
+
+
+    public void smashAnt(AntSmash smash){
         AntSmashMessage antSocketMessage = new AntSmashMessage(smash);
-        gameWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
+        if(gameWebSocket != null){
+            gameWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
+        }
     }
 
-    public void startWebSockets() {
-        gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
+    public void startWebSockets(){
+        if(BuildConfig.DEBUG){
+            Log.i(TAG, "Debug, creating mock web socket");
+            gameWebSocket = new MockWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
+            gameWebSocket.setMessageListener(serviceEventListener);
+        }else{
+            Log.i(TAG, "Debug, real web socket");
+            gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
+        }
     }
+
 
     @Override
     public void onDestroy() {
@@ -91,7 +111,6 @@ public class AppService extends Service {
 
     public interface AppServiceEventListener {
         void onAntMoved(AntLocation antLocation);
-
         void onAntSmashed(AntSmash smashed);
     }
 
