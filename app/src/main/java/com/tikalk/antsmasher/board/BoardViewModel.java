@@ -42,6 +42,8 @@ public class BoardViewModel extends ViewModel {
         void smashAnt(Ant ant, boolean user);
 
         void sendSmash(AntSmash event);
+
+        void removeAnt(Ant ant);
     }
 
     private View view;
@@ -113,7 +115,7 @@ public class BoardViewModel extends ViewModel {
             ant = new Ant(String.valueOf(antIdBase + i));
             ant.setSpecies(species);
             ant.setLocation(random.nextFloat(), 0f);
-            species.addAnt(ant);
+            species.add(ant);
         }
     }
 
@@ -151,17 +153,13 @@ public class BoardViewModel extends ViewModel {
                 do {
                     for (int i = 0; i < size; i++) {
                         ant = ants.get(i);
-                        if (!ant.isAlive()) {
+                        if (!ant.isAlive() || !ant.isVisible()) {
                             continue;
                         }
                         dy = random.nextFloat() * 0.02f;
                         x = antX[i] + (float) (Math.sin(t) / 10);
                         y = ant.getLocation().y + dy;
                         onAntMoved(new AntLocation(ant.getId(), ant.getSpecies().getId(), x, y));
-                        if (!ant.isVisible()) {
-                            //TODO game.removeAnt(ant);
-                            //TODO view.removeAnt(ant);
-                        }
                         try {
                             sleep(1);
                         } catch (InterruptedException e) {
@@ -215,8 +213,15 @@ public class BoardViewModel extends ViewModel {
         if (game != null) {
             Ant ant = game.getAnt(event.antId);
             ant.setLocation(event.xPercent, event.yPercent);
-            if (view != null) {
-                view.moveAnt(ant);
+            if (ant.isVisible()) {
+                if (view != null) {
+                    view.moveAnt(ant);
+                }
+            } else {
+                game.removeAnt(ant);
+                if (view != null) {
+                    view.removeAnt(ant);
+                }
             }
         }
     }

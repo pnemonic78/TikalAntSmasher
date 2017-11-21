@@ -70,4 +70,8 @@ public class Team {
     public List<Ant> getAllAnts() {
         return getAntSpecies().getAllAnts();
     }
+
+    public void removeAnt(Ant ant) {
+        getAntSpecies().remove(ant);
+    }
 }

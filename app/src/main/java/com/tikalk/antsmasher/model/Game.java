@@ -50,4 +50,10 @@ public class Game {
     public Ant getAnt(String id) {
         return getAnts().get(id);
     }
+
+    public void removeAnt(Ant ant) {
+        for (Team team : teams) {
+            team.removeAnt(ant);
+        }
+    }
 }
