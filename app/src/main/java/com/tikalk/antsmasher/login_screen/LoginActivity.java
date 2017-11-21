@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -70,7 +71,6 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
 
     @Override
     public void onEditDone(String value) {
-
         mPrefsHelper.saveUserName(value);
         splash(SPLASH_EDIT_TIMEOUT);
     }
