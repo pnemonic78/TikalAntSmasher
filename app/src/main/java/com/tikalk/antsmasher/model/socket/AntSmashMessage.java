@@ -6,7 +6,7 @@ public class AntSmashMessage extends SocketMessage {
     private final AntSmash smash;
 
     public AntSmashMessage(AntSmash smash) {
-        super("send", "toAddress");
+        super(TYPE_SEND, "TODO toAddress");
         this.smash = smash;
     }
 }

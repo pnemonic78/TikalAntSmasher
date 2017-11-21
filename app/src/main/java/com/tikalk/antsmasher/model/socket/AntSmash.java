@@ -1,7 +1,7 @@
 package com.tikalk.antsmasher.model.socket;
 
 /**
- * Ant smash.
+ * Ant smash to server.
  */
 
 public class AntSmash {

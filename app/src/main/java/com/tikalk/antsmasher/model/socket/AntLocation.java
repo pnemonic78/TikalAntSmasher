@@ -1,7 +1,7 @@
 package com.tikalk.antsmasher.model.socket;
 
 /**
- * Ant location.
+ * Ant location from server.
  */
 
 public class AntLocation {
