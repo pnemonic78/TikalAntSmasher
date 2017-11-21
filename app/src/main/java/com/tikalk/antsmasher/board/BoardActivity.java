@@ -131,6 +131,7 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onGameStarted() {
+        soundHelper.playMusic();
         runOnUiThread(() -> {
             progressBar.setVisibility(View.GONE);
         });

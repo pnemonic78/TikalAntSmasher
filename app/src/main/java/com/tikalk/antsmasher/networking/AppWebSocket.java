@@ -57,8 +57,12 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     protected AppWebSocket(String baseUrl, String deviceId, Context context) {
         Log.i(TAG, "AppWebSocket created.. url: " + baseUrl);
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http").encodedAuthority(baseUrl).appendPath("11").appendPath("xyz_" + deviceId).appendPath("websocket");
+        Uri.Builder builder = new Uri.Builder()
+                .scheme("http")
+                .encodedAuthority(baseUrl)
+                .appendPath("11")
+                .appendPath("xyz_" + deviceId)
+                .appendPath("websocket");
         weakContext = new WeakReference<>(context);
         gsonBuilder.registerTypeAdapter(SocketMessage.class, new SocketMessageSerializer());
         mSocketMessageGson = gsonBuilder.create();
@@ -156,9 +160,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     }
 
     public void showToast(String message) {
-
         if (weakContext.get() != null) {
-//            Toast.makeText(weakContext.get(), message, Toast.LENGTH_SHORT).show();
             mHandler.post(() -> Toast.makeText(weakContext.get(), message, Toast.LENGTH_SHORT).show());
         }
     }

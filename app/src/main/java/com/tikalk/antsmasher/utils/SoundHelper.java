@@ -71,7 +71,7 @@ public class SoundHelper {
     }
 
     public void playMusic() {
-        if (mMusicPlayer != null) {
+        if (mMusicPlayer != null && !mMusicPlayer.isPlaying()) {
             mMusicPlayer.start();
         }
     }

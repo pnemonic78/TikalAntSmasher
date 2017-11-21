@@ -17,4 +17,9 @@ public class AntLocation {
         this.xPercent = xPercent;
         this.yPercent = yPercent;
     }
+
+    @Override
+    public String toString() {
+        return "{id:" + antId + ", species:" + speciesId + ", x:" + xPercent + ", y:" + yPercent + "}";
+    }
 }

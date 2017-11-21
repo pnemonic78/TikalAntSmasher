@@ -15,12 +15,9 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
-
-import java.util.Random;
 
 import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.model.Ant;
@@ -30,7 +27,6 @@ import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.service.AppService;
-import com.tikalk.antsmasher.utils.SoundHelper;
 
 /**
  * Board presenter.
@@ -86,8 +82,6 @@ public class BoardViewModel extends AndroidViewModel implements
 
     private View view;
     private MutableLiveData<Game> game;
-    private static final Random random = new Random();
-    private Thread thread;
     private final Handler handler = new Handler();
     private AppService.AppServiceProxy appService;
     private boolean serviceBound = false;
@@ -111,10 +105,14 @@ public class BoardViewModel extends AndroidViewModel implements
 
     private void loadGame() {
         // TODO Do an asynchronous operation to list for game on socket.
-        Game data = new Game();
-        populateGame(data);//TODO delete me!
-
+        Game data = createGame();
         game.postValue(data);
+    }
+
+    public static Game createGame() {
+        Game game = new Game();
+        populateGame(game);//TODO delete me!
+        return game;
     }
 
     public static void populateGame(Game game) {
@@ -155,96 +153,12 @@ public class BoardViewModel extends AndroidViewModel implements
      * Start the game.
      */
     public void start() {
-        // fake ants from the server.
-        thread = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    // wait for View to start drawing.
-                    sleep(500L);
-                } catch (InterruptedException e) {
-                }
-                onGameStarted();
-                final Game game = BoardViewModel.this.game.getValue();
-                if (game == null) {
-                    return;
-                }
-                final int size = 20;
-                final Ant[] ants = new Ant[size];
-                Ant ant;
-                AntSpecies species;
-                float dy;
-                float x;
-                float y;
-                double t = 0;
-                final double T = Math.PI * 2 * 3;
-                final double dt = T / 300;
-                float[] antX = new float[size];
-                float[] antY = new float[size];
-                float[] antVelocityY = new float[size];
-                int antId = 1;
-                int teamIndex;
-                long start = SystemClock.uptimeMillis();
-
-                for (int i = 0; i < size; i++) {
-                    antX[i] = random.nextFloat();
-                    antY[i] = 0f;
-                    antVelocityY[i] = 1f + random.nextFloat();
-
-                    teamIndex = random.nextInt(3);
-                    species = game.getTeams().get(teamIndex).getAntSpecies();
-
-                    ant = new Ant(String.valueOf(antId++));
-                    ant.setLocation(antX[i], antY[i]);
-                    species.add(ant);
-                    ants[i] = ant;
-                }
-
-                do {
-                    for (int i = 0; i < size; i++) {
-                        ant = ants[i];
-                        species = ant.getSpecies();
-                        if (ant.isAlive()) {
-                            dy = antVelocityY[i] * random.nextFloat() * 0.02f;
-                            x = antX[i] + (float) (Math.sin(t) / 10);
-                            y = ant.getLocation().y + dy;
-                            onAntMoved(new AntLocation(ant.getId(), species.getId(), x, y));
-                        }
-                        if (!ant.isVisible()) {
-                            ants[i] = null;
-                            species.remove(ant);
-
-                            ant = new Ant(String.valueOf(antId++));
-                            ant.setLocation(antX[i], antY[i]);
-                            species.add(ant);
-                            ants[i] = ant;
-                        }
-                        try {
-                            sleep(2);
-                        } catch (InterruptedException e) {
-                        }
-                    }
-                    t += dt;
-                }
-                while ((SystemClock.uptimeMillis() <= (start + 15000L)) && isAlive() && !isInterrupted());
-                onGameFinished();
-            }
-        };
-        thread.start();
     }
 
     /**
      * Stop the game.
      */
     public void stop() {
-        if (thread != null) {
-            thread.interrupt();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-            }
-        }
     }
 
     public void onAntTouch(String antId) {
@@ -263,7 +177,7 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     public boolean allowStart() {
-        return (game.getValue() != null) && ((thread == null) || thread.isInterrupted() || !thread.isAlive());
+        return (game.getValue() != null);// && ((thread == null) || thread.isInterrupted() || !thread.isAlive());
     }
 
     @Override
@@ -357,6 +271,7 @@ public class BoardViewModel extends AndroidViewModel implements
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
+            Log.v(TAG, "onServiceConnected: " + componentName);
             AppService.LocalBinder binder = (AppService.LocalBinder) service;
 
             appService = binder.getService();
@@ -366,7 +281,7 @@ public class BoardViewModel extends AndroidViewModel implements
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.i(TAG, "onServiceDisconnected: ");
+            Log.v(TAG, "onServiceDisconnected: " + componentName);
             serviceBound = false;
             appService = null;
         }
