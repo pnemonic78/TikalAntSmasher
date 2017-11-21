@@ -1,15 +1,10 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.tikalk.antsmasher.board.BoardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/board"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tikalk.antsmasher.board.BoardActivity">
-
-    <com.tikalk.antsmasher.board.BoardView
-        android:id="@+id/board"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/board"
-        android:keepScreenOn="true"
-        tools:background="@drawable/board"/>
-
-</FrameLayout>
+    android:background="@color/board"
+    android:keepScreenOn="true"
+    tools:context="com.tikalk.antsmasher.board.BoardActivity"
+    tools:scaleType="fitXY"
+    tools:src="@drawable/board"/>
