@@ -74,15 +74,19 @@ public class AntSpecies {
     }
 
     public void add(Ant ant) {
+        ant.setSpecies(this);
         ants.add(ant);
         antsById.put(ant.getId(), ant);
     }
 
-    public void remove(Ant ant) {
+    public boolean remove(Ant ant) {
+        ant.setSpecies(null);
         final String id = ant.getId();
         if (antsById.containsKey(id)) {
             ants.remove(ant);
             antsById.remove(id);
+            return true;
         }
+        return false;
     }
 }

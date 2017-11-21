@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
@@ -30,6 +32,8 @@ import static com.tikalk.graphics.ImageUtils.tintImage;
 
 public class BoardView extends View {
 
+    private static final String TAG = "BoardView";
+
     interface AntListener {
         void onAntTouch(@Nullable String antId);
     }
@@ -42,7 +46,7 @@ public class BoardView extends View {
     int antDeadHeight;
     private Map<String, Bitmap> bitmapsAlive = new HashMap<>();
     private Map<String, Bitmap> bitmapsDead = new HashMap<>();
-    private final List<AntRect> ants = new ArrayList<>();
+    private final List<AntRect> ants = new CopyOnWriteArrayList<>();
     private final Map<String, AntRect> antsById = new HashMap<>();
     private AntListener antListener;
 
@@ -90,6 +94,10 @@ public class BoardView extends View {
         float px, py;
         for (AntRect ant : ants) {
             bitmap = ant.alive ? bitmapsAlive.get(ant.speciesId) : bitmapsDead.get(ant.speciesId);
+            if ((bitmap == null) || bitmap.isRecycled()) {
+                Log.w(TAG, "bitmap invalid for species: " + ant.speciesId + " " + (ant.alive ? "alive" : "dead"));
+                return;
+            }
             angle = ant.angle;
             px = ant.x();
             py = ant.y();
@@ -99,7 +107,7 @@ public class BoardView extends View {
         }
     }
 
-    public void addAnt(Ant ant) {
+    public AntRect addAnt(Ant ant) {
         final float width = getWidth();
         final float height = getHeight();
 
@@ -134,6 +142,8 @@ public class BoardView extends View {
             bitmap = tintImage(antSmashed, species.getTint());
             bitmapsDead.put(speciesId, bitmap);
         }
+
+        return rect;
     }
 
     public void removeAnt(Ant ant) {
@@ -145,6 +155,9 @@ public class BoardView extends View {
 
     public void moveTo(Ant ant) {
         AntRect rect = antsById.get(ant.getId());
+        if (rect == null) {
+            rect = addAnt(ant);
+        }
         if (rect != null) {
             float dxPercent = ant.getLocation().x;
             float dyPercent = ant.getLocation().y;

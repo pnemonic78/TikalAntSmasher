@@ -4,7 +4,6 @@ import android.app.Service;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -20,13 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
+import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.service.AppService;
 
 /**
@@ -129,27 +127,31 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onChanged(@Nullable Game game) {
         this.game = game;
-        if (game != null) {
-            boardView.clear();
 
+        boardView.clear();
+        if (game != null) {
             for (Ant ant : game.getAllAnts()) {
                 boardView.addAnt(ant);
             }
-
-            if (hasWindowFocus()) {
-                presenter.onBoardReady();
-            }
+        }
+        if (hasWindowFocus()) {
+            presenter.onBoardReady();
         }
     }
 
     @Override
-    public void moveAnt(Ant ant) {
-        boardView.moveTo(ant);
+    public void addAnt(Ant ant) {
+        boardView.addAnt(ant);
     }
 
     @Override
     public void removeAnt(Ant ant) {
         boardView.removeAnt(ant);
+    }
+
+    @Override
+    public void moveAnt(Ant ant) {
+        boardView.moveTo(ant);
     }
 
     @Override
@@ -164,18 +166,15 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onGameFinished() {
         runOnUiThread(() -> {
-            Toast.makeText(BoardActivity.this, "Game finished", Toast.LENGTH_SHORT).show();
-
             showGameOverDialog();
         });
     }
 
     private void showGameOverDialog() {
-        AlertDialog.Builder builder =  new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name)).setMessage("Game Over").setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher));
-        builder.setPositiveButton("OK", (dialogInterface, i) -> finish());
-
-        builder.create().show();
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.app_name)).setMessage("Game Over").setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
+                .setPositiveButton(getText(android.R.string.ok), (dialogInterface, i) -> finish())
+                .show();
     }
 
     @Override

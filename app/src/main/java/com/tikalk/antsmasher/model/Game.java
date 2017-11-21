@@ -51,9 +51,25 @@ public class Game {
         return getAnts().get(id);
     }
 
-    public void removeAnt(Ant ant) {
+    public Ant addAnt(String antId, String speciesId) {
+        AntSpecies species;
         for (Team team : teams) {
-            team.removeAnt(ant);
+            species = team.getAntSpecies();
+            if (speciesId.equals(species.getId())) {
+                Ant ant = new Ant(antId);
+                species.add(ant);
+                return ant;
+            }
         }
+        return null;
+    }
+
+    public boolean removeAnt(Ant ant) {
+        for (Team team : teams) {
+            if (team.removeAnt(ant)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

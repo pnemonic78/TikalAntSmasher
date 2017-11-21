@@ -1,7 +1,5 @@
 package com.tikalk.antsmasher.model;
 
-import android.util.SparseArray;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +69,7 @@ public class Team {
         return getAntSpecies().getAllAnts();
     }
 
-    public void removeAnt(Ant ant) {
-        getAntSpecies().remove(ant);
+    public boolean removeAnt(Ant ant) {
+        return getAntSpecies().remove(ant);
     }
 }
