@@ -31,8 +31,29 @@ public class AppService extends Service {
     private static final String TAG = "AppService";
 
     public interface AppServiceEventListener {
+
+        /**
+         * Notification from the server that the game has started.
+         */
+        void onGameStarted();
+
+        /**
+         * Notification from the server that the game has finished.
+         */
+        void onGameFinished();
+
+        /**
+         * Notification from the server that the ant has been moved.
+         *
+         * @param locationEvent the location event.
+         */
         void onAntMoved(AntLocation locationEvent);
 
+        /**
+         * Notification from the server that the ant has been smashed.
+         *
+         * @param smashEvent the smash event.
+         */
         void onAntSmashed(AntSmash smashEvent);
     }
 

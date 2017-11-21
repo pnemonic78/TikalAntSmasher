@@ -126,6 +126,11 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onGameStarted() {
+        //TODO hide "waiting for game to start" spinning progress.
+    }
+
+    @Override
     public void onGameFinished() {
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {

@@ -70,6 +70,11 @@ public class BoardViewModel extends AndroidViewModel implements
         void paint();
 
         /**
+         * Notification that the game has started.
+         */
+        void onGameStarted();
+
+        /**
          * Notification that the game has finished.
          */
         void onGameFinished();
@@ -150,13 +155,12 @@ public class BoardViewModel extends AndroidViewModel implements
      * Start the game.
      */
     public void start() {
-        view.paint();
-
         // fake ants from the server.
         thread = new Thread() {
 
             @Override
             public void run() {
+                onGameStarted();
                 try {
                     // wait for View to start drawing.
                     sleep(500L);
@@ -222,7 +226,7 @@ public class BoardViewModel extends AndroidViewModel implements
                     t += dt;
                 }
                 while ((SystemClock.uptimeMillis() <= (start + 15000L)) && isAlive() && !isInterrupted());
-                view.onGameFinished();
+                onGameFinished();
             }
         };
         thread.start();
@@ -260,11 +264,17 @@ public class BoardViewModel extends AndroidViewModel implements
         return (game.getValue() != null) && ((thread == null) || thread.isInterrupted() || !thread.isAlive());
     }
 
-    /**
-     * Notification from the server that the ant has been moved.
-     *
-     * @param event the location event.
-     */
+    @Override
+    public void onGameStarted() {
+        view.paint();
+        view.onGameStarted();
+    }
+
+    @Override
+    public void onGameFinished() {
+        view.onGameFinished();
+    }
+
     @Override
     public void onAntMoved(AntLocation event) {
         Game game = getGame().getValue();
@@ -289,11 +299,6 @@ public class BoardViewModel extends AndroidViewModel implements
         view.paint();
     }
 
-    /**
-     * Notification from the server that the ant has been smashed.
-     *
-     * @param event the smash event.
-     */
     @Override
     public void onAntSmashed(AntSmash event) {
         Game game = getGame().getValue();
