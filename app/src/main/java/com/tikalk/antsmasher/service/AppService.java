@@ -76,6 +76,7 @@ public class AppService extends Service {
 
     public void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
         this.serviceEventListener = serviceEventListener;
+        serviceEventListener.onGameStarted();
         if (gameWebSocket != null) {
             gameWebSocket.setMessageListener(serviceEventListener);
         }
@@ -83,10 +84,13 @@ public class AppService extends Service {
 
 
     public void smashAnt(AntSmash smash) {
+        Log.i(TAG, "smashAnt:");
         AntSmashMessage antSocketMessage = new AntSmashMessage(smash);
         if (gameWebSocket != null) {
             gameWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
         }
+        serviceEventListener.onAntSmashed(smash);
+
     }
 
     public void startWebSockets() {
@@ -110,6 +114,8 @@ public class AppService extends Service {
         void onAntMoved(AntLocation antLocation);
 
         void onAntSmashed(AntSmash smashed);
+        void onGameStarted();
+        void onGameOver();
     }
 
 }

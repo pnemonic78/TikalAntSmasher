@@ -26,6 +26,7 @@ import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.service.AppService;
+import com.tikalk.antsmasher.utils.SoundHelper;
 
 /**
  * Game board activity.
@@ -44,6 +45,7 @@ public class BoardActivity extends AppCompatActivity implements
     private AppService appService;//FIXME move to BoardViewModel
     private boolean isServiceBounded = false;
     private Intent mServiceIntent;
+    SoundHelper soundHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class BoardActivity extends AppCompatActivity implements
         presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
         presenter.setView(this);
         presenter.getGame().observe(this, this);
+        soundHelper = new SoundHelper(this);
 
     }
 
@@ -166,6 +169,8 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onGameFinished() {
         runOnUiThread(() -> {
+            soundHelper.pauseMusic();
+            soundHelper.playGameOver();
             showGameOverDialog();
         });
     }
@@ -191,6 +196,7 @@ public class BoardActivity extends AppCompatActivity implements
             }
         }
         boardView.smashAnt(ant);
+        soundHelper.playPopSound();
 
     }
 
@@ -230,7 +236,20 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onGameStarted() {
+        soundHelper.playMusic();
+    }
+
+    @Override
+    public void onGameOver() {
+        soundHelper.pauseMusic();
+        soundHelper.playGameOver();
+    }
+
+    @Override
     protected void onDestroy() {
+        soundHelper.cleanSoundHelper();
+
         if (isFinishing()) {
             Log.i(TAG, "onDestroy: exiting...");
             if (appService != null && isServiceBounded) {
