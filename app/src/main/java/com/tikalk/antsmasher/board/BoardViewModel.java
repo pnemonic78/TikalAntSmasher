@@ -1,11 +1,22 @@
 package com.tikalk.antsmasher.board;
 
+import android.app.Application;
+import android.app.Service;
+import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -18,12 +29,15 @@ import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.service.AppService;
 
 /**
  * Board presenter.
  */
 
-public class BoardViewModel extends ViewModel {
+public class BoardViewModel extends AndroidViewModel implements
+        LifecycleObserver,
+        AppService.AppServiceEventListener {
 
     private static final String TAG = "BoardViewModel";
 
@@ -60,8 +74,6 @@ public class BoardViewModel extends ViewModel {
         void onGameFinished();
 
         void smashAnt(Ant ant, boolean user);
-
-        void sendSmash(AntSmash event);
     }
 
     private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
@@ -71,6 +83,13 @@ public class BoardViewModel extends ViewModel {
     private static final Random random = new Random();
     private Thread thread;
     private final Handler handler = new Handler();
+    private AppService.AppServiceProxy appService;
+    private boolean serviceBound = false;
+    private Intent serviceIntent;
+
+    public BoardViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public void setView(View view) {
         this.view = view;
@@ -126,6 +145,9 @@ public class BoardViewModel extends ViewModel {
         }
     }
 
+    /**
+     * Start the game.
+     */
     public void start() {
         view.paint();
 
@@ -205,6 +227,9 @@ public class BoardViewModel extends ViewModel {
         thread.start();
     }
 
+    /**
+     * Stop the game.
+     */
     public void stop() {
         if (thread != null) {
             thread.interrupt();
@@ -218,7 +243,7 @@ public class BoardViewModel extends ViewModel {
     public void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
-        view.sendSmash(event);
+        appService.smashAnt(event);
         if (BuildConfig.DEBUG) {
             onAntSmashed(event);//TODO delete me!
         }
@@ -239,6 +264,7 @@ public class BoardViewModel extends ViewModel {
      *
      * @param event the location event.
      */
+    @Override
     public void onAntMoved(AntLocation event) {
         Game game = getGame().getValue();
         if (game != null) {
@@ -267,6 +293,7 @@ public class BoardViewModel extends ViewModel {
      *
      * @param event the smash event.
      */
+    @Override
     public void onAntSmashed(AntSmash event) {
         Game game = getGame().getValue();
         if (game != null) {
@@ -287,4 +314,53 @@ public class BoardViewModel extends ViewModel {
             view.paint();
         }, delay);
     }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    void onStart() {
+        Log.v(TAG, "onStart");
+        final Context context = getApplication();
+        serviceIntent = new Intent(context, AppService.class);
+        context.bindService(serviceIntent, connection, Service.BIND_AUTO_CREATE);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    void onStop() {
+        Log.v(TAG, "onStop");
+        //This means that onStop called due to screen rotation, therefore it's crucial to unbind
+        //the service and clean its reference to insure that the destroyed Activity reference will be released.
+        //Service will rebound in onStart after mActivity recreation.
+        //If this is not due to screen rotation service will be killed in onDestroy ( stopService() ).
+        final Context context = getApplication();
+        context.unbindService(connection); //This will not stop the service as it started with startService()
+        serviceBound = false;
+        appService = null;
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    void onDestroy() {
+        Log.v(TAG, "onDestroy");
+        if (appService != null && serviceBound) {
+            final Context context = getApplication();
+            context.unbindService(connection);
+            context.stopService(serviceIntent);
+        }
+    }
+
+    private final ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            AppService.LocalBinder binder = (AppService.LocalBinder) service;
+
+            appService = binder.getService();
+            serviceBound = true;
+            appService.registerServiceEventListener(BoardViewModel.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.i(TAG, "onServiceDisconnected: ");
+            serviceBound = false;
+            appService = null;
+        }
+    };
 }

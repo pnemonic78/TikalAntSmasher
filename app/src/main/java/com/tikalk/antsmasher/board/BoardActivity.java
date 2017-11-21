@@ -1,13 +1,8 @@
 package com.tikalk.antsmasher.board;
 
-import android.app.Service;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
@@ -23,9 +18,6 @@ import android.view.View;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
-import com.tikalk.antsmasher.model.socket.AntLocation;
-import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.service.AppService;
 
 /**
  * Game board activity.
@@ -33,17 +25,13 @@ import com.tikalk.antsmasher.service.AppService;
 public class BoardActivity extends AppCompatActivity implements
         BoardViewModel.View,
         Observer<Game>,
-        BoardView.AntListener,
-        AppService.AppServiceEventListener {
+        BoardView.AntListener {
 
     private static final String TAG = "BoardActivity";
 
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
-    private AppService.AppServiceProxy appService;//FIXME move to BoardViewModel
-    private boolean serviceBound = false;
-    private Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,39 +58,9 @@ public class BoardActivity extends AppCompatActivity implements
 
         presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
         presenter.setView(this);
+        getLifecycle().addObserver(presenter);
         presenter.getGame().observe(this, this);
-
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        serviceIntent = new Intent(this, AppService.class);
-        bindService(serviceIntent, connection, Service.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (isChangingConfigurations()) {
-            //This means that onStop called due to screen rotation, therefore it's crucial to unbind
-            //the service and clean its reference to insure that the destroyed Activity reference will be released.
-            //Service will rebound in onStart after mActivity recreation.
-            //If this is not due to screen rotation service will be killed in onDestroy ( stopService() ).
-            unbindService(connection); //This will not stop the service as it started with startService()
-            serviceBound = false;
-            appService = null;
-        } else {
-            /*
-            *This means that onStop called due 2 possible reasons:
-             1. Activity is going down because user hit the back button ( --> destroyed)
-             The Service will be cleaned and stopped in onDestroy()
-             2. The user is leaving to another mActivity such as web browser, a phone call, or hit the home button (--> stopped)
-             The service will keep running in background until activity resumes
-            * */
-        }
-    }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -186,57 +144,18 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void smashAnt(Ant ant, boolean user) {
+        boardView.smashAnt(ant);
         if (user && (ant != null)) {
             Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             if ((vibrator != null) && vibrator.hasVibrator()) {
                 vibrator.vibrate(10L);
             }
         }
-        boardView.smashAnt(ant);
-    }
-
-    @Override
-    public void sendSmash(AntSmash event) {
-        appService.smashAnt(event);
-    }
-
-    private final ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            AppService.LocalBinder binder = (AppService.LocalBinder) service;
-
-            appService = binder.getService();
-            serviceBound = true;
-            appService.registerServiceEventListener(BoardActivity.this);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            Log.i(TAG, "onServiceDisconnected: ");
-            serviceBound = false;
-            appService = null;
-        }
-    };
-
-    @Override
-    public void onAntMoved(AntLocation locationEvent) {
-        presenter.onAntMoved(locationEvent);
-    }
-
-    @Override
-    public void onAntSmashed(AntSmash smashEvent) {
-        presenter.onAntSmashed(smashEvent);
     }
 
     @Override
     protected void onDestroy() {
-        if (isFinishing()) {
-            Log.i(TAG, "onDestroy: exiting...");
-            if (appService != null && serviceBound) {
-                unbindService(connection);
-                stopService(serviceIntent);
-            }
-        }
+        Log.i(TAG, "onDestroy");
         super.onDestroy();
         presenter.stop();
     }
