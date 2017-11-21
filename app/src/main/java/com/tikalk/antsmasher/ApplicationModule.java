@@ -1,16 +1,11 @@
 package com.tikalk.antsmasher;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import android.content.Context;
+import android.app.Application;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.model.socket.SocketMessage;
-import com.tikalk.antsmasher.networking.SocketMessageSerializer;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,38 +16,22 @@ import dagger.Provides;
 @Module
 @Singleton
 class ApplicationModule {
-    private final Context mContext;
+    Application mApplication;
 
-    ApplicationModule(Context context) {
-        mContext = context;
+    ApplicationModule(Application application) {
+        mApplication = application;
     }
 
-
-    @Provides
-    Context provideContext() {
-        return mContext;
-    }
 
     @Provides
     PrefsHelper providePrefsHelper() {
-        return new PrefsHelper(mContext);
-    }
-
-
-    @Provides
-    @Named("PlainGson")
-    @Singleton
-    Gson providePlainGson() {
-        return new Gson();
+        return new PrefsHelper(mApplication);
     }
 
     @Provides
-    @Named("SocketMessageGson")
     @Singleton
-    Gson provideSocketGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(SocketMessage.class, new SocketMessageSerializer());
-        return gsonBuilder.create();
+    Application provideApplication(){
+        return mApplication;
     }
 
 }
