@@ -160,12 +160,12 @@ public class BoardViewModel extends AndroidViewModel implements
 
             @Override
             public void run() {
-                onGameStarted();
                 try {
                     // wait for View to start drawing.
                     sleep(500L);
                 } catch (InterruptedException e) {
                 }
+                onGameStarted();
                 final View view = BoardViewModel.this.view;
                 final Game game = BoardViewModel.this.game.getValue();
                 final int size = 20;

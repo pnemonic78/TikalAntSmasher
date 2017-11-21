@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
@@ -34,6 +35,7 @@ public class BoardActivity extends AppCompatActivity implements
     private BoardViewModel presenter;
     private Game game;
     private SoundHelper soundHelper;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class BoardActivity extends AppCompatActivity implements
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         boardView.setAntListener(this);
+
+        progressBar = findViewById(R.id.wait);
 
         presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
         presenter.setView(this);
@@ -127,15 +131,17 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onGameStarted() {
-        //TODO hide "waiting for game to start" spinning progress.
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.GONE);
+        });
     }
 
     @Override
     public void onGameFinished() {
+        soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {
                 showGameOverDialog();
-                soundHelper.pauseMusic();
                 soundHelper.playGameOver();
             });
         }

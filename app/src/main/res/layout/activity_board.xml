@@ -1,10 +1,22 @@
-<com.tikalk.antsmasher.board.BoardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/board"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/board"
     android:keepScreenOn="true"
-    tools:context="com.tikalk.antsmasher.board.BoardActivity"
-    tools:scaleType="fitXY"
-    tools:src="@drawable/board"/>
+    tools:context="com.tikalk.antsmasher.board.BoardActivity">
+
+    <com.tikalk.antsmasher.board.BoardView
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/board"
+        tools:scaleType="fitXY"
+        tools:src="@drawable/board"/>
+
+    <ProgressBar
+        android:id="@+id/wait"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"/>
+</FrameLayout>
