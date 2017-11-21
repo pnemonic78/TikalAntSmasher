@@ -1,8 +1,8 @@
 package com.tikalk.antsmasher.networking;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
+
+import android.content.Context;
 
 import com.tikalk.antsmasher.model.socket.AntSocketMessage;
 import com.tikalk.antsmasher.service.AppService;

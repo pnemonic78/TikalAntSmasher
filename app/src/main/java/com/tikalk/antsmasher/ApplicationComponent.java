@@ -1,11 +1,11 @@
 package com.tikalk.antsmasher;
 
 
+import javax.inject.Singleton;
+
 import com.tikalk.antsmasher.login_screen.LoginActivity;
 import com.tikalk.antsmasher.networking.NetworkModule;
 import com.tikalk.antsmasher.service.AppService;
-
-import javax.inject.Singleton;
 
 import dagger.Component;
 

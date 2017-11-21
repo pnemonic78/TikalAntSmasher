@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.SigninMvpView;
-import com.tikalk.antsmasher.R;
-
 import javax.inject.Inject;
+
+import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.SigninMvpView;
+import com.tikalk.antsmasher.data.PrefsHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

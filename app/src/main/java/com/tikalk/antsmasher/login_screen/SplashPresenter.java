@@ -1,9 +1,9 @@
 package com.tikalk.antsmasher.login_screen;
 
-import com.tikalk.antsmasher.base.BasePresenter;
-import com.tikalk.antsmasher.SigninMvpView;
-
 import javax.inject.Inject;
+
+import com.tikalk.antsmasher.SigninMvpView;
+import com.tikalk.antsmasher.base.BasePresenter;
 
 import io.reactivex.disposables.Disposable;
 

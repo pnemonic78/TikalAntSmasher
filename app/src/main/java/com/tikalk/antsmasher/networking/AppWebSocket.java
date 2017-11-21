@@ -1,5 +1,8 @@
 package com.tikalk.antsmasher.networking;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
@@ -8,15 +11,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import com.tikalk.antsmasher.model.socket.SocketMessage;
-import com.tikalk.antsmasher.service.AppService;
-
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
+import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.service.AppService;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
