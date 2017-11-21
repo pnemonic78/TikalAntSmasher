@@ -1,25 +1,22 @@
 package com.tikalk.antsmasher.board;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.bumptech.glide.Glide;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
@@ -30,7 +27,7 @@ import static com.tikalk.graphics.ImageUtils.tintImage;
  * Board view with wood background and ants walking on top.
  */
 
-public class BoardView extends View {
+public class BoardView extends AppCompatImageView {
 
     private static final String TAG = "BoardView";
 
@@ -65,13 +62,13 @@ public class BoardView extends View {
         init(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
-    }
-
     private void init(Context context) {
+        setScaleType(ScaleType.FIT_XY);
+        Glide.with(this)
+                .asBitmap()
+                .load(R.drawable.board)
+                .into(this);
+
         final Resources res = context.getResources();
         antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
         antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
@@ -204,26 +201,6 @@ public class BoardView extends View {
             rect.alive = false;
             rect.offset((antWidth - antDeadWidth) / 2, (antHeight - antDeadHeight) / 2);
             postInvalidate();
-        }
-    }
-
-    @Override
-    protected void onSizeChanged(final int w, final int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-        if ((w != oldw) && (h != oldh)) {
-            final Resources res = getResources();
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            if ((bgWidth == 0) || (bgHeight == 0)) {
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeResource(res, R.drawable.board, options);
-                bgWidth = options.outWidth;
-                bgHeight = options.outHeight;
-                options.inJustDecodeBounds = false;
-            }
-            options.inSampleSize = Math.max(1, Math.min(bgWidth / w, bgHeight / h));
-            Bitmap bg = BitmapFactory.decodeResource(res, R.drawable.board, options);
-            setBackground(new BitmapDrawable(res, bg));
         }
     }
 }
