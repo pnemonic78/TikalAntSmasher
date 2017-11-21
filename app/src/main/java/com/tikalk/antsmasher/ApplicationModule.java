@@ -9,8 +9,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.model.SocketMessage;
-import com.tikalk.antsmasher.model.SocketMessageSerializer;
+import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.networking.SocketMessageSerializer;
 
 import dagger.Module;
 import dagger.Provides;

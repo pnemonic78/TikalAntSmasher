@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.tikalk.antsmasher.model.Ant;
-import com.tikalk.antsmasher.model.AntLocation;
-import com.tikalk.antsmasher.model.AntSmash;
+import com.tikalk.antsmasher.model.socket.AntLocation;
+import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Team;

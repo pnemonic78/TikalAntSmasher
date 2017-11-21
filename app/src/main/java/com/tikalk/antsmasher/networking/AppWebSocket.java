@@ -11,8 +11,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import com.tikalk.antsmasher.model.SocketMessage;
-import com.tikalk.antsmasher.model.SocketMessageSerializer;
+import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
 
 import java.lang.ref.WeakReference;

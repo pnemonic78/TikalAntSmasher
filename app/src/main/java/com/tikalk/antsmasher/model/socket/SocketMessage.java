@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.model;
+package com.tikalk.antsmasher.model.socket;
 
 import com.google.gson.annotations.SerializedName;
 

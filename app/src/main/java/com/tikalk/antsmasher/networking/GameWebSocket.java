@@ -4,8 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
-import com.tikalk.antsmasher.model.AntLocation;
-import com.tikalk.antsmasher.model.AntSocketMessage;
+import com.tikalk.antsmasher.model.socket.AntSocketMessage;
 import com.tikalk.antsmasher.service.AppService;
 
 import okhttp3.Response;

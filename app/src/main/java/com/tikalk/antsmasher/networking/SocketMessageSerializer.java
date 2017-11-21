@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.model;
+package com.tikalk.antsmasher.networking;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,6 +7,8 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
+import com.tikalk.antsmasher.model.socket.SmashSocketMessage;
+import com.tikalk.antsmasher.model.socket.SocketMessage;
 
 public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
