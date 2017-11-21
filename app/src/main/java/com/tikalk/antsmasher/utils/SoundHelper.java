@@ -1,13 +1,11 @@
 package com.tikalk.antsmasher.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
-import android.view.View;
 
 import com.tikalk.antsmasher.R;
 
@@ -19,17 +17,17 @@ public class SoundHelper {
 
     private SoundPool mSoundPool;
     private MediaPlayer mMusicPlayer;
-    private MediaPlayer mPopSound;
-    private Activity mActivity;
+    private MediaPlayer mSmashSound;
+    private Context mActivity;
 
     private boolean mLoaded;
     private float mVolume;
 
-    private int poppedSoundId;
+    private int smashedSoundId;
     private int gameOverSoundId;
     private int missedSoundId;
 
-    public SoundHelper(Activity context) {
+    public SoundHelper(Context context) {
         mActivity = context;
         prepareMusicPlayer();
         prepareSoundPool();
@@ -37,7 +35,7 @@ public class SoundHelper {
 
     public void prepareMusicPlayer() {
         //Using getApplicationContext will help to improve media player operation during configuration changes
-        mPopSound = MediaPlayer.create(mActivity.getApplicationContext(), R.raw.smash);
+        mSmashSound = MediaPlayer.create(mActivity.getApplicationContext(), R.raw.smash);
         mMusicPlayer = MediaPlayer.create(mActivity.getApplicationContext(), R.raw.ants_moving);
         mMusicPlayer.setVolume(.5f, .5f);
         mMusicPlayer.setLooping(true);
@@ -49,7 +47,7 @@ public class SoundHelper {
         float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         mVolume = actVolume / maxVolume;
 
-        mActivity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+//        mActivity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes attributes = new AudioAttributes.Builder().
@@ -65,7 +63,7 @@ public class SoundHelper {
 
         mSoundPool.setOnLoadCompleteListener((soundPool, sampleId, status) -> mLoaded = true);
 
-        poppedSoundId = mSoundPool.load(mActivity, R.raw.smash, 1);
+        smashedSoundId = mSoundPool.load(mActivity, R.raw.smash, 1);
         gameOverSoundId = mSoundPool.load(mActivity, R.raw.game_over, 1);
         //  missedSoundId = mSoundPool.load(mActivity, R.raw.missed_ballon, 1);
 
@@ -84,9 +82,9 @@ public class SoundHelper {
         }
     }
 
-    public void playPopSound() {
+    public void playSmashedSound() {
         if (mLoaded) {
-            mSoundPool.play(poppedSoundId, mVolume, mVolume, 1, 0, 1f);
+            mSoundPool.play(smashedSoundId, mVolume, mVolume, 1, 0, 1f);
         }
     }
 

@@ -18,8 +18,6 @@ import android.view.View;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
-import com.tikalk.antsmasher.model.socket.AntLocation;
-import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.utils.SoundHelper;
 
@@ -135,13 +133,10 @@ public class BoardActivity extends AppCompatActivity implements
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {
                 showGameOverDialog();
+                soundHelper.pauseMusic();
+                soundHelper.playGameOver();
             });
         }
-        runOnUiThread(() -> {
-            soundHelper.pauseMusic();
-            soundHelper.playGameOver();
-            showGameOverDialog();
-        });
     }
 
     private void showGameOverDialog() {
@@ -166,68 +161,17 @@ public class BoardActivity extends AppCompatActivity implements
             }
         }
         boardView.smashAnt(ant);
-        soundHelper.playPopSound();
+        soundHelper.playSmashedSound();
 
     }
 
-    @Override
-    public void sendSmash(AntSmash event) {
-        appService.smashAnt(event);
-    }
-
-    ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            AppService.LocalBinder binder = (AppService.LocalBinder) iBinder;
-
-            appService = binder.getService();
-            if (appService != null) {
-                isServiceBounded = true;
-                appService.registerServiceEventListener(BoardActivity.this);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            Log.i(TAG, "onServiceDisconnected: ");
-            isServiceBounded = false;
-            appService = null;
-        }
-    };
-
-    @Override
-    public void onAntMoved(AntLocation locationEvent) {
-        presenter.onAntMoved(locationEvent);
-    }
-
-    @Override
-    public void onAntSmashed(AntSmash smashEvent) {
-        presenter.onAntSmashed(smashEvent);
-    }
-
-    @Override
-    public void onGameStarted() {
-        soundHelper.playMusic();
-    }
-
-    @Override
-    public void onGameOver() {
-        soundHelper.pauseMusic();
-        soundHelper.playGameOver();
-    }
 
     @Override
     protected void onDestroy() {
         Log.i(TAG, "onDestroy");
         soundHelper.cleanSoundHelper();
 
-        if (isFinishing()) {
-            Log.i(TAG, "onDestroy: exiting...");
-            if (appService != null && isServiceBounded) {
-                unbindService(mConnection);
-                stopService(mServiceIntent);
-            }
-        }
+
         super.onDestroy();
         presenter.stop();
     }
