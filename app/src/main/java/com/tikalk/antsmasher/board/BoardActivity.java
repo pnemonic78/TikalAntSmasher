@@ -4,6 +4,7 @@ import android.app.Service;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -162,8 +165,17 @@ public class BoardActivity extends AppCompatActivity implements
     public void onGameFinished() {
         runOnUiThread(() -> {
             Toast.makeText(BoardActivity.this, "Game finished", Toast.LENGTH_SHORT).show();
-            finish();
+
+            showGameOverDialog();
         });
+    }
+
+    private void showGameOverDialog() {
+        AlertDialog.Builder builder =  new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name)).setMessage("Game Over").setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher));
+        builder.setPositiveButton("OK", (dialogInterface, i) -> finish());
+
+        builder.create().show();
     }
 
     @Override

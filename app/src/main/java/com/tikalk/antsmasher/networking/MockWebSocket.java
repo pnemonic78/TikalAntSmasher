@@ -43,10 +43,10 @@ public class MockWebSocket extends AppWebSocket {
             ant.setLocation(xVal, yVal);
 
             Log.i(TAG, "MockWebSocket: ant location = " + ant.getLocation());
-//            if(socketMessageListener != null){
-//                socketMessageListener.onAntMoved(new AntLocation(ant
-//                        .getId(), ant.getLocation().x, ant.getLocation().y));
-//            }
+            if(socketMessageListener != null){
+                socketMessageListener.onAntMoved(new AntLocation(ant.getId(), "10"
+                        , ant.getLocation().x, ant.getLocation().y));
+            }
         });
         upDownAnim.setRepeatMode(ValueAnimator.RESTART);
 
@@ -61,7 +61,7 @@ public class MockWebSocket extends AppWebSocket {
         Log.i(TAG, "setMessageListener: starting animation...");
         socketMessageListener = mServiceListener;
         animatorSet.playTogether(upDownAnim, sideAnimation);
-        animatorSet.start();
+//        animatorSet.start();
     }
 
     @Override
