@@ -30,14 +30,26 @@ public class AppService extends Service {
 
     private static final String TAG = "AppService";
 
-    NetworkManager networkManager;
-    AppServiceEventListener serviceEventListener;
-    AppWebSocket gameWebSocket;
-    Binder mBinder = new LocalBinder();
-    String userName;
+    public interface AppServiceEventListener {
+        void onAntMoved(AntLocation locationEvent);
+
+        void onAntSmashed(AntSmash smashEvent);
+    }
+
+    public interface AppServiceProxy {
+        void registerServiceEventListener(AppServiceEventListener serviceEventListener);
+
+        void smashAnt(AntSmash event);
+    }
+
+    private NetworkManager networkManager;
+    private AppServiceEventListener serviceEventListener;
+    private AppWebSocket gameWebSocket;
+    private final LocalBinder binder = new LocalBinder();
+    private String userName;
 
     @Inject
-    PrefsHelper mPrefsHelper;
+    PrefsHelper prefsHelper;
 
     @Inject
     @Named("SocketMessageGson")
@@ -50,66 +62,62 @@ public class AppService extends Service {
         networkManager = new NetworkManager();
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        userName = mPrefsHelper.getString(PrefsConstants.USER_NAME);
+        userName = prefsHelper.getString(PrefsConstants.USER_NAME);
 
         startWebSockets();
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
+    public LocalBinder onBind(Intent intent) {
         Log.i(TAG, "onBind");
-        return mBinder;
+        return binder;
     }
 
-    public class LocalBinder extends Binder {
-        public AppService getService() {
-            // Return this instance of LocalService so clients can call public methods
-            return AppService.this;
+    public final class LocalBinder extends Binder implements AppServiceProxy {
+        public AppServiceProxy getService() {
+            // Return this instance so that clients can call public methods.
+            return this;
+        }
+
+        @Override
+        public void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
+            AppService.this.registerServiceEventListener(serviceEventListener);
+        }
+
+        @Override
+        public void smashAnt(AntSmash event) {
+            AppService.this.smashAnt(event);
         }
     }
 
-    public void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
+    private void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
         this.serviceEventListener = serviceEventListener;
         if (gameWebSocket != null) {
             gameWebSocket.setMessageListener(serviceEventListener);
         }
     }
 
-
-    public void smashAnt(AntSmash smash) {
+    private void smashAnt(AntSmash smash) {
         AntSmashMessage antSocketMessage = new AntSmashMessage(smash);
         if (gameWebSocket != null) {
             gameWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
         }
     }
 
-    public void startWebSockets() {
+    private void startWebSockets() {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Debug, creating mock web socket");
             gameWebSocket = new MockWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
         } else {
-            Log.i(TAG, "Debug, real web socket");
+            Log.i(TAG, "Real web socket");
             gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
         }
     }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         networkManager.clear();
-    }
-
-    public interface AppServiceEventListener {
-        void onAntMoved(AntLocation locationEvent);
-
-        void onAntSmashed(AntSmash smashEvent);
     }
 
 }

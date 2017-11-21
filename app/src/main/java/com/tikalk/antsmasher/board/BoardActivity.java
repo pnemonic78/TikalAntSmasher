@@ -41,9 +41,9 @@ public class BoardActivity extends AppCompatActivity implements
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
-    private AppService appService;//FIXME move to BoardViewModel
-    private boolean isServiceBounded = false;
-    private Intent mServiceIntent;
+    private AppService.AppServiceProxy appService;//FIXME move to BoardViewModel
+    private boolean serviceBound = false;
+    private Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,8 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        mServiceIntent = new Intent(this, AppService.class);
-        bindService(mServiceIntent, mConnection, Service.BIND_AUTO_CREATE);
+        serviceIntent = new Intent(this, AppService.class);
+        bindService(serviceIntent, connection, Service.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -89,8 +89,8 @@ public class BoardActivity extends AppCompatActivity implements
             //the service and clean its reference to insure that the destroyed Activity reference will be released.
             //Service will rebound in onStart after mActivity recreation.
             //If this is not due to screen rotation service will be killed in onDestroy ( stopService() ).
-            unbindService(mConnection); //This will not stop the service as it started with startService()
-            isServiceBounded = false;
+            unbindService(connection); //This will not stop the service as it started with startService()
+            serviceBound = false;
             appService = null;
         } else {
             /*
@@ -165,9 +165,11 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onGameFinished() {
-        runOnUiThread(() -> {
-            showGameOverDialog();
-        });
+        if (!isDestroyed() && !isFinishing()) {
+            runOnUiThread(() -> {
+                showGameOverDialog();
+            });
+        }
     }
 
     private void showGameOverDialog() {
@@ -191,7 +193,6 @@ public class BoardActivity extends AppCompatActivity implements
             }
         }
         boardView.smashAnt(ant);
-
     }
 
     @Override
@@ -199,22 +200,20 @@ public class BoardActivity extends AppCompatActivity implements
         appService.smashAnt(event);
     }
 
-    ServiceConnection mConnection = new ServiceConnection() {
+    private final ServiceConnection connection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            AppService.LocalBinder binder = (AppService.LocalBinder) iBinder;
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            AppService.LocalBinder binder = (AppService.LocalBinder) service;
 
             appService = binder.getService();
-            if (appService != null) {
-                isServiceBounded = true;
-                appService.registerServiceEventListener(BoardActivity.this);
-            }
+            serviceBound = true;
+            appService.registerServiceEventListener(BoardActivity.this);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.i(TAG, "onServiceDisconnected: ");
-            isServiceBounded = false;
+            serviceBound = false;
             appService = null;
         }
     };
@@ -233,9 +232,9 @@ public class BoardActivity extends AppCompatActivity implements
     protected void onDestroy() {
         if (isFinishing()) {
             Log.i(TAG, "onDestroy: exiting...");
-            if (appService != null && isServiceBounded) {
-                unbindService(mConnection);
-                stopService(mServiceIntent);
+            if (appService != null && serviceBound) {
+                unbindService(connection);
+                stopService(serviceIntent);
             }
         }
         super.onDestroy();
