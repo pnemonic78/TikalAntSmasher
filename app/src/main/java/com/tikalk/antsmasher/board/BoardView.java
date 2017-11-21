@@ -35,14 +35,12 @@ public class BoardView extends AppCompatImageView {
         void onAntTouch(@Nullable String antId);
     }
 
-    int bgWidth = 0;
-    int bgHeight = 0;
     int antWidth;
     int antHeight;
     int antDeadWidth;
     int antDeadHeight;
-    private Map<String, Bitmap> bitmapsAlive = new HashMap<>();
-    private Map<String, Bitmap> bitmapsDead = new HashMap<>();
+    private final Map<String, Bitmap> bitmapsAlive = new HashMap<>();
+    private final Map<String, Bitmap> bitmapsDead = new HashMap<>();
     private final List<AntRect> ants = new CopyOnWriteArrayList<>();
     private final Map<String, AntRect> antsById = new HashMap<>();
     private AntListener antListener;
