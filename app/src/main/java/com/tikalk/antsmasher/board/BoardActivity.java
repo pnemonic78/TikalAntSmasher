@@ -18,7 +18,6 @@ import android.view.View;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
-import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.utils.SoundHelper;
 
 /**
@@ -34,9 +33,7 @@ public class BoardActivity extends AppCompatActivity implements
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
-    private AppService appService;//FIXME move to BoardViewModel
-    private boolean isServiceBounded = false;
-    SoundHelper soundHelper;
+    private SoundHelper soundHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,17 +159,13 @@ public class BoardActivity extends AppCompatActivity implements
         }
         boardView.smashAnt(ant);
         soundHelper.playSmashedSound();
-
     }
-
 
     @Override
     protected void onDestroy() {
         Log.i(TAG, "onDestroy");
-        soundHelper.cleanSoundHelper();
-
-
         super.onDestroy();
         presenter.stop();
+        soundHelper.cleanSoundHelper();
     }
 }
