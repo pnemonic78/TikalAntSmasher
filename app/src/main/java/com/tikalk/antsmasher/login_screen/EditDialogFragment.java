@@ -2,6 +2,7 @@ package com.tikalk.antsmasher.login_screen;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ public class EditDialogFragment extends DialogFragment {
 
     private static final int COMMENT_MAX_LENGTH = 25;
     EditDialogEventListener eventListener;
+    Button posButton;
 
     @Nullable
     @Override
@@ -45,10 +48,10 @@ public class EditDialogFragment extends DialogFragment {
 
 
     public AlertDialog buildDialog(Context context) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
-        alert.setTitle(getArguments().getString("Title"));
-        alert.setMessage(getArguments().getString("Message"));
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
+        builder.setTitle(getArguments().getString("Title"));
+        builder.setMessage(getArguments().getString("Message"));
 
         LinearLayout layout = new LinearLayout(context);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
@@ -74,13 +77,51 @@ public class EditDialogFragment extends DialogFragment {
             chars.setText("0/" + COMMENT_MAX_LENGTH);
             input.setText("");
         }
+
+        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv1Params.bottomMargin = 5;
+        layout.addView(input, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        layout.addView(chars, tv1Params);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton(R.string.ok_button,
+                (dialog, whichButton) -> {
+                    String value = input.getText().toString().trim();
+                    eventListener.onEditDone(value);
+                    // Toast.makeText(context, value + " entered..",
+                    // Toast.LENGTH_LONG).show();
+                });
+
+
+        builder.setTitle(getString(R.string.app_name));
+        builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                posButton = ((AlertDialog)dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+                posButton.setEnabled(false);
+            }
+        });
+
+
         input.addTextChangedListener(new TextWatcher() {
             // StringBuilder builder = new StringBuilder();
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
-                String text = input.getText().toString();
+                String text = input.getText().toString().trim();
                 chars.setText(text.length() + "/" + COMMENT_MAX_LENGTH);
+                if(text.length() > 0){
+                    posButton.setEnabled(true);
+                }else {
+                    posButton.setEnabled(false);
+                }
             }
 
             @Override
@@ -95,29 +136,7 @@ public class EditDialogFragment extends DialogFragment {
             }
         });
 
-        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1Params.bottomMargin = 5;
-        layout.addView(input, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        layout.addView(chars, tv1Params);
-
-        alert.setView(layout);
-
-        alert.setPositiveButton(R.string.ok_button,
-                (dialog, whichButton) -> {
-                    String value = input.getText().toString();
-                    eventListener.onEditDone(value);
-                    // Toast.makeText(context, value + " entered..",
-                    // Toast.LENGTH_LONG).show();
-                });
-
-
-        alert.setTitle(getString(R.string.app_name));
-        alert.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
-        return alert.create();
+        return dialog;
     }
 
     public interface EditDialogEventListener {
