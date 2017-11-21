@@ -107,9 +107,9 @@ public class AppService extends Service {
     }
 
     public interface AppServiceEventListener {
-        void onAntMoved(AntLocation antLocation);
+        void onAntMoved(AntLocation locationEvent);
 
-        void onAntSmashed(AntSmash smashed);
+        void onAntSmashed(AntSmash smashEvent);
     }
 
 }

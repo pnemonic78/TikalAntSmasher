@@ -214,7 +214,6 @@ public class BoardViewModel extends ViewModel {
     public void onAntTouch(String antId) {
         //TODO send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
-
         view.sendSmash(event);
     }
 
