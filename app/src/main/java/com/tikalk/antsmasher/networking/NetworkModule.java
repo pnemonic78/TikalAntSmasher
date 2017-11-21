@@ -2,6 +2,7 @@ package com.tikalk.antsmasher.networking;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 
 import javax.inject.Named;

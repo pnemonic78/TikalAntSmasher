@@ -44,7 +44,7 @@ public class MockWebSocket extends AppWebSocket {
             ant.setLocation(xVal, yVal);
 
             Log.i(TAG, "MockWebSocket: ant location = " + ant.getLocation());
-            if(socketMessageListener != null){
+            if (socketMessageListener != null) {
                 socketMessageListener.onAntMoved(new AntLocation(ant.getId(), "10"
                         , ant.getLocation().x, ant.getLocation().y));
             }
