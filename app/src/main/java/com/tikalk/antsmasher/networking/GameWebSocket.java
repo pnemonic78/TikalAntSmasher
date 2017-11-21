@@ -12,16 +12,15 @@ import okhttp3.WebSocket;
 
 public class GameWebSocket extends AppWebSocket {
 
-    private AppService.AppServiceEventListener messageListener;
-    private Gson gson;
+    private final Gson gson;
 
     public GameWebSocket(String baseUrl, String deviceId, Context context) {
         super(baseUrl, deviceId, context);
         gson = new Gson();
     }
 
-    public void setMessageListener(AppService.AppServiceEventListener messageListener) {
-        this.messageListener = messageListener;
+    public void setMessageListener(AppService.AppServiceEventListener eventListener) {
+        super.setMessageListener(eventListener);
     }
 
     @Override
@@ -32,8 +31,8 @@ public class GameWebSocket extends AppWebSocket {
     protected void handleNewMessage(WebSocket socket, String message) {
         AntLocationMessage locationMessage = gson.fromJson(message, AntLocationMessage.class);
 
-        if (messageListener != null) {
-            messageListener.onAntMoved(locationMessage.getAntLocation());
+        if (socketMessageListener != null) {
+            socketMessageListener.onAntMoved(locationMessage.getAntLocation());
         }
     }
 

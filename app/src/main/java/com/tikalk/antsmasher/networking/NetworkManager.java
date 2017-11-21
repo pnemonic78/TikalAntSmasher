@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -14,13 +15,14 @@ public class NetworkManager {
 
     private static final String TAG = "NetworkManager";
 
-    Set<AppWebSocket> webSockets;
-    io.reactivex.Observable<AppWebSocket> socketsObservable;
+    private final Set<AppWebSocket> webSockets;
+    private Observable<AppWebSocket> socketsObservable;
 
     public NetworkManager() {
         webSockets = new ConcurrentSkipListSet<>();
-        socketsObservable = io.reactivex.Observable.fromIterable(webSockets);
-        socketsObservable.subscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread());
+        socketsObservable = Observable.fromIterable(webSockets)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public boolean add(AppWebSocket webSocket) {
@@ -29,8 +31,7 @@ public class NetworkManager {
 
     public boolean remove(AppWebSocket webSocket) {
         webSocket.closeConnection();
-        boolean status = webSockets.remove(webSocket);
-        return status;
+        return webSockets.remove(webSocket);
     }
 
     public void updateInternetConnection(boolean isInternetConnected) {
@@ -39,7 +40,6 @@ public class NetworkManager {
 
             @Override
             public void onSubscribe(Disposable disposable) {
-
             }
 
             @Override
@@ -49,12 +49,10 @@ public class NetworkManager {
 
             @Override
             public void onError(Throwable throwable) {
-
             }
 
             @Override
             public void onComplete() {
-
             }
         });
     }
@@ -64,24 +62,22 @@ public class NetworkManager {
         socketsObservable.subscribe(new Observer<AppWebSocket>() {
             @Override
             public void onSubscribe(Disposable disposable) {
-
             }
 
             @Override
             public void onNext(AppWebSocket webSocket) {
-                Log.i(TAG, "clear socket: " + webSocket.socketBaseUrl);
+                Log.i(TAG, "clear socket: " + webSocket.getSocketBaseUrl());
                 remove(webSocket);
-                webSocket = null;
             }
 
             @Override
             public void onError(Throwable throwable) {
-                Log.e(TAG, "onError: ", throwable);
+                Log.e(TAG, "onError: " + throwable.getLocalizedMessage(), throwable);
             }
 
             @Override
             public void onComplete() {
-                Log.i(TAG, "onComplete: ");
+                Log.i(TAG, "onComplete");
                 webSockets.clear();
             }
         });

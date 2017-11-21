@@ -28,7 +28,6 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-
 public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     private static final String TAG = "AppWebSocket";
@@ -39,24 +38,24 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     private WebSocket mSocket;
     private Request mRequest;
 
-    OkHttpClient client;
+    private OkHttpClient client;
     private OkHttpClient.Builder okHttpClientBuilder;
     private String deviceId;
 
     private GsonBuilder gsonBuilder = new GsonBuilder();
     private Gson mSocketMessageGson;
 
-    boolean socketOpened = false;
+    private boolean socketOpened = false;
 
     private WeakReference<Context> weakContext;
-    String socketBaseUrl;
+    private String socketBaseUrl;
     private Disposable pingDisposable;
 
-    AppService.AppServiceEventListener socketMessageListener;
+    protected AppService.AppServiceEventListener socketMessageListener;
 
-    static Handler mHandler = new Handler(Looper.getMainLooper());
+    protected final Handler mHandler = new Handler(Looper.getMainLooper());
 
-    AppWebSocket(String baseUrl, String deviceId, Context context) {
+    protected AppWebSocket(String baseUrl, String deviceId, Context context) {
         Log.i(TAG, "AppWebSocket created.. url: " + baseUrl);
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http").encodedAuthority(baseUrl).appendPath("11").appendPath("xyz_" + deviceId).appendPath("websocket");
@@ -172,7 +171,9 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     protected abstract void handleSocketClose(WebSocket webSocket, int code, String reason);
 
-    public abstract void setMessageListener(AppService.AppServiceEventListener messageListener);
+    public void setMessageListener(AppService.AppServiceEventListener eventListener) {
+        this.socketMessageListener = eventListener;
+    }
 
     @Override
     public int compareTo(@NonNull AppWebSocket webSocket) {
@@ -194,6 +195,9 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         return socketBaseUrl.hashCode();
     }
 
+    public String getSocketBaseUrl() {
+        return socketBaseUrl;
+    }
 
     WebSocketListener mSocketListener = new WebSocketListener() {
         @Override
