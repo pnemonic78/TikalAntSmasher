@@ -148,6 +148,11 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void removeAnt(Ant ant) {
+        boardView.removeAnt(ant);
+    }
+
+    @Override
     public void paint() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             boardView.invalidate();

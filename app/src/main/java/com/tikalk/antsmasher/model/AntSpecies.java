@@ -68,13 +68,21 @@ public class AntSpecies {
 
         if (ants != null) {
             for (Ant ant : ants) {
-                addAnt(ant);
+                add(ant);
             }
         }
     }
 
-    public void addAnt(Ant ant) {
+    public void add(Ant ant) {
         ants.add(ant);
         antsById.put(ant.getId(), ant);
+    }
+
+    public void remove(Ant ant) {
+        final String id = ant.getId();
+        if (antsById.containsKey(id)) {
+            ants.remove(ant);
+            antsById.remove(id);
+        }
     }
 }

@@ -136,6 +136,13 @@ public class BoardView extends View {
         }
     }
 
+    public void removeAnt(Ant ant) {
+        AntRect rect = antsById.remove(ant.getId());
+        if (rect != null) {
+            ants.remove(rect);
+        }
+    }
+
     public void moveTo(Ant ant) {
         AntRect rect = antsById.get(ant.getId());
         if (rect != null) {

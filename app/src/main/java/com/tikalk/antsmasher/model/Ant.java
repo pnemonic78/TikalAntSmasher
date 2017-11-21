@@ -45,7 +45,7 @@ public class Ant {
     }
 
     public boolean isVisible() {
-        return (location.x >= 0f) && (location.x < 1f) && (location.y >= 0f) && (location.y < 1f);
+        return (location.x >= 0f) && (location.x <= 1f) && (location.y >= 0f) && (location.y <= 1f);
     }
 
     public boolean isAlive() {
@@ -54,5 +54,10 @@ public class Ant {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
