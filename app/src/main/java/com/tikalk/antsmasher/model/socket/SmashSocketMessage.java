@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class SmashSocketMessage extends SocketMessage {
 
     @SerializedName("body")
-    private AntSmash antSmash;
+    private final AntSmash antSmash;
 
     public SmashSocketMessage(String type, String address, AntSmash smash) {
         super(type, address);
