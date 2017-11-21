@@ -4,11 +4,14 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Color;
+import android.os.Handler;
 import android.os.SystemClock;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.util.Random;
 
+import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
@@ -61,10 +64,13 @@ public class BoardViewModel extends ViewModel {
         void sendSmash(AntSmash event);
     }
 
+    private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
+
     private View view;
     private MutableLiveData<Game> game;
     private static final Random random = new Random();
     private Thread thread;
+    private final Handler handler = new Handler();
 
     public void setView(View view) {
         this.view = view;
@@ -169,19 +175,13 @@ public class BoardViewModel extends ViewModel {
                 do {
                     for (int i = 0; i < size; i++) {
                         ant = ants[i];
-                        if (!ant.isAlive()) {
-                            continue;
-                        }
-                        dy = antVelocityY[i] * random.nextFloat() * 0.02f;
-                        x = antX[i] + (float) (Math.sin(t) / 10);
-                        y = ant.getLocation().y + dy;
                         species = ant.getSpecies();
-                        onAntMoved(new AntLocation(ant.getId(), species.getId(), x, y));
-                        try {
-                            sleep(1);
-                        } catch (InterruptedException e) {
+                        if (ant.isAlive()) {
+                            dy = antVelocityY[i] * random.nextFloat() * 0.02f;
+                            x = antX[i] + (float) (Math.sin(t) / 10);
+                            y = ant.getLocation().y + dy;
+                            onAntMoved(new AntLocation(ant.getId(), species.getId(), x, y));
                         }
-
                         if (!ant.isVisible()) {
                             ants[i] = null;
                             species.remove(ant);
@@ -190,6 +190,10 @@ public class BoardViewModel extends ViewModel {
                             ant.setLocation(antX[i], antY[i]);
                             species.add(ant);
                             ants[i] = ant;
+                        }
+                        try {
+                            sleep(1);
+                        } catch (InterruptedException e) {
                         }
                     }
                     t += dt;
@@ -212,9 +216,12 @@ public class BoardViewModel extends ViewModel {
     }
 
     public void onAntTouch(String antId) {
-        //TODO send hit/miss to server via socket.
+        // Send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
         view.sendSmash(event);
+        if (BuildConfig.DEBUG) {
+            onAntSmashed(event);//TODO delete me!
+        }
     }
 
     public void onBoardReady() {
@@ -267,8 +274,17 @@ public class BoardViewModel extends ViewModel {
             if (ant != null) {
                 ant.setAlive(false);
                 view.smashAnt(ant, event.user);
+                removeAntDelayed(game, ant, DELAY_REMOVE);
             }
         }
         view.paint();
+    }
+
+    private void removeAntDelayed(Game game, Ant ant, long delay) {
+        handler.postDelayed(() -> {
+            game.removeAnt(ant);
+            view.removeAnt(ant);
+            view.paint();
+        }, delay);
     }
 }
