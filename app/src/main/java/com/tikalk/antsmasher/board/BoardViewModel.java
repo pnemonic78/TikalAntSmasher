@@ -192,7 +192,7 @@ public class BoardViewModel extends ViewModel {
                             ants[i] = ant;
                         }
                         try {
-                            sleep(1);
+                            sleep(2);
                         } catch (InterruptedException e) {
                         }
                     }
