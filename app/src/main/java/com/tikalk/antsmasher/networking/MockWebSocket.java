@@ -8,6 +8,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.tikalk.antsmasher.model.Ant;
+import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.service.AppService;
 
 import okhttp3.Response;
