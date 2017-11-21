@@ -17,6 +17,7 @@ import com.tikalk.antsmasher.service.AppService;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -38,7 +39,8 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     private WebSocket mSocket;
     private Request mRequest;
-    private OkHttpClient client;
+
+    OkHttpClient client;
     private OkHttpClient.Builder okHttpClientBuilder;
     private String deviceId;
 
