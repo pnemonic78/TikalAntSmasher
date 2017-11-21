@@ -166,8 +166,10 @@ public class BoardViewModel extends AndroidViewModel implements
                 } catch (InterruptedException e) {
                 }
                 onGameStarted();
-                final View view = BoardViewModel.this.view;
                 final Game game = BoardViewModel.this.game.getValue();
+                if (game == null) {
+                    return;
+                }
                 final int size = 20;
                 final Ant[] ants = new Ant[size];
                 Ant ant;
