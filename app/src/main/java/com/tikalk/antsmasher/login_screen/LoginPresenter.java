@@ -19,9 +19,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by tamirnoach on 23/10/2017.
  */
 
-public class SplashPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presetner{
+public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presetner{
 
-    public static final String TAG = "SplashPresenter";
+    public static final String TAG = "LoginPresenter";
     private Disposable mDisposable;
 
     private LoginContract.View view;
@@ -30,7 +30,7 @@ public class SplashPresenter extends BasePresenter<LoginContract.View> implement
     Context context;
 
 
-    public SplashPresenter(Context context, LoginContract.View view, PrefsHelper prefsHelper) {
+    public LoginPresenter(Context context, LoginContract.View view, PrefsHelper prefsHelper) {
         this.view = view;
         apiClient = new ApiClient();
         this.prefsHelper = prefsHelper;

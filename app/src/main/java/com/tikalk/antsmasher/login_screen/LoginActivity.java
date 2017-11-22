@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
-import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
@@ -26,7 +25,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     public static final long SPLASH_TIMEOUT = 3000;
     public static final long SPLASH_EDIT_TIMEOUT = 1000;
 
-    SplashPresenter mSplashPresenter;
+    LoginPresenter mLoginPresenter;
 
     @Inject
     PrefsHelper mPrefsHelper;
@@ -38,14 +37,14 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         Log.i(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        mSplashPresenter = new SplashPresenter(this, this, mPrefsHelper);
+        mLoginPresenter = new LoginPresenter(this, this, mPrefsHelper);
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSplashPresenter.login();
+        mLoginPresenter.login();
     }
 
     private void showLoginDialog() {
@@ -68,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
 
     @Override
     public void onEditDone(String value) {
-        mSplashPresenter.saveUserName(value);
+        mLoginPresenter.saveUserName(value);
     }
 
 
