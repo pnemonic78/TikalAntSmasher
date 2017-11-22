@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.teams;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamViewHolder> {
         notifyDataSetChanged();
     }
 
-    private Bitmap createIcon(TeamViewHolder holder, int tint) {
+    private Bitmap createIcon(TeamViewHolder holder, @ColorInt int tint) {
         final Context context = holder.iconView.getContext();
         Bitmap ant = BitmapFactory.decodeResource(context.getResources(), R.drawable.ant_normal);
         return tintImage(ant, tint);
