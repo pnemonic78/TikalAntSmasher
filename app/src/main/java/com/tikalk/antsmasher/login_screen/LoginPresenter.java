@@ -8,18 +8,14 @@ import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.networking.ApiClient;
-import com.tikalk.antsmasher.networking.RestApiService;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by tamirnoach on 23/10/2017.
  */
 
-public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presetner{
+public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presetner, LoginInterceptor.OnLoginFinishedListener{
 
     public static final String TAG = "LoginPresenter";
     private Disposable mDisposable;
@@ -29,11 +25,14 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     PrefsHelper prefsHelper;
     Context context;
 
+    LoginManager loginManager;
+
 
     public LoginPresenter(Context context, LoginContract.View view, PrefsHelper prefsHelper) {
         this.view = view;
         apiClient = new ApiClient();
         this.prefsHelper = prefsHelper;
+        loginManager = new LoginManager(apiClient.getApiService());
         view.setPresenter(this);
         this.context = context;
     }
@@ -55,7 +54,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             view.showUserNameDialog();
         }else {
             checkUserId(username);
-            //Splash
         }
     }
 
@@ -63,38 +61,10 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
         if(prefsHelper.getString(PrefsConstants.USER_ID) == null){
             Log.i(TAG, "checkUserId: about to login to server");
-            // loginWithRetrofit(username); //TODO enable once server is ready
-            view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT); //TODO remove when server ready
+            loginManager.login(username, this);
         }else {
-            view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
+            view.completeSplash(LoginActivity.SPLASH_TIMEOUT);
         }
-    }
-
-    private void loginWithRetrofit(String username) {
-        Log.i(TAG, "getDataWithRetrofit called");
-        RestApiService apiService = apiClient.getApiService();
-
-        apiService.login(username)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<String>() {
-                    @Override
-                    public void onNext(String response) {
-                        Log.i(TAG, "onNext: got user ID from server" + response);
-                        prefsHelper.saveStringToPrefs(PrefsConstants.USER_ID, response);
-                        view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
 
     @Override
@@ -103,5 +73,15 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         checkUserId(userName);
     }
 
+    @Override
+    public void onLoginSuccess(String userUniqueId) {
+        prefsHelper.saveStringToPrefs(PrefsConstants.USER_ID, userUniqueId);
+        view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
+    }
 
+    @Override
+    public void onLoginFailed(Throwable e) {
+        view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
+        //view.loginFailed();
+    }
 }

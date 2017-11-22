@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -15,9 +18,6 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
 
-/**
- * A login screen that offers login via email/password.
- */
 public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, LoginContract.View {
 
     private static final String TAG = "LoginActivity";
@@ -74,6 +74,22 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     @Override
     public void showUserNameDialog() {
         showLoginDialog();
+    }
+
+
+    @Override
+    public void showLoginFailedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name));
+        builder.setMessage("Login filed, please check your connection and try again.");
+        builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        builder.setPositiveButton("OK", (dialogInterface, i) -> {
+            Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
+            finish();
+        });
+
+        builder.create().show();
+
     }
 
     @Override
