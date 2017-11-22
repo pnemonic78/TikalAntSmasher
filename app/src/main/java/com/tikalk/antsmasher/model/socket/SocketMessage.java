@@ -3,7 +3,7 @@ package com.tikalk.antsmasher.model.socket;
 import com.google.gson.annotations.SerializedName;
 
 
-public class SocketMessage {
+public class SocketMessage<B> {
 
     public static final String TYPE_SEND = "send";
     public static final String TYPE_ERROR = "err";
@@ -14,10 +14,13 @@ public class SocketMessage {
     public String type;
     @SerializedName("address")
     public String address;
+    @SerializedName("body")
+    public B body;
 
-    public SocketMessage(String type, String address) {
+    public SocketMessage(String type, String address, B body) {
         this.type = type;
         this.address = address;
+        this.body = body;
     }
 
     @Override
@@ -25,10 +28,7 @@ public class SocketMessage {
         return "SocketMessage{" +
                 "type='" + type + '\'' +
                 ", address='" + address + '\'' +
+                ", body='" + body + '\'' +
                 '}';
-    }
-
-    public String toSockJs() {
-        return "[\"{\\\"type\\\":\\\"" + type + "\\\",\\\"address\\\":\\\"" + address + "\\\"";
     }
 }

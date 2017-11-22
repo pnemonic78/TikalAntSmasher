@@ -2,6 +2,7 @@ package com.tikalk.antsmasher.networking;
 
 import android.content.Context;
 import android.os.SystemClock;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -10,6 +11,9 @@ import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.socket.AntLocation;
+import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.model.socket.AntSmashMessage;
+import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
 
 import okhttp3.Response;
@@ -19,8 +23,8 @@ public class MockWebSocket extends AppWebSocket {
 
     private static final String TAG = "MockWebSocket";
 
-    private Thread thread;
-    private static final Random random = new Random();
+    private Thread server;
+    private Game game;
 
     public MockWebSocket(String baseUrl, String deviceId, Context context) {
         super(baseUrl, deviceId, context);
@@ -38,6 +42,17 @@ public class MockWebSocket extends AppWebSocket {
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
+        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
+        if (AntSmashMessage.TYPE_SMASH.equals(socketMessage.type)) {
+            AntSmashMessage smashMessage = socketMessageGson.fromJson(message, AntSmashMessage.class);
+            AntSmash smash = smashMessage.body;
+            if ((game != null) && (smash.id != null)) {
+                Ant ant = game.getAnt(smash.id);
+                if (ant != null) {
+                    ant.setAlive(false);
+                }
+            }
+        }
     }
 
     @Override
@@ -50,12 +65,19 @@ public class MockWebSocket extends AppWebSocket {
         stop();
     }
 
+    @Override
+    public boolean sendMessage(String message) {
+        Log.v(TAG, "sendMessage: " + message);
+        handleNewMessage(null, message);
+        return true;
+    }
+
     /**
      * Start the game.
      */
     private void start(final AppService.AppServiceEventListener listener) {
         // fake ants from the server.
-        thread = new Thread() {
+        server = new Thread() {
 
             @Override
             public void run() {
@@ -69,6 +91,7 @@ public class MockWebSocket extends AppWebSocket {
                 if (game == null) {
                     return;
                 }
+                MockWebSocket.this.game = game;
                 final int teamSize = game.getTeams().size();
                 final int size = 20;
                 final Ant[] ants = new Ant[size];
@@ -86,6 +109,7 @@ public class MockWebSocket extends AppWebSocket {
                 int antId = 1;
                 int teamIndex;
                 long start = SystemClock.uptimeMillis();
+                final Random random = new Random();
 
                 for (int i = 0; i < size; i++) {
                     antX[i] = random.nextFloat();
@@ -132,17 +156,17 @@ public class MockWebSocket extends AppWebSocket {
                 listener.onGameFinished();
             }
         };
-        thread.start();
+        server.start();
     }
 
     /**
      * Stop the game.
      */
     public void stop() {
-        if (thread != null) {
-            thread.interrupt();
+        if (server != null) {
+            server.interrupt();
             try {
-                thread.join();
+                server.join();
             } catch (InterruptedException e) {
             }
         }

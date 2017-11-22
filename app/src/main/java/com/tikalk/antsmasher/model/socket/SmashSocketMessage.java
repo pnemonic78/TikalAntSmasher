@@ -1,26 +1,8 @@
 package com.tikalk.antsmasher.model.socket;
 
-import com.google.gson.annotations.SerializedName;
-
-
-public class SmashSocketMessage extends SocketMessage {
-
-    @SerializedName("body")
-    private final AntSmash antSmash;
+public class SmashSocketMessage extends SocketMessage<AntSmash> {
 
     public SmashSocketMessage(String type, String address, AntSmash smash) {
-        super(type, address);
-        this.antSmash = smash;
-    }
-
-    public AntSmash getAntSmash() {
-        return antSmash;
-    }
-
-    @Override
-    public String toString() {
-        return "SmashSocketMessage{" +
-                "antSmash=" + antSmash +
-                '}';
+        super(type, address, smash);
     }
 }

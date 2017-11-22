@@ -7,26 +7,16 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-import com.tikalk.antsmasher.model.socket.SmashSocketMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 
 public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
     @Override
-    public JsonElement serialize(SocketMessage src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(SocketMessage src, Type typeOfSrc, JsonSerializationContext serializer) {
         JsonObject message = new JsonObject();
-        message.add("type", context.serialize(src.type));
-        message.add("address", context.serialize(src.address));
-
-        JsonObject body;
-
-        if (src instanceof SmashSocketMessage) {
-            body = new JsonObject();
-            body.addProperty("antId", ((SmashSocketMessage) src).getAntSmash().id);
-            body.addProperty("timestamp", ((SmashSocketMessage) src).getAntSmash().timestamp);
-            message.add("body", body);
-        }
-
+        message.add("type", serializer.serialize(src.type));
+        message.add("address", serializer.serialize(src.address));
+        message.add("body", serializer.serialize(src.body));
         message.add("headers", new JsonObject());
         return message;
     }

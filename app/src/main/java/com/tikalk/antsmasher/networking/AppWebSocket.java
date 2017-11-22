@@ -1,7 +1,6 @@
 package com.tikalk.antsmasher.networking;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import android.content.Context;
 import android.net.Uri;
@@ -14,6 +13,10 @@ import android.widget.Toast;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
 
@@ -42,8 +45,9 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     private OkHttpClient.Builder okHttpClientBuilder;
     private String deviceId;
 
-    private GsonBuilder gsonBuilder = new GsonBuilder();
-    private Gson mSocketMessageGson;
+    @Inject
+    @Named("SocketMessageGson")
+    protected Gson socketMessageGson;
 
     private boolean socketOpened = false;
 
@@ -57,6 +61,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     protected AppWebSocket(String baseUrl, String deviceId, Context context) {
         Log.i(TAG, "AppWebSocket created.. url: " + baseUrl);
+        ((AntApplication) context.getApplicationContext()).getApplicationComponent().inject(this);
         Uri.Builder builder = new Uri.Builder()
                 .scheme("http")
                 .encodedAuthority(baseUrl)
@@ -64,8 +69,6 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
                 .appendPath("xyz_" + deviceId)
                 .appendPath("websocket");
         weakContext = new WeakReference<>(context);
-        gsonBuilder.registerTypeAdapter(SocketMessage.class, new SocketMessageSerializer());
-        mSocketMessageGson = gsonBuilder.create();
         socketBaseUrl = baseUrl;
         this.deviceId = deviceId;
         initSocket(builder.build().toString());

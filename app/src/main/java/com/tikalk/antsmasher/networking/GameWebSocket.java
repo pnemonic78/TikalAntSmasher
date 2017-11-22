@@ -32,7 +32,7 @@ public class GameWebSocket extends AppWebSocket {
         AntLocationMessage locationMessage = gson.fromJson(message, AntLocationMessage.class);
 
         if (socketMessageListener != null) {
-            socketMessageListener.onAntMoved(locationMessage.getAntLocation());
+            socketMessageListener.onAntMoved(locationMessage.body);
         }
     }
 
