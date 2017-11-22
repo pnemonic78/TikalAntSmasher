@@ -6,5 +6,6 @@ package com.tikalk.antsmasher.networking;
 
 public class ApiContract {
 
-    public static final String DEVICES_REST_URL = "http://";
+    public static final String SERVICE_BASE_URL = "http://";
+    public static final String LOGIN_ENDPOINT = "service/login";
 }

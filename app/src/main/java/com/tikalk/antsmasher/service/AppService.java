@@ -21,6 +21,7 @@ import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.AppWebSocket;
+import com.tikalk.antsmasher.networking.GameNetworkContract;
 import com.tikalk.antsmasher.networking.GameWebSocket;
 import com.tikalk.antsmasher.networking.MockWebSocket;
 import com.tikalk.antsmasher.networking.NetworkManager;
@@ -128,10 +129,10 @@ public class AppService extends Service {
     private void startWebSockets() {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Debug, creating mock web socket");
-            gameWebSocket = new MockWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
+            gameWebSocket = new MockWebSocket(GameNetworkContract.GAME_SERVER_BASE_URL, userName, this);
         } else {
             Log.i(TAG, "Real web socket");
-            gameWebSocket = new GameWebSocket(ApiContract.DEVICES_REST_URL, userName, this);
+            gameWebSocket = new GameWebSocket(GameNetworkContract.GAME_SERVER_BASE_URL, userName, this);
         }
     }
 
