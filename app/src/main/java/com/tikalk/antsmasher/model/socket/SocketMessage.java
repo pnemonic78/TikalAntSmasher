@@ -17,6 +17,10 @@ public class SocketMessage<B> {
     @SerializedName("body")
     public B body;
 
+    public SocketMessage(String type, String address) {
+        this(type, address, null);
+    }
+
     public SocketMessage(String type, String address, B body) {
         this.type = type;
         this.address = address;
