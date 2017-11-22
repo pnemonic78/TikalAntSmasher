@@ -6,7 +6,6 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.login_screen.SplashPresenter;
 
 import dagger.Module;
 import dagger.Provides;

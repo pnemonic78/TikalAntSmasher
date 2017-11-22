@@ -26,6 +26,7 @@ public class SoundHelper {
     private int smashedSoundId;
     private int gameOverSoundId;
     private int missedSoundId;
+    private int oopsSoundId;
 
     public SoundHelper(Context context) {
         mActivity = context;
@@ -64,6 +65,7 @@ public class SoundHelper {
         mSoundPool.setOnLoadCompleteListener((soundPool, sampleId, status) -> mLoaded = true);
 
         smashedSoundId = mSoundPool.load(mActivity, R.raw.smash, 1);
+        oopsSoundId = mSoundPool.load(mActivity, R.raw.ooops, 1);
         gameOverSoundId = mSoundPool.load(mActivity, R.raw.game_over, 1);
         //  missedSoundId = mSoundPool.load(mActivity, R.raw.missed_ballon, 1);
 
@@ -88,6 +90,11 @@ public class SoundHelper {
         }
     }
 
+    public void playOops() {
+        if (mLoaded) {
+            mSoundPool.play(oopsSoundId, mVolume, mVolume, 1, 0, 1f);
+        }
+    }
     public void playGameOver() {
         if (mLoaded) {
             mSoundPool.play(gameOverSoundId, mVolume, mVolume, 1, 0, 1f);

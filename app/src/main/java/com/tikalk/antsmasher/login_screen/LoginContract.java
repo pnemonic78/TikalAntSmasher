@@ -10,6 +10,7 @@ public interface LoginContract {
 
     interface View extends MvpView{
         void showUserNameDialog();
+        void showLoginFailedDialog();
         void completeSplash(long timeout);
     }
 
