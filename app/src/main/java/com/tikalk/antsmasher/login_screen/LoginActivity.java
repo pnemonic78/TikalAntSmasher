@@ -19,14 +19,13 @@ import com.tikalk.antsmasher.teams.TeamsActivity;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener {
+public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, LoginContract.View {
 
     private static final String TAG = "LoginActivity";
 
-    private static final long SPLASH_TIMEOUT = 300;
-    private static final long SPLASH_EDIT_TIMEOUT = 1000;
+    public static final long SPLASH_TIMEOUT = 3000;
+    public static final long SPLASH_EDIT_TIMEOUT = 1000;
 
-    @Inject
     SplashPresenter mSplashPresenter;
 
     @Inject
@@ -39,15 +38,14 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         Log.i(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
+        mSplashPresenter = new SplashPresenter(this, this, mPrefsHelper);
+    }
 
-        if (mPrefsHelper != null && mPrefsHelper.getString(PrefsConstants.USER_NAME) == null) {
 
-            Log.i(TAG, "About to open dialog");
-
-            showLoginDialog();
-        } else {
-            splash(SPLASH_TIMEOUT);
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSplashPresenter.login();
     }
 
     private void showLoginDialog() {
@@ -70,11 +68,17 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
 
     @Override
     public void onEditDone(String value) {
-        mPrefsHelper.saveUserName(value);
-        splash(SPLASH_EDIT_TIMEOUT);
+        mSplashPresenter.saveUserName(value);
     }
 
-    void splash(long splashTimeout) {
+
+    @Override
+    public void showUserNameDialog() {
+        showLoginDialog();
+    }
+
+    @Override
+    public void completeSplash(long timeout) {
         Intent service = new Intent(LoginActivity.this, AppService.class);
         startService(service);
 
@@ -82,7 +86,12 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
             Intent intent = new Intent(LoginActivity.this, TeamsActivity.class);
             startActivity(intent);
             finish();
-        }, splashTimeout);
+        }, timeout);
+    }
+
+    @Override
+    public void setPresenter(Object presenter) {
+
     }
 }
 
