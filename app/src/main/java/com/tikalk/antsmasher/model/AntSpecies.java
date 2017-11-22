@@ -1,5 +1,7 @@
 package com.tikalk.antsmasher.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 
@@ -10,14 +12,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Ant species.
+ * Ant species with ants.
  */
 
 public class AntSpecies {
 
+    @SerializedName("id")
     private String id;
+    @SerializedName("name")
     private String name;
     @ColorInt
+    @SerializedName("tint")
     private int tint = Color.BLACK;
     private final Map<String, Ant> antsById = new HashMap<>();
     private final List<Ant> ants = new ArrayList<>();

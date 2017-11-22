@@ -1,5 +1,7 @@
 package com.tikalk.antsmasher.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +14,13 @@ import io.reactivex.annotations.NonNull;
 
 public class Team {
 
+    @SerializedName("id")
     private String id;
+    @SerializedName("name")
     private String name;
+    @SerializedName("players")
     private final List<Player> players = new ArrayList<>();
+    @SerializedName("antSpecies")
     private AntSpecies antSpecies;
 
     public Team(String id, String name) {

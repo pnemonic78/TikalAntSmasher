@@ -1,5 +1,7 @@
 package com.tikalk.antsmasher.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -13,7 +15,9 @@ import java.util.Map;
 
 public class Game {
 
+    @SerializedName("id")
     private String id;
+    @SerializedName("teams")
     private final List<Team> teams = new ArrayList<>();
 
     public String getId() {

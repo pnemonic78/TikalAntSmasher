@@ -3,23 +3,17 @@ package com.tikalk.antsmasher.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Player.
+ * Developer team.
  */
 
-public class Player {
+public class DeveloperTeam {
 
     @SerializedName("id")
     private String id;
     @SerializedName("name")
     private String name;
-    @SerializedName("avatar")
-    private String avatarUri;
 
-    public Player(String name) {
-        this(null, name);
-    }
-
-    public Player(String id, String name) {
+    public DeveloperTeam(String id, String name) {
         setId(id);
         setName(name);
     }
@@ -40,11 +34,8 @@ public class Player {
         this.name = name;
     }
 
-    public String getAvatarUri() {
-        return avatarUri;
-    }
-
-    public void setAvatarUri(String avatarUri) {
-        this.avatarUri = avatarUri;
+    @Override
+    public String toString() {
+        return getName();
     }
 }
