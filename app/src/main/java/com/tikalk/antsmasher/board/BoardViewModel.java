@@ -19,7 +19,6 @@ import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
@@ -165,9 +164,6 @@ public class BoardViewModel extends AndroidViewModel implements
         // Send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
         appService.smashAnt(event);
-        if (BuildConfig.DEBUG) {
-            onAntSmashed(event);//TODO delete me!
-        }
     }
 
     public void onBoardReady() {
@@ -177,7 +173,7 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     public boolean allowStart() {
-        return (game.getValue() != null);// && ((thread == null) || thread.isInterrupted() || !thread.isAlive());
+        return (game.getValue() != null);
     }
 
     @Override

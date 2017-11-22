@@ -50,6 +50,7 @@ public class MockWebSocket extends AppWebSocket {
                 Ant ant = game.getAnt(smash.id);
                 if (ant != null) {
                     ant.setAlive(false);
+                    socketMessageListener.onAntSmashed(smash);
                 }
             }
         }
