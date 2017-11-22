@@ -171,8 +171,12 @@ public class BoardActivity extends AppCompatActivity implements
                 vibrator.vibrate(10L);
             }
         }
+        if(user){
+            soundHelper.playSmashedSound();
+        }else {
+            soundHelper.playOops();
+        }
         boardView.smashAnt(ant);
-        soundHelper.playSmashedSound();
     }
 
     @Override
