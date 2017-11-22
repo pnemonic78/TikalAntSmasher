@@ -18,9 +18,9 @@ public class ApiClient {
     private static final String TAG = "ApiClient";
 
     //    private static final String BASE_URL = "https://planet.tikalk.com/timetracker/time.php/";
-    private RestApiService restApiService;
+    private GameApiService gameApiService;
 
-    public RestApiService getApiService() {
+    public GameApiService getApiService() {
 
 
         Gson gson = new GsonBuilder()
@@ -35,15 +35,15 @@ public class ApiClient {
 
         OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
-        restApiService = new Retrofit.Builder()
+        gameApiService = new Retrofit.Builder()
                 .baseUrl(ApiContract.SERVICE_BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
-                .create(RestApiService.class);
+                .create(GameApiService.class);
 
-        return restApiService;
+        return gameApiService;
 
     }
 }
