@@ -36,7 +36,7 @@ public class ApiClient {
         OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
         restApiService = new Retrofit.Builder()
-                .baseUrl(ApiContract.DEVICES_REST_URL)
+                .baseUrl(ApiContract.SERVICE_BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

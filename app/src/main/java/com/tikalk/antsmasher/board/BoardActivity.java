@@ -139,6 +139,7 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onGameFinished() {
+        Log.i(TAG, "onGameFinished: ");
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {
@@ -152,6 +153,7 @@ public class BoardActivity extends AppCompatActivity implements
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.app_name)).setMessage("Game Over").setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
                 .setPositiveButton(getText(android.R.string.ok), (dialogInterface, i) -> finish())
+                .setCancelable(false)
                 .show();
     }
 
