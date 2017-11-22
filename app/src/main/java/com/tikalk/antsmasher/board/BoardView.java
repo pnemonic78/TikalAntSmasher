@@ -134,10 +134,10 @@ public class BoardView extends AppCompatImageView {
 
             Bitmap antSmashed = BitmapFactory.decodeResource(res, R.drawable.ant_squashed);
             antSmashed = Bitmap.createScaledBitmap(antSmashed, antDeadWidth, antDeadHeight, false);
+            antSmashed = tintImage(antSmashed, species.getTint());
             Bitmap antBlood = BitmapFactory.decodeResource(res, R.drawable.ant_blood);
-            antBlood = Bitmap.createScaledBitmap(antBlood, antDeadWidth, antDeadHeight, false);
-            bitmap = tintImage(antSmashed, species.getTint());
-            Canvas canvas = new Canvas(antBlood);
+            bitmap = Bitmap.createScaledBitmap(antBlood, antDeadWidth, antDeadHeight, false);
+            Canvas canvas = new Canvas(bitmap);
             canvas.drawBitmap(antSmashed, 0, 0, null);
             bitmapsDead.put(speciesId, bitmap);
         }
