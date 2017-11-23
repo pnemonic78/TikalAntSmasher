@@ -18,7 +18,6 @@ public class SoundHelper {
     private SoundPool mSoundPool;
     private MediaPlayer mMusicPlayer;
     private MediaPlayer mSmashSound;
-    private Context mActivity;
 
     private boolean mLoaded;
     private float mVolume;
@@ -29,21 +28,20 @@ public class SoundHelper {
     private int oopsSoundId;
 
     public SoundHelper(Context context) {
-        mActivity = context;
-        prepareMusicPlayer();
-        prepareSoundPool();
+        prepareMusicPlayer(context);
+        prepareSoundPool(context);
     }
 
-    public void prepareMusicPlayer() {
+    private void prepareMusicPlayer(Context context) {
         //Using getApplicationContext will help to improve media player operation during configuration changes
-        mSmashSound = MediaPlayer.create(mActivity.getApplicationContext(), R.raw.smash);
-        mMusicPlayer = MediaPlayer.create(mActivity.getApplicationContext(), R.raw.ants_moving);
+        mSmashSound = MediaPlayer.create(context, R.raw.smash);
+        mMusicPlayer = MediaPlayer.create(context, R.raw.ants_moving);
         mMusicPlayer.setVolume(.5f, .5f);
         mMusicPlayer.setLooping(true);
     }
 
-    public void prepareSoundPool() {
-        AudioManager audioManager = (AudioManager) mActivity.getSystemService(Context.AUDIO_SERVICE);
+    private void prepareSoundPool(Context context) {
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         mVolume = actVolume / maxVolume;
@@ -64,22 +62,20 @@ public class SoundHelper {
 
         mSoundPool.setOnLoadCompleteListener((soundPool, sampleId, status) -> mLoaded = true);
 
-        smashedSoundId = mSoundPool.load(mActivity, R.raw.smash, 1);
-        oopsSoundId = mSoundPool.load(mActivity, R.raw.ooops, 1);
-        gameOverSoundId = mSoundPool.load(mActivity, R.raw.game_over, 1);
+        smashedSoundId = mSoundPool.load(context, R.raw.smash, 1);
+        oopsSoundId = mSoundPool.load(context, R.raw.ooops, 1);
+        gameOverSoundId = mSoundPool.load(context, R.raw.game_over, 1);
         //  missedSoundId = mSoundPool.load(mActivity, R.raw.missed_ballon, 1);
-
-
     }
 
     public void playMusic() {
-        if (mMusicPlayer != null && !mMusicPlayer.isPlaying()) {
+        if (mLoaded && mMusicPlayer != null && !mMusicPlayer.isPlaying()) {
             mMusicPlayer.start();
         }
     }
 
     public void pauseMusic() {
-        if (mMusicPlayer != null && mMusicPlayer.isPlaying()) {
+        if (mLoaded && mMusicPlayer != null && mMusicPlayer.isPlaying()) {
             mMusicPlayer.pause();
         }
     }
@@ -95,6 +91,7 @@ public class SoundHelper {
             mSoundPool.play(oopsSoundId, mVolume, mVolume, 1, 0, 1f);
         }
     }
+
     public void playGameOver() {
         if (mLoaded) {
             mSoundPool.play(gameOverSoundId, mVolume, mVolume, 1, 0, 1f);
@@ -102,13 +99,13 @@ public class SoundHelper {
     }
 
 
-    public void playMissedBalloon() {
+    public void playMissed() {
         if (mLoaded) {
             mSoundPool.play(missedSoundId, mVolume, mVolume, 1, 0, 1f);
         }
     }
 
-    public void cleanSoundHelper() {
+    public void dispose() {
         mMusicPlayer.pause();
         mMusicPlayer.release();
     }

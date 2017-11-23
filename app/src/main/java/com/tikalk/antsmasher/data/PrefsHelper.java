@@ -39,6 +39,10 @@ public class PrefsHelper {
         preferences.edit().putString(key, value).apply();
     }
 
+    private boolean getBoolean(String key) {
+        return preferences.getBoolean(key, false);
+    }
+
     public String getDeveloperTeam() {
         return preferences.getString(DEV_TEAM, null);
     }
@@ -57,5 +61,17 @@ public class PrefsHelper {
 
     public String getUserName() {
         return getString(USER_NAME);
+    }
+
+    public boolean isInteractiveMusic() {
+        return getBoolean("interactive_music");
+    }
+
+    public boolean isInteractiveSounds() {
+        return getBoolean("interactive_sound");
+    }
+
+    public boolean isInteractiveVibrate() {
+        return getBoolean("interactive_vibrate");
     }
 }

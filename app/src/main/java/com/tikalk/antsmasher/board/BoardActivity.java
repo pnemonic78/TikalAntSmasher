@@ -17,7 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import javax.inject.Inject;
+
+import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.utils.SoundHelper;
@@ -34,6 +38,9 @@ public class BoardActivity extends AppCompatActivity implements
 
     public static final String EXTRA_TEAM = "team_id";
 
+    @Inject
+    protected PrefsHelper prefsHelper;
+
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
@@ -44,6 +51,7 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AntApplication) getApplication()).getApplicationComponent().inject(this);
 
         teamId = getIntent().getStringExtra(EXTRA_TEAM);
 
@@ -137,7 +145,9 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onGameStarted() {
-        soundHelper.playMusic();
+        if (prefsHelper.isInteractiveMusic()) {
+            soundHelper.playMusic();
+        }
         runOnUiThread(() -> {
             progressBar.setVisibility(View.GONE);
         });
@@ -150,7 +160,9 @@ public class BoardActivity extends AppCompatActivity implements
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {
                 showGameOverDialog();
-                soundHelper.playGameOver();
+                if (prefsHelper.isInteractiveSounds()) {
+                    soundHelper.playGameOver();
+                }
             });
         }
     }
@@ -171,16 +183,25 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void smashAnt(@NonNull Ant ant, boolean user) {
         boardView.smashAnt(ant);
+        final boolean sound = prefsHelper.isInteractiveSounds();
         if (user) {
-            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-            if ((vibrator != null) && vibrator.hasVibrator()) {
-                vibrator.vibrate(10L);
+            if (prefsHelper.isInteractiveVibrate()) {
+                Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                if ((vibrator != null) && vibrator.hasVibrator()) {
+                    vibrator.vibrate(10L);
+                }
             }
-            soundHelper.playSmashedSound();
+            if (sound) {
+                soundHelper.playSmashedSound();
+            }
         } else if ((game != null) && game.isSameTeam(teamId, ant)) {
-            //TODO play sound that smashed team's ant
+            if (sound) {
+                //TODO play sound that smashed team's ant
+            }
         } else {
-            soundHelper.playOops();
+            if (sound) {
+                soundHelper.playOops();
+            }
         }
         boardView.smashAnt(ant);
     }
@@ -190,6 +211,6 @@ public class BoardActivity extends AppCompatActivity implements
         Log.i(TAG, "onDestroy");
         super.onDestroy();
         presenter.stop();
-        soundHelper.cleanSoundHelper();
+        soundHelper.dispose();
     }
 }

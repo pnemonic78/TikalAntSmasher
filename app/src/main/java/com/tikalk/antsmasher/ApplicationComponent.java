@@ -2,6 +2,7 @@ package com.tikalk.antsmasher;
 
 import javax.inject.Singleton;
 
+import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.login_screen.LoginActivity;
 import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.NetworkModule;
@@ -21,4 +22,6 @@ public interface ApplicationComponent {
     void inject(AppWebSocket appWebSocket);
 
     void inject(TeamsActivity activity);
+
+    void inject(BoardActivity activity);
 }
