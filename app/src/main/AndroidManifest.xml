@@ -29,7 +29,7 @@
         </activity>
         <activity
             android:name=".teams.TeamsActivity"
-            android:label="@string/teams"></activity>
+            android:label="@string/teams"/>
         <activity
             android:name=".board.BoardActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -41,8 +41,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tikalk.antsmasher.teams.TeamsActivity"/>
         </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".teams.TeamsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tikalk.antsmasher.teams.TeamsActivity"/>
+        </activity>
 
-        <service android:name=".service.AppService"
+        <service
+            android:name=".service.AppService"
             android:enabled="true"
             android:exported="false"/>
     </application>

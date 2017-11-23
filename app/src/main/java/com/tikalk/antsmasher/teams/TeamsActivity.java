@@ -23,6 +23,7 @@ import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.Team;
+import com.tikalk.antsmasher.settings.SettingsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,7 +88,8 @@ public class TeamsActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_settings) {
-            chooseDeveloperTeam();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
