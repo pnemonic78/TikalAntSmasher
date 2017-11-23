@@ -28,6 +28,7 @@
         <item quantity="one">%d player</item>
         <item quantity="other">%d players</item>
     </plurals>
+    <string name="dev_team_choose">Choose developer team:</string>
 
     <!-- Board -->
     <string name="title_activity_board">Ant Smasher</string>

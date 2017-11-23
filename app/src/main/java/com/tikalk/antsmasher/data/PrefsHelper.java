@@ -2,8 +2,11 @@ package com.tikalk.antsmasher.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
+
+import static com.tikalk.antsmasher.data.PrefsConstants.*;
 
 /**
  * Created by tamirnoach on 24/10/2017.
@@ -11,30 +14,34 @@ import javax.inject.Inject;
 
 public class PrefsHelper {
 
-    public static final String PREF_FILE_NAME = "android_antsmasher_pref_file";
-
-    private final SharedPreferences mPref;
+    private final SharedPreferences preferences;
 
     @Inject
     public PrefsHelper(Context context) {
-        mPref = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void clear() {
-        mPref.edit().clear().apply();
+        preferences.edit().clear().apply();
     }
 
     public void saveUserName(final String userName) {
-        mPref.edit().putString(PrefsConstants.USER_NAME, userName).apply();
+        preferences.edit().putString(USER_NAME, userName).apply();
     }
-
 
     public String getString(String key) {
-        return mPref.getString(key, null);
+        return preferences.getString(key, null);
     }
 
+    public void saveStringToPrefs(String key, String value) {
+        preferences.edit().putString(key, value).apply();
+    }
 
-    public void saveStringToPrefs(String key, String value){
-        mPref.edit().putString(key, value).apply();
+    public String getDeveloperTeam() {
+        return preferences.getString(DEV_TEAM, null);
+    }
+
+    public void setDeveloperTeam(String value) {
+        preferences.edit().putString(DEV_TEAM, value).apply();
     }
 }
