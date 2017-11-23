@@ -2,7 +2,7 @@ package com.tikalk.antsmasher.login_screen;
 
 import android.util.Log;
 
-import com.tikalk.antsmasher.networking.RestApiService;
+import com.tikalk.antsmasher.networking.GameApiService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -15,9 +15,9 @@ import io.reactivex.schedulers.Schedulers;
 public class LoginManager implements LoginInterceptor {
 
     public static final String TAG = "LoginManager";
-    RestApiService loginService;
+    GameApiService loginService;
 
-    LoginManager(RestApiService apiService){
+    LoginManager(GameApiService apiService){
         this.loginService = apiService;
     }
 
