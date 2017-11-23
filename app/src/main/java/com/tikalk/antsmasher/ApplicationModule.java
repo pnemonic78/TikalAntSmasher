@@ -2,10 +2,12 @@ package com.tikalk.antsmasher;
 
 
 import android.app.Application;
+import android.arch.lifecycle.ViewModelProvider;
 
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.teams.ViewModelFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -34,4 +36,9 @@ class ApplicationModule {
         return mApplication;
     }
 
+
+    @Provides
+    ViewModelProvider.Factory provideTeamsViewModelFactory(ViewModelFactory factory){
+        return factory;
+    }
 }

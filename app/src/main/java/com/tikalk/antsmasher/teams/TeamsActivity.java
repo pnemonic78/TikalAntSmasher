@@ -1,6 +1,7 @@
 package com.tikalk.antsmasher.teams;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,6 +43,9 @@ public class TeamsActivity extends AppCompatActivity implements
     private TeamViewModel presenter;
     private TeamAdapter adapter;
 
+    @Inject
+    ViewModelProvider.Factory mViewModelFactory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,7 @@ public class TeamsActivity extends AppCompatActivity implements
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(adapter);
 
-        presenter = ViewModelProviders.of(this).get(TeamViewModel.class);
+        presenter = ViewModelProviders.of(this, mViewModelFactory).get(TeamViewModel.class);
         presenter.setView(this);
         presenter.getTeams(this).observe(this, this);
 

@@ -1,12 +1,17 @@
 package com.tikalk.antsmasher.login_screen;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.networking.ApiClient;
+import com.tikalk.antsmasher.networking.GameRestService;
+
+import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
@@ -27,13 +32,17 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     LoginManager loginManager;
 
 
-    public LoginPresenter(Context context, LoginContract.View view, PrefsHelper prefsHelper) {
-        this.view = view;
+    @Inject
+    public LoginPresenter(Context context, PrefsHelper prefsHelper, GameRestService gameRestService) {
         apiClient = new ApiClient();
         this.prefsHelper = prefsHelper;
-        loginManager = new LoginManager(apiClient.getApiService());
-        view.setPresenter(this);
+        loginManager = new LoginManager(gameRestService);
         this.context = context;
+    }
+
+
+    public void setView(LoginContract.View view){
+        this.view = view;
     }
 
     @Override
@@ -58,7 +67,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     private void checkUserId(String username) {
         if (TextUtils.isEmpty(prefsHelper.getUserId())) {
-            Log.i(TAG, "checkUserId: about to login to server");
+            Log.i(TAG, "checkUserId: about to createUser to server");
             loginManager.login(username, this);
         } else {
             view.completeSplash(LoginActivity.SPLASH_TIMEOUT);
