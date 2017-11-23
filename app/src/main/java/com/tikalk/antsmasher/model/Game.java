@@ -70,7 +70,16 @@ public class Game {
 
     public boolean removeAnt(Ant ant) {
         for (Team team : teams) {
-            if (team.removeAnt(ant)) {
+            if (team.remove(ant)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isSameTeam(String teamId, Ant ant) {
+        for (Team team : getTeams()) {
+            if (team.contains(ant)) {
                 return true;
             }
         }

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -31,15 +32,20 @@ public class BoardActivity extends AppCompatActivity implements
 
     private static final String TAG = "BoardActivity";
 
+    public static final String EXTRA_TEAM = "team_id";
+
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
     private SoundHelper soundHelper;
     private ProgressBar progressBar;
+    private String teamId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        teamId = getIntent().getStringExtra(EXTRA_TEAM);
 
         setContentView(R.layout.activity_board);
         ActionBar actionBar = getSupportActionBar();
@@ -66,8 +72,8 @@ public class BoardActivity extends AppCompatActivity implements
         presenter.setView(this);
         getLifecycle().addObserver(presenter);
         presenter.getGame().observe(this, this);
-        soundHelper = new SoundHelper(this);
 
+        soundHelper = new SoundHelper(this);
     }
 
     @Override
@@ -163,17 +169,17 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void smashAnt(Ant ant, boolean user) {
+    public void smashAnt(@NonNull Ant ant, boolean user) {
         boardView.smashAnt(ant);
-        if (user && (ant != null)) {
+        if (user) {
             Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             if ((vibrator != null) && vibrator.hasVibrator()) {
                 vibrator.vibrate(10L);
             }
-        }
-        if(user){
             soundHelper.playSmashedSound();
-        }else {
+        } else if ((game != null) && game.isSameTeam(teamId, ant)) {
+            //TODO play sound that smashed team's ant
+        } else {
             soundHelper.playOops();
         }
         boardView.smashAnt(ant);

@@ -94,4 +94,8 @@ public class AntSpecies {
         }
         return false;
     }
+
+    public boolean contains(Ant ant) {
+        return antsById.containsKey(ant.getId());
+    }
 }

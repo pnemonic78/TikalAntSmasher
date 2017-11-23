@@ -75,7 +75,11 @@ public class Team {
         return getAntSpecies().getAllAnts();
     }
 
-    public boolean removeAnt(Ant ant) {
+    public boolean remove(Ant ant) {
         return getAntSpecies().remove(ant);
+    }
+
+    public boolean contains(Ant ant) {
+        return getAntSpecies().contains(ant);
     }
 }

@@ -1,12 +1,13 @@
 package com.tikalk.antsmasher.model;
 
 import android.graphics.PointF;
+import android.support.annotation.NonNull;
 
 /**
  * Ant.
  */
 
-public class Ant {
+public class Ant implements Comparable<Ant> {
 
     private String id;
     private final PointF location = new PointF();
@@ -59,5 +60,21 @@ public class Ant {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    @Override
+    public int compareTo(@NonNull Ant that) {
+        return this.id.compareTo(that.id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof Ant) {
+            return compareTo((Ant) obj) == 0;
+        }
+        return super.equals(obj);
     }
 }

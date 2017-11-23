@@ -39,8 +39,7 @@ public class TeamViewModel extends ViewModel {
 
     private void loadTeams(Context context) {
         // TODO Do an asynchronous operation to fetch teams.
-        Game game = new Game();
-        BoardViewModel.populateGame(game);
+        Game game = BoardViewModel.createGame();
         teams.setValue(game.getTeams());
     }
 

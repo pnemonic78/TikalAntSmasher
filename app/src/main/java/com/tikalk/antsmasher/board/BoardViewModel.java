@@ -74,7 +74,7 @@ public class BoardViewModel extends AndroidViewModel implements
          */
         void onGameFinished();
 
-        void smashAnt(Ant ant, boolean user);
+        void smashAnt(@NonNull Ant ant, boolean user);
     }
 
     private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
