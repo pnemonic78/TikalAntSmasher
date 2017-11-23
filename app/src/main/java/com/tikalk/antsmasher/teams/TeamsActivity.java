@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -54,6 +55,10 @@ public class TeamsActivity extends AppCompatActivity implements
         presenter = ViewModelProviders.of(this).get(TeamViewModel.class);
         presenter.setView(this);
         presenter.getTeams(this).observe(this, this);
+
+        if (TextUtils.isEmpty(prefsHelper.getDeveloperTeam())) {
+            chooseDeveloperTeam();
+        }
     }
 
     @Override

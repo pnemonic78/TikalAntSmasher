@@ -5,8 +5,6 @@ import com.google.gson.Gson;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import javax.inject.Inject;
@@ -14,12 +12,10 @@ import javax.inject.Named;
 
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.BuildConfig;
-import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.AntSmashMessage;
-import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.GameNetworkContract;
 import com.tikalk.antsmasher.networking.GameWebSocket;
@@ -84,7 +80,7 @@ public class AppService extends Service {
         networkManager = new NetworkManager();
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        userName = prefsHelper.getString(PrefsConstants.USER_NAME);
+        userName = prefsHelper.getUserName();
 
         startWebSockets();
     }

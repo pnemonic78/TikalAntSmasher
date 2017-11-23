@@ -6,13 +6,15 @@ import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
 
-import static com.tikalk.antsmasher.data.PrefsConstants.*;
-
 /**
  * Created by tamirnoach on 24/10/2017.
  */
 
 public class PrefsHelper {
+
+    public static final String USER_NAME = "user_name";
+    public static final String USER_ID = "user_id";
+    public static final String DEV_TEAM = "dev_team";
 
     private final SharedPreferences preferences;
 
@@ -25,15 +27,15 @@ public class PrefsHelper {
         preferences.edit().clear().apply();
     }
 
-    public void saveUserName(final String userName) {
-        preferences.edit().putString(USER_NAME, userName).apply();
+    public void setUserName(String value) {
+        saveStringToPrefs(USER_NAME, value);
     }
 
-    public String getString(String key) {
+    private String getString(String key) {
         return preferences.getString(key, null);
     }
 
-    public void saveStringToPrefs(String key, String value) {
+    private void saveStringToPrefs(String key, String value) {
         preferences.edit().putString(key, value).apply();
     }
 
@@ -43,5 +45,17 @@ public class PrefsHelper {
 
     public void setDeveloperTeam(String value) {
         preferences.edit().putString(DEV_TEAM, value).apply();
+    }
+
+    public String getUserId() {
+        return getString(USER_ID);
+    }
+
+    public void setUserId(String value) {
+        saveStringToPrefs(USER_ID, value);
+    }
+
+    public String getUserName() {
+        return getString(USER_NAME);
     }
 }

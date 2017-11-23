@@ -1,11 +1,10 @@
 package com.tikalk.antsmasher.login_screen;
 
-
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.tikalk.antsmasher.base.BasePresenter;
-import com.tikalk.antsmasher.data.PrefsConstants;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.networking.ApiClient;
 
@@ -15,7 +14,7 @@ import io.reactivex.disposables.Disposable;
  * Created by tamirnoach on 23/10/2017.
  */
 
-public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presetner, LoginInterceptor.OnLoginFinishedListener{
+public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presetner, LoginInterceptor.OnLoginFinishedListener {
 
     public static final String TAG = "LoginPresenter";
     private Disposable mDisposable;
@@ -49,33 +48,32 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Override
     public void login() {
-        String username = prefsHelper.getString(PrefsConstants.USER_NAME);
-        if(username == null){
+        String username = prefsHelper.getUserName();
+        if (TextUtils.isEmpty(username)) {
             view.showUserNameDialog();
-        }else {
+        } else {
             checkUserId(username);
         }
     }
 
     private void checkUserId(String username) {
-
-        if(prefsHelper.getString(PrefsConstants.USER_ID) == null){
+        if (TextUtils.isEmpty(prefsHelper.getUserId())) {
             Log.i(TAG, "checkUserId: about to login to server");
             loginManager.login(username, this);
-        }else {
+        } else {
             view.completeSplash(LoginActivity.SPLASH_TIMEOUT);
         }
     }
 
     @Override
     public void saveUserName(String userName) {
-        prefsHelper.saveUserName(userName);
+        prefsHelper.setUserName(userName);
         checkUserId(userName);
     }
 
     @Override
-    public void onLoginSuccess(String userUniqueId) {
-        prefsHelper.saveStringToPrefs(PrefsConstants.USER_ID, userUniqueId);
+    public void onLoginSuccess(String userId) {
+        prefsHelper.setUserId(userId);
         view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
     }
 
