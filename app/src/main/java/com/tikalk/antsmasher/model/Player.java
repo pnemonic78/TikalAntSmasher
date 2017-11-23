@@ -9,26 +9,26 @@ import com.google.gson.annotations.SerializedName;
 public class Player {
 
     @SerializedName("id")
-    private String id;
+    private long id;
     @SerializedName("name")
     private String name;
     @SerializedName("avatar")
     private String avatarUri;
 
     public Player(String name) {
-        this(null, name);
+        this(0, name);
     }
 
-    public Player(String id, String name) {
+    public Player(long id, String name) {
         setId(id);
         setName(name);
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -7,11 +7,11 @@ package com.tikalk.antsmasher.model.socket;
 public class AntLocation {
 
     public final String antId;
-    public final String speciesId;
+    public final long speciesId;
     public final float xPercent;
     public final float yPercent;
 
-    public AntLocation(String antId, String speciesId, float xPercent, float yPercent) {
+    public AntLocation(String antId, long speciesId, float xPercent, float yPercent) {
         this.antId = antId;
         this.speciesId = speciesId;
         this.xPercent = xPercent;

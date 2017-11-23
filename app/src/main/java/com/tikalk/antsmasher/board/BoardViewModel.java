@@ -115,34 +115,34 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     public static void populateGame(Game game) {
-        game.setId("1");
+        game.setId(1);
 
-        Team team = new Team("10", "Army");
+        Team team = new Team(10, "Army");
         populateTeam(team);
         game.getTeams().add(team);
 
-        team = new Team("20", "Fire");
+        team = new Team(20, "Fire");
         populateTeam(team);
         game.getTeams().add(team);
 
-        team = new Team("30", "Black");
+        team = new Team(30, "Black");
         populateTeam(team);
         game.getTeams().add(team);
     }
 
     public static void populateTeam(Team team) {
         AntSpecies species = team.getAntSpecies();
-        switch (team.getId()) {
-            case "10":
-                species.setId("1");
+        switch ((int) team.getId()) {
+            case 10:
+                species.setId(1);
                 species.setTint(0xFF00cc00);
                 break;
-            case "20":
-                species.setId("2");
+            case 20:
+                species.setId(2);
                 species.setTint(0xFFcc0000);
                 break;
-            case "30":
-                species.setId("3");
+            case 30:
+                species.setId(3);
                 species.setTint(Color.BLACK);
                 break;
         }

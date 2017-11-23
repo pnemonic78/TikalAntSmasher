@@ -18,28 +18,32 @@ import java.util.Map;
 public class AntSpecies {
 
     @SerializedName("id")
-    private String id;
+    private long id;
     @SerializedName("name")
     private String name;
     @ColorInt
-    @SerializedName("tint")
+    @SerializedName("color")
     private int tint = Color.BLACK;
+    @SerializedName("size")
+    private float size = 1;
+    @SerializedName("speed")
+    private float speed = 1;
     private final Map<String, Ant> antsById = new HashMap<>();
     private final List<Ant> ants = new ArrayList<>();
 
     public AntSpecies() {
-        this(null);
+        this(0);
     }
 
-    public AntSpecies(String id) {
+    public AntSpecies(long id) {
         setId(id);
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

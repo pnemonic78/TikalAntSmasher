@@ -13,7 +13,7 @@ public class AntRect extends RectF {
 
     public String id;
     public float angle = HEADING_DOWN;
-    public String speciesId;
+    public long speciesId;
     public boolean alive = true;
 
     public boolean isHit(float x, float y) {

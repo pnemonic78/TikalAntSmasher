@@ -39,8 +39,8 @@ public class BoardView extends AppCompatImageView {
     int antHeight;
     int antDeadWidth;
     int antDeadHeight;
-    private final Map<String, Bitmap> bitmapsAlive = new HashMap<>();
-    private final Map<String, Bitmap> bitmapsDead = new HashMap<>();
+    private final Map<Long, Bitmap> bitmapsAlive = new HashMap<>();
+    private final Map<Long, Bitmap> bitmapsDead = new HashMap<>();
     private final List<AntRect> ants = new CopyOnWriteArrayList<>();
     private final Map<String, AntRect> antsById = new HashMap<>();
     private AntListener antListener;
@@ -107,7 +107,7 @@ public class BoardView extends AppCompatImageView {
         final float height = getHeight();
 
         final AntSpecies species = ant.getSpecies();
-        final String speciesId = species.getId();
+        final long speciesId = species.getId();
 
         float x = ant.getLocation().x * width;
         float y = ant.getLocation().y * height;

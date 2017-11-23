@@ -15,24 +15,26 @@ import io.reactivex.annotations.NonNull;
 public class Team {
 
     @SerializedName("id")
-    private String id;
+    private long id;
     @SerializedName("name")
     private String name;
     @SerializedName("players")
     private final List<Player> players = new ArrayList<>();
     @SerializedName("antSpecies")
     private AntSpecies antSpecies;
+    @SerializedName("score")
+    private int score;
 
-    public Team(String id, String name) {
+    public Team(long id, String name) {
         setId(id);
         setName(name);
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

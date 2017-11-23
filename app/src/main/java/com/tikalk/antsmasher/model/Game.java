@@ -16,15 +16,15 @@ import java.util.Map;
 public class Game {
 
     @SerializedName("id")
-    private String id;
+    private long id;
     @SerializedName("teams")
     private final List<Team> teams = new ArrayList<>();
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -55,11 +55,11 @@ public class Game {
         return getAnts().get(id);
     }
 
-    public Ant addAnt(String antId, String speciesId) {
+    public Ant addAnt(String antId, long speciesId) {
         AntSpecies species;
         for (Team team : teams) {
             species = team.getAntSpecies();
-            if (speciesId.equals(species.getId())) {
+            if (speciesId == species.getId()) {
                 Ant ant = new Ant(antId);
                 species.add(ant);
                 return ant;
