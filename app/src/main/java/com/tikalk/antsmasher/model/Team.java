@@ -84,4 +84,12 @@ public class Team {
     public boolean contains(Ant ant) {
         return getAntSpecies().contains(ant);
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }

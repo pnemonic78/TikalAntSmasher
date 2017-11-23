@@ -102,4 +102,20 @@ public class AntSpecies {
     public boolean contains(Ant ant) {
         return antsById.containsKey(ant.getId());
     }
+
+    public float getSize() {
+        return size;
+    }
+
+    public void setSize(float size) {
+        this.size = size;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
 }
