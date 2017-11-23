@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     public static final long SPLASH_TIMEOUT = 3000;
     public static final long SPLASH_EDIT_TIMEOUT = 1000;
 
+    @Inject
     LoginPresenter mLoginPresenter;
 
     @Inject
@@ -37,7 +38,9 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         Log.i(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        mLoginPresenter = new LoginPresenter(this, this, mPrefsHelper);
+        if(mLoginPresenter != null){
+            mLoginPresenter.setView(this);
+        }
     }
 
 
