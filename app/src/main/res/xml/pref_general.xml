@@ -3,14 +3,16 @@
     <EditTextPreference
         android:capitalize="words"
         android:defaultValue="@string/pref_default_display_name"
+        android:enabled="false"
+        android:hint="@string/login_name_hint"
         android:inputType="textCapWords"
-        android:key="example_text"
+        android:key="user_name"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_title_display_name"/>
+        android:title="@string/login_dialog_header"/>
 
-     <ListPreference
+    <ListPreference
         android:defaultValue="dev_team_1"
         android:key="dev_team"
         android:negativeButtonText="@android:string/cancel"

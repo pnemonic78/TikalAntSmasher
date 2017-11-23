@@ -70,6 +70,7 @@ public class EditDialogFragment extends DialogFragment {
 
         chars.setPadding(5, 0, 0, 2);
         String comment = getArguments().getString("Comment");
+        // FIXME move this to strings.xml %1$d/%2$d
         if (comment != null) {  //This means that recording had a comment already..
             chars.setText(comment.length() + "/" + COMMENT_MAX_LENGTH);
             input.setText(comment);
@@ -116,6 +117,7 @@ public class EditDialogFragment extends DialogFragment {
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 String text = input.getText().toString().trim();
+                // FIXME move this to strings.xml %1$d/%2$d
                 chars.setText(text.length() + "/" + COMMENT_MAX_LENGTH);
                 if(text.length() > 0){
                     posButton.setEnabled(true);
