@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
@@ -43,7 +44,7 @@ public class TeamsActivity extends AppCompatActivity implements
     private TeamViewModel presenter;
     private TeamAdapter adapter;
 
-    @Inject
+    @Inject @Named("Teams")
     ViewModelProvider.Factory mViewModelFactory;
 
     @Override

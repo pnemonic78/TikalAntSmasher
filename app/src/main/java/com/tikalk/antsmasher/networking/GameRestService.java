@@ -27,6 +27,8 @@ public interface GameRestService {
     @GET(ApiContract.LOGIN_ENDPOINT)
     Observable<String> getCurrentTeams(@Query(ApiContract.LOGIN_ENDPOINT) String username); //Join the game
 
+    @GET(ApiContract.LOGIN_ENDPOINT)
+    Observable<String> getDevelopentDeams(@Query(ApiContract.LOGIN_ENDPOINT) String username); //Join the game
 
 
 

@@ -1,23 +1,27 @@
-package com.tikalk.antsmasher.teams;
+package com.tikalk.antsmasher.board;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
+
 import javax.inject.Inject;
 
+/**
+ * Created by motibartov on 25/11/2017.
+ */
 
-public class ViewModelFactory implements ViewModelProvider.Factory{
+public class BoardVmFactory implements ViewModelProvider.Factory{
 
-    private TeamViewModel mViewModel;
+    private BoardViewModel mViewModel;
 
     @Inject
-    public ViewModelFactory(TeamViewModel viewModel){
+    public BoardVmFactory(BoardViewModel viewModel){
         this.mViewModel = viewModel;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if(modelClass.isAssignableFrom(TeamViewModel.class)){
+        if(modelClass.isAssignableFrom(BoardViewModel.class)){
             return (T) mViewModel;
         }
         throw new IllegalArgumentException("Unknown class name");

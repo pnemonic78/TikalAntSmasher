@@ -1,6 +1,7 @@
 package com.tikalk.antsmasher.board;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Looper;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
@@ -40,6 +42,10 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Inject
     protected PrefsHelper prefsHelper;
+
+    @Inject @Named("Board")
+    ViewModelProvider.Factory mBoardViewModelFactory;
+
 
     private BoardView boardView;
     private BoardViewModel presenter;
@@ -76,7 +82,7 @@ public class BoardActivity extends AppCompatActivity implements
 
         progressBar = findViewById(R.id.wait);
 
-        presenter = ViewModelProviders.of(this).get(BoardViewModel.class);
+        presenter = ViewModelProviders.of(this, mBoardViewModelFactory).get(BoardViewModel.class);
         presenter.setView(this);
         getLifecycle().addObserver(presenter);
         presenter.getGame().observe(this, this);

@@ -25,7 +25,14 @@ import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.networking.GameRestService;
 import com.tikalk.antsmasher.service.AppService;
+
+import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Board presenter.
@@ -85,9 +92,13 @@ public class BoardViewModel extends AndroidViewModel implements
     private AppService.AppServiceProxy appService;
     private boolean serviceBound = false;
     private Intent serviceIntent;
+    private GameRestService gameRestService;
 
-    public BoardViewModel(@NonNull Application application) {
+    @Inject
+    public BoardViewModel(@NonNull Application application, GameRestService gameRestService) {
         super(application);
+
+        this.gameRestService = gameRestService;
     }
 
     public void setView(View view) {
@@ -103,9 +114,30 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     private void loadGame() {
-        // TODO Do an asynchronous operation to list for game on socket.
-        Game data = createGame();
-        game.postValue(data);
+        gameRestService.getDevelopentDeams("") .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(String response) {
+                        Log.i(TAG, "onNext: got teams!!, showing teams list");
+                        Game data = createGame();
+                        game.postValue(data);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //TODO Remove this when server is up...
+                        Log.e(TAG, "onError: Something happened, can't get teams list from server...");
+                        Game data = createGame();
+                        game.postValue(data);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
     }
 
     public static Game createGame() {
