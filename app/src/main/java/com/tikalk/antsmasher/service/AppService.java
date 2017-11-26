@@ -27,7 +27,7 @@ import com.tikalk.antsmasher.networking.SmashWebSocket;
 
 public class AppService extends Service {
 
-    private static final String TAG = "AppService";
+    private static final String TAG = "TAG_AppService";
 
     public interface AppServiceEventListener {
 
@@ -130,10 +130,7 @@ public class AppService extends Service {
     }
 
     private void startWebSockets() {
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "Debug, creating mock web socket");
-            gameWebSocket = new MockWebSocket(userName, this);
-        } else {
+
             String socketUrl = prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL);
             String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
             Log.i(TAG, "Real web socket");
@@ -143,7 +140,6 @@ public class AppService extends Service {
             networkManager.add(smashWebSocket);
             gameWebSocket.openConnection();
             smashWebSocket.openConnection();
-        }
     }
 
     @Override
