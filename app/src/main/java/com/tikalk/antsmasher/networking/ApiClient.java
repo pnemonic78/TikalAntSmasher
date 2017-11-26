@@ -34,7 +34,7 @@ public class ApiClient {
         OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
         gameRestService = new Retrofit.Builder()
-                .baseUrl(ApiContract.SERVICE_BASE_URL)
+                .baseUrl(ApiContract.ADMIN_BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

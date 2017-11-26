@@ -22,7 +22,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         LoginContract.Presenter,
         LoginInterceptor.OnLoginFinishedListener {
 
-    public static final String TAG = "LoginPresenter";
+    public static final String TAG = "TAG_LoginPresenter";
     private Disposable mDisposable;
 
     private LoginContract.View view;
@@ -62,6 +62,17 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             view.showUserNameDialog();
         } else {
             checkUserId(username);
+        }
+    }
+
+    @Override
+    public void checkServersIp() {
+        if (TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ADMIN_IP))
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTS_IP))
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_IP))) {
+            view.showIpDialog();
+        }else{
+            login();
         }
     }
 
