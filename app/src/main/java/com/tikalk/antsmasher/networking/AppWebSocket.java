@@ -62,16 +62,17 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     protected AppWebSocket(String baseUrl, String deviceId, Context context) {
         Log.v(TAG, "AppWebSocket created. url: " + baseUrl);
         ((AntApplication) context.getApplicationContext()).getApplicationComponent().inject(this);
-        Uri.Builder builder = new Uri.Builder()
+        Uri uri = new Uri.Builder()
                 .scheme("http")
                 .encodedAuthority(baseUrl)
                 .appendPath("11")
                 .appendPath("xyz_" + deviceId)
-                .appendPath("websocket");
+                .appendPath("websocket")
+                .build();
         weakContext = new WeakReference<>(context);
         socketBaseUrl = baseUrl;
         this.deviceId = deviceId;
-        initSocket(builder.build().toString());
+        initSocket(uri.toString());
     }
 
     private void initSocket(String socketUrl) {

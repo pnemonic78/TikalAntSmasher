@@ -13,11 +13,11 @@ import javax.inject.Named;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.networking.AppWebSocket;
-import com.tikalk.antsmasher.networking.GameNetworkContract;
 import com.tikalk.antsmasher.networking.GameWebSocket;
 import com.tikalk.antsmasher.networking.MockWebSocket;
 import com.tikalk.antsmasher.networking.NetworkManager;
@@ -65,6 +65,7 @@ public class AppService extends Service {
     private AppWebSocket gameWebSocket;
     private final LocalBinder binder = new LocalBinder();
     private String userName;
+    private DeveloperTeam developerTeam;
 
     @Inject
     PrefsHelper prefsHelper;
@@ -77,10 +78,11 @@ public class AppService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.v(TAG, "onCreate");
-        networkManager = new NetworkManager();
-
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
+
+        networkManager = new NetworkManager();
         userName = prefsHelper.getUserName();
+        developerTeam = DeveloperTeam.find(prefsHelper.getDeveloperTeam());
 
         startWebSockets();
     }
@@ -128,7 +130,7 @@ public class AppService extends Service {
             gameWebSocket = new MockWebSocket(userName, this);
         } else {
             Log.i(TAG, "Real web socket");
-            gameWebSocket = new GameWebSocket(GameNetworkContract.GAME_SERVER_BASE_URL, userName, this);
+            gameWebSocket = new GameWebSocket(developerTeam.getAddress1(), userName, this);
         }
     }
 
