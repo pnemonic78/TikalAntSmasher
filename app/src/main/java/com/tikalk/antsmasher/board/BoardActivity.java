@@ -1,5 +1,6 @@
 package com.tikalk.antsmasher.board;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -18,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -26,6 +29,8 @@ import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.model.Team;
+import com.tikalk.antsmasher.teams.TeamViewModel;
 import com.tikalk.antsmasher.utils.SoundHelper;
 
 /**
@@ -46,10 +51,14 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Inject
     @Named("Board")
-    ViewModelProvider.Factory mBoardViewModelFactory;
+    ViewModelProvider.Factory boardViewModelFactory;
+    @Inject
+    @Named("Teams")
+    ViewModelProvider.Factory teamsViewModelFactory;
 
     private BoardView boardView;
     private BoardViewModel presenter;
+    private TeamViewModel presenterTeams;
     private Game game;
     private SoundHelper soundHelper;
     private ProgressBar progressBar;
@@ -85,10 +94,12 @@ public class BoardActivity extends AppCompatActivity implements
 
         progressBar = findViewById(R.id.wait);
 
-        presenter = ViewModelProviders.of(this, mBoardViewModelFactory).get(BoardViewModel.class);
+        presenter = ViewModelProviders.of(this, boardViewModelFactory).get(BoardViewModel.class);
         presenter.setView(this);
         getLifecycle().addObserver(presenter);
         presenter.getGame().observe(this, this);
+
+        presenterTeams = ViewModelProviders.of(this, teamsViewModelFactory).get(TeamViewModel.class);
 
         soundHelper = new SoundHelper(this);
     }
@@ -117,12 +128,14 @@ public class BoardActivity extends AppCompatActivity implements
     public void onChanged(@Nullable Game game) {
         this.game = game;
 
-        boardView.clear();
         if (game != null) {
-            for (Ant ant : game.getAllAnts()) {
-                boardView.addAnt(ant);
+            List<Team> teams = presenterTeams.getTeams().getValue();
+            if (teams != null) {
+                game.setTeams(teams);
             }
         }
+
+        boardView.clear();
         if (hasWindowFocus()) {
             presenter.onBoardReady();
         }

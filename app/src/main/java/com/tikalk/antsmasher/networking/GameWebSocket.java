@@ -1,11 +1,9 @@
 package com.tikalk.antsmasher.networking;
 
-
 import android.content.Context;
 import android.util.Log;
 
-import com.tikalk.antsmasher.model.GameState;
-import com.tikalk.antsmasher.model.socket.AntLocation;
+import com.tikalk.antsmasher.model.socket.AntLocationMessage;
 import com.tikalk.antsmasher.model.socket.GameStateMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
@@ -32,23 +30,19 @@ public class GameWebSocket extends AppWebSocket {
 
         SocketMessage game_state_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.GAME_STATE_MESSAGE);
         sendMessage(socketMessageGson.toJson(game_state_register));
-
     }
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
+
         if (socketMessage.address.equals(ApiContract.LR_MESSAGE)) {
-            AntLocation antLocation = socketMessageGson.fromJson(message, AntLocation.class);
-            socketMessageListener.onAntMoved(antLocation);
-        }
-
-        if(socketMessage.address.equals(ApiContract.GAME_STATE_MESSAGE)){
+            AntLocationMessage antLocation = socketMessageGson.fromJson(message, AntLocationMessage.class);
+            socketMessageListener.onAntMoved(antLocation.body);
+        } else if (socketMessage.address.equals(ApiContract.GAME_STATE_MESSAGE)) {
             GameStateMessage stateMessage = socketMessageGson.fromJson(message, GameStateMessage.class);
-            socketMessageListener.onGameStateMessage(GameState.valueOf(stateMessage.body));
+            socketMessageListener.onGameStateMessage(stateMessage.body);
         }
-
     }
 
     @Override

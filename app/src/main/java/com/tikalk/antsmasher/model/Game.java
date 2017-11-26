@@ -100,4 +100,11 @@ public class Game {
     public GameState getState() {
         return state;
     }
+
+    public void setTeams(List<Team> teams) {
+        getTeams().clear();
+        if (teams != null) {
+            getTeams().addAll(teams);
+        }
+    }
 }
