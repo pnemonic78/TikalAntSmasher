@@ -5,14 +5,13 @@ import java.util.List;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.User;
-import com.tikalk.antsmasher.model.rest_response.CreateBody;
 import com.tikalk.antsmasher.model.rest_response.LatestGame;
 import com.tikalk.antsmasher.model.rest_response.LatestTeam;
+import com.tikalk.antsmasher.networking.requests.CreateUserRequest;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -29,12 +28,11 @@ import static com.tikalk.antsmasher.networking.ApiContract.USERID_PARAM;
 
 public interface GameRestService {
 
-    @Headers("Content-Type: application/json")
     @POST(LOGIN_ENDPOINT)
-    Observable<User> createUser(@Body CreateBody createBody);
+    Observable<User> createUser(@Body CreateUserRequest createBody);
 
     @PUT(UPDATE_ENDPOINT)
-    Observable<String> updateUser(@Query(ID_PARAM) String name);
+    Observable<User> updateUser(@Query(ID_PARAM) String id);
 
     @PUT(CREATE_PLAYER)
     Observable<Player> joinGame(@Query(TEAM_PARAM) long teamId, @Query(USERID_PARAM) String userId);
@@ -46,9 +44,9 @@ public interface GameRestService {
     Observable<List<Team>> getCurrentTeams();
 
     @GET(LEADERS)
-    Observable<Player> getLeaderPlayer(); //Join the game
+    Observable<Player> getLeaderPlayer();
 
     @GET(LATEST_TEAMS)
-    Observable<LatestTeam> getLatestTeams(); //Join the game
+    Observable<LatestTeam> getLatestTeams();
 
 }
