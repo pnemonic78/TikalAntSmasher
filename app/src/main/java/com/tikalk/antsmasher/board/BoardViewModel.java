@@ -221,6 +221,7 @@ public class BoardViewModel extends AndroidViewModel implements
     public void onGameStateMessage(GameState state) {
         switch (state) {
             case STARTED:
+            case RESUMED:
                 view.paint();
                 view.onGameStarted();
                 break;
