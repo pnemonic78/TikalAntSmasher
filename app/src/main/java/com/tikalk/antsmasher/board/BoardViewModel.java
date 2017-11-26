@@ -43,7 +43,7 @@ public class BoardViewModel extends AndroidViewModel implements
         LifecycleObserver,
         AppService.AppServiceEventListener {
 
-    private static final String TAG = "BoardViewModel";
+    private static final String TAG = "TAG_BoardViewModel";
 
     public interface View {
         /**

@@ -66,7 +66,7 @@ public class TeamViewModel extends AndroidViewModel {
                 .subscribe(new DisposableObserver<List<Team>>() {
                     @Override
                     public void onNext(List<Team> response) {
-                        Log.v(TAG, "onNext: teams");
+                        Log.v(TAG, "onNext: teams" + response.size());
                         teams.setValue(response);
                     }
 

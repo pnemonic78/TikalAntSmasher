@@ -4,12 +4,8 @@ package com.tikalk.antsmasher.networking;
 import android.content.Context;
 import android.util.Log;
 
-import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
-import com.tikalk.antsmasher.model.socket.AntLocationMessage;
-import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.model.socket.GameStateMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
