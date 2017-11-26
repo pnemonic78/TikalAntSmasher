@@ -201,7 +201,8 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     public boolean allowStart() {
-        return (game.getValue() != null);
+        Game game = this.game.getValue();
+        return (game != null) && ((game.getState() == GameState.STARTED) || (game.getState() == GameState.RESUMED));
     }
 
     @Override
