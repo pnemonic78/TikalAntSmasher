@@ -4,12 +4,13 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import javax.inject.Inject;
+
 import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.model.User;
 import com.tikalk.antsmasher.networking.ApiClient;
 import com.tikalk.antsmasher.networking.GameRestService;
-
-import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
@@ -17,15 +18,17 @@ import io.reactivex.disposables.Disposable;
  * Created by tamirnoach on 23/10/2017.
  */
 
-public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presenter, LoginInterceptor.OnLoginFinishedListener {
+public class LoginPresenter extends BasePresenter<LoginContract.View> implements
+        LoginContract.Presenter,
+        LoginInterceptor.OnLoginFinishedListener {
 
     public static final String TAG = "LoginPresenter";
     private Disposable mDisposable;
 
     private LoginContract.View view;
     private ApiClient apiClient;
-    PrefsHelper prefsHelper;
-    Context context;
+    private PrefsHelper prefsHelper;
+    private Context context;
 
     LoginManager loginManager;
 
@@ -37,7 +40,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         loginManager = new LoginManager(gameRestService);
         this.context = context;
     }
-
 
     public void setView(LoginContract.View view) {
         this.view = view;
@@ -79,8 +81,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     @Override
-    public void onLoginSuccess(long userId) {
-        prefsHelper.saveLongToPrefs(PrefsHelper.USER_ID, userId);
+    public void onLoginSuccess(User user) {
+        prefsHelper.saveLongToPrefs(PrefsHelper.USER_ID, user.getId());
         view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
     }
 

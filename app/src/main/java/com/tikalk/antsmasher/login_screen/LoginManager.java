@@ -2,8 +2,8 @@ package com.tikalk.antsmasher.login_screen;
 
 import android.util.Log;
 
+import com.tikalk.antsmasher.model.User;
 import com.tikalk.antsmasher.model.rest_response.CreateBody;
-import com.tikalk.antsmasher.model.rest_response.CreateUserResp;
 import com.tikalk.antsmasher.networking.GameRestService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,17 +27,16 @@ public class LoginManager implements LoginInterceptor {
 
     @Override
     public void login(String userName, OnLoginFinishedListener listener) {
-
         CreateBody body = new CreateBody(userName);
 
         loginService.createUser(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<CreateUserResp>() {
+                .subscribe(new DisposableObserver<User>() {
                     @Override
-                    public void onNext(CreateUserResp response) {
-                        Log.i(TAG, "onNext: got user ID from server" + response);
-                        listener.onLoginSuccess(response.getId());
+                    public void onNext(User response) {
+                        Log.v(TAG, "onNext: got user from server: " + response);
+                        listener.onLoginSuccess(response);
                     }
 
                     @Override
@@ -48,7 +47,6 @@ public class LoginManager implements LoginInterceptor {
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
     }

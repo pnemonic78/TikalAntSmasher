@@ -1,10 +1,12 @@
 package com.tikalk.antsmasher.login_screen;
 
 
+import com.tikalk.antsmasher.model.User;
+
 public interface LoginInterceptor {
 
     interface OnLoginFinishedListener {
-        void onLoginSuccess(long userUniqueId);
+        void onLoginSuccess(User user);
 
         void onLoginFailed(Throwable e);
     }
