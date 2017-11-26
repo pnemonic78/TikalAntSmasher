@@ -160,9 +160,9 @@ public class TeamsActivity extends AppCompatActivity implements
                         }
                     }).create().show();
         }else{
-            prefsHelper.saveStringPref(PrefsHelper.ANTS_IP, enteredAntIp);
-            prefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, enteredAdminIp);
-            prefsHelper.saveStringPref(PrefsHelper.SMASH_IP, enteredSmashIp);
+            prefsHelper.saveStringPref(PrefsHelper.ANTS_IP, "http://" + enteredAntIp);
+            prefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
+            prefsHelper.saveStringPref(PrefsHelper.SMASH_IP, "http://" + enteredSmashIp);
         }
 
         Log.i(TAG, "onEditDone: ip valid");
