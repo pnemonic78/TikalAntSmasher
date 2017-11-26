@@ -114,7 +114,8 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     private void loadGame() {
-        gameRestService.getDevelopentDeams("") .subscribeOn(Schedulers.io())
+        gameRestService.getDeveloperTeams("")
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<String>() {
                     @Override
