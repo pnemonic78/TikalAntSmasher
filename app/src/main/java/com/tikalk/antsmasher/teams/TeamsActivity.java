@@ -73,8 +73,8 @@ public class TeamsActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         if (TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ADMIN_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTS_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_IP))) {
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL))
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL))) {
 //            chooseDeveloperTeam();
             enterIpDialog();
         }
@@ -137,9 +137,9 @@ public class TeamsActivity extends AppCompatActivity implements
         Bundle b = new Bundle();
         b.putString("Title", getString(R.string.dev_ip_dialog_header));
         b.putString("Message", getString(R.string.dev_ip_dialog_body));
-        b.putString(PrefsHelper.ANTS_IP, prefsHelper.getStringPref(PrefsHelper.ANTS_IP));
+        b.putString(PrefsHelper.ANTPUBLISH_SOCKET_URL, prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL));
         b.putString(PrefsHelper.ADMIN_IP, prefsHelper.getStringPref(PrefsHelper.ADMIN_IP));
-        b.putString(PrefsHelper.SMASH_IP, prefsHelper.getStringPref(PrefsHelper.SMASH_IP));
+        b.putString(PrefsHelper.SMASH_SOCKET_URL, prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL));
         dialogFragment.setArguments(b);
         dialogFragment.show(getSupportFragmentManager(), "IpDialog");
     }
@@ -161,9 +161,9 @@ public class TeamsActivity extends AppCompatActivity implements
                         }
                     }).create().show();
         }else{
-            prefsHelper.saveStringPref(PrefsHelper.ANTS_IP, "http://" + enteredAntIp);
+            prefsHelper.saveStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL, "http://" + enteredAntIp);
             prefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
-            prefsHelper.saveStringPref(PrefsHelper.SMASH_IP, "http://" + enteredSmashIp);
+            prefsHelper.saveStringPref(PrefsHelper.SMASH_SOCKET_URL, "http://" + enteredSmashIp);
         }
 
         Log.i(TAG, "onEditDone: ip valid");

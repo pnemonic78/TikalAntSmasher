@@ -11,7 +11,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,9 +119,9 @@ public class IpDialogFragment extends DialogFragment {
         smashChars.setPadding(5, 0, 0, 2);
 
 
-        String antsPrefIp = getArguments().getString(PrefsHelper.ANTS_IP);
+        String antsPrefIp = getArguments().getString(PrefsHelper.ANTPUBLISH_SOCKET_URL);
         String adminPrefIp = getArguments().getString(PrefsHelper.ADMIN_IP);
-        String smashPrefIp = getArguments().getString(PrefsHelper.SMASH_IP);
+        String smashPrefIp = getArguments().getString(PrefsHelper.SMASH_SOCKET_URL);
 
         // FIXME move this to strings.xml %1$d/%2$d
         if (antsPrefIp != null) {  //This means that recording had a comment already..
