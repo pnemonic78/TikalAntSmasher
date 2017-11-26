@@ -1,10 +1,9 @@
 package com.tikalk.antsmasher.networking;
 
-
 import android.content.Context;
 import android.util.Log;
 
-import com.tikalk.antsmasher.model.socket.AntLocationMessage;
+import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
 
@@ -36,18 +35,15 @@ public class SmashWebSocket extends AppWebSocket {
 
         SocketMessage team_score_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.TEAM_SCORE_MESSAGE);
         sendMessage(socketMessageGson.toJson(team_score_register));
-
-
-
-
     }
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-        AntLocationMessage locationMessage = plainGson.fromJson(message, AntLocationMessage.class);
+        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
-        if (socketMessageListener != null) {
-            socketMessageListener.onAntMoved(locationMessage.body);
+        if (socketMessage.address.equals(ApiContract.SMASH_MESSAGE)) {
+            AntSmashMessage smash = socketMessageGson.fromJson(message, AntSmashMessage.class);
+            socketMessageListener.onAntSmashed(smash.body);
         }
     }
 
