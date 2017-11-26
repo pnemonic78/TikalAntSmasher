@@ -16,7 +16,7 @@ public interface LoginContract {
         void completeSplash(long timeout);
     }
 
-    interface Presetner {
+    interface Presenter {
         void login();
 
         void saveUserName(String userName);
