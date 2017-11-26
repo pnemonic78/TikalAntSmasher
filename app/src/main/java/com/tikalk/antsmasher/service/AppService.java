@@ -88,8 +88,6 @@ public class AppService extends Service {
         networkManager = new NetworkManager();
         userName = prefsHelper.getUserName();
         developerTeam = DeveloperTeam.find(prefsHelper.getDeveloperTeam());
-
-        startWebSockets();
     }
 
     @Override
@@ -107,6 +105,8 @@ public class AppService extends Service {
         @Override
         public void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
             AppService.this.registerServiceEventListener(serviceEventListener);
+            startWebSockets();
+
         }
 
         @Override
@@ -139,6 +139,10 @@ public class AppService extends Service {
             Log.i(TAG, "Real web socket");
             gameWebSocket = new GameWebSocket(socketUrl, sessionId, this);
             smashWebSocket = new SmashWebSocket(socketUrl, sessionId, this);
+            networkManager.add(gameWebSocket);
+            networkManager.add(smashWebSocket);
+            gameWebSocket.openConnection();
+            smashWebSocket.openConnection();
         }
     }
 
