@@ -2,6 +2,8 @@ package com.tikalk.antsmasher.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.support.annotation.Nullable;
+
 /**
  * Developer team.
  */
@@ -59,7 +61,8 @@ public enum DeveloperTeam {
         return getName();
     }
 
-    public static DeveloperTeam find(String id) {
+    @Nullable
+    public static DeveloperTeam find(@Nullable String id) {
         if (id == null) {
             return null;
         }

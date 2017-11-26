@@ -2,6 +2,7 @@ package com.tikalk.antsmasher.model;
 
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Ant.
@@ -29,6 +30,7 @@ public class Ant implements Comparable<Ant> {
         this.id = id;
     }
 
+    @NonNull
     public PointF getLocation() {
         return location;
     }
@@ -68,7 +70,7 @@ public class Ant implements Comparable<Ant> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }

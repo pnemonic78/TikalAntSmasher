@@ -2,6 +2,8 @@ package com.tikalk.antsmasher.model.socket;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.support.annotation.NonNull;
+
 
 public class SocketMessage<B> {
 
@@ -27,6 +29,7 @@ public class SocketMessage<B> {
         this.body = body;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SocketMessage{" +

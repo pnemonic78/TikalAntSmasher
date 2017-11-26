@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,15 +66,17 @@ public class AntSpecies {
         this.tint = tint;
     }
 
+    @NonNull
     public Map<String, Ant> getAnts() {
         return antsById;
     }
 
+    @NonNull
     public List<Ant> getAllAnts() {
         return ants;
     }
 
-    public void setAnts(Collection<Ant> ants) {
+    public void setAnts(@Nullable Collection<Ant> ants) {
         this.ants.clear();
 
         if (ants != null) {
@@ -82,13 +86,13 @@ public class AntSpecies {
         }
     }
 
-    public void add(Ant ant) {
+    public void add(@NonNull Ant ant) {
         ant.setSpecies(this);
         ants.add(ant);
         antsById.put(ant.getId(), ant);
     }
 
-    public boolean remove(Ant ant) {
+    public boolean remove(@NonNull Ant ant) {
         ant.setSpecies(null);
         final String id = ant.getId();
         if (antsById.containsKey(id)) {
@@ -99,7 +103,7 @@ public class AntSpecies {
         return false;
     }
 
-    public boolean contains(Ant ant) {
+    public boolean contains(@NonNull Ant ant) {
         return antsById.containsKey(ant.getId());
     }
 

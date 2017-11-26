@@ -1,5 +1,7 @@
 package com.tikalk.antsmasher.model.socket;
 
+import android.support.annotation.NonNull;
+
 /**
  * Ant location from server.
  */
@@ -18,6 +20,7 @@ public class AntLocation {
         this.yPercent = yPercent;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "{id:" + antId + ", species:" + speciesId + ", x:" + xPercent + ", y:" + yPercent + "}";

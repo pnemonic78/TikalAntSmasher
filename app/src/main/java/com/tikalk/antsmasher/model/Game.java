@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.model;
 import com.google.gson.annotations.SerializedName;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ public class Game {
         return getAnts().get(id);
     }
 
+    @Nullable
     public Ant addAnt(String antId, long speciesId) {
         AntSpecies species;
         for (Team team : teams) {

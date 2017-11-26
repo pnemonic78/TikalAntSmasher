@@ -2,11 +2,12 @@ package com.tikalk.antsmasher.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.annotations.NonNull;
 
 /**
  * Team with players.
@@ -46,11 +47,12 @@ public class Team {
         this.name = name;
     }
 
+    @NonNull
     public List<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(@Nullable List<Player> players) {
         this.players.clear();
         if (players != null) {
             this.players.addAll(players);
