@@ -84,9 +84,9 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
             Bundle b = new Bundle();
             b.putString("Title", getString(R.string.dev_ip_dialog_header));
             b.putString("Message", getString(R.string.dev_ip_dialog_body));
-            b.putString(PrefsHelper.ANTS_IP, mPrefsHelper.getStringPref(PrefsHelper.ANTS_IP));
+            b.putString(PrefsHelper.ANTPUBLISH_SOCKET_URL, mPrefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL));
             b.putString(PrefsHelper.ADMIN_IP, mPrefsHelper.getStringPref(PrefsHelper.ADMIN_IP));
-            b.putString(PrefsHelper.SMASH_IP, mPrefsHelper.getStringPref(PrefsHelper.SMASH_IP));
+            b.putString(PrefsHelper.SMASH_SOCKET_URL, mPrefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL));
             dialogFragment.setArguments(b);
             dialogFragment.show(getSupportFragmentManager(), "IpDialog");
     }
@@ -143,11 +143,10 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
 
                     }).create().show();
         }else{
-            mPrefsHelper.saveStringPref(PrefsHelper.ANTS_IP, "http://" + enteredAntIp);
+            mPrefsHelper.saveStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL, enteredAntIp + ":" + ApiContract.ANT_PUBLISH_PORT);
             mPrefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
-            mPrefsHelper.saveStringPref(PrefsHelper.SMASH_IP, "http://" + enteredSmashIp);
+            mPrefsHelper.saveStringPref(PrefsHelper.SMASH_SOCKET_URL, enteredSmashIp + ":" + ApiContract.SMASH_PORT);
 
-            GameRestServiceModule.updateServiceBaseUrl("http://" + enteredAdminIp + ":" + ApiContract.ADMIN_PORT);
             mLoginPresenter.login();
         }
 

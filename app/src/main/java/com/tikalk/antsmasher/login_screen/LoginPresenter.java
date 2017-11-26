@@ -68,8 +68,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     @Override
     public void checkServersIp() {
         if (TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ADMIN_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTS_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_IP))) {
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL))
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL))) {
             view.showIpDialog();
         }else{
             login();
