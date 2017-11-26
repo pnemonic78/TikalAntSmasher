@@ -18,6 +18,8 @@ import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import javax.inject.Inject;
+
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
@@ -28,8 +30,6 @@ import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.networking.GameRestService;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.service.AppService;
-
-import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -191,6 +191,7 @@ public class BoardViewModel extends AndroidViewModel implements
     public void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
         AntSmash event = new AntSmash(antId, true);
+        onAntSmashed(event);
         appService.smashAnt(event);
     }
 
