@@ -7,7 +7,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import com.tikalk.antsmasher.board.BoardVmFactory;
+import com.tikalk.antsmasher.board.BoardViewModelFactory;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.teams.TeamsViewModelFactory;
 
@@ -47,7 +47,7 @@ class ApplicationModule {
 
     @Provides
     @Named("Board")
-    ViewModelProvider.Factory provideBoardViewModelFactory(BoardVmFactory factory) {
+    ViewModelProvider.Factory provideBoardViewModelFactory(BoardViewModelFactory factory) {
         return factory;
     }
 }

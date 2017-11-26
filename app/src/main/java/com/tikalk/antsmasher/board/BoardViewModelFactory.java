@@ -10,12 +10,12 @@ import javax.inject.Inject;
  * Created by motibartov on 25/11/2017.
  */
 
-public class BoardVmFactory implements ViewModelProvider.Factory {
+public class BoardViewModelFactory implements ViewModelProvider.Factory {
 
     private BoardViewModel mViewModel;
 
     @Inject
-    public BoardVmFactory(BoardViewModel viewModel) {
+    public BoardViewModelFactory(BoardViewModel viewModel) {
         this.mViewModel = viewModel;
     }
 
