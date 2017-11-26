@@ -131,20 +131,23 @@ public class AppService extends Service {
 
     private void startWebSockets() {
 
-            String socketUrl = prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL);
+            String antPublishUrl = prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL);
+            String smashSocketUrl = prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL);
             String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
             Log.i(TAG, "Real web socket");
-            gameWebSocket = new GameWebSocket(socketUrl, sessionId, this);
-            smashWebSocket = new SmashWebSocket(socketUrl, sessionId, this);
+            gameWebSocket = new GameWebSocket(antPublishUrl, sessionId, this);
+            smashWebSocket = new SmashWebSocket(smashSocketUrl, sessionId, this, prefsHelper.getPlayerId());
+
             networkManager.add(gameWebSocket);
             networkManager.add(smashWebSocket);
             gameWebSocket.openConnection();
-            smashWebSocket.openConnection();
+          //  smashWebSocket.openConnection();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
         networkManager.clear();
     }
 

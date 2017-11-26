@@ -69,7 +69,8 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         Uri uri = new Uri.Builder()
                 .scheme("http")
                 .encodedAuthority(baseUrl)
-                .appendPath("11")
+                .appendPath("client.register")
+                .appendPath("123")
                 .appendPath(session_id)
                 .appendPath("websocket")
                 .build();
