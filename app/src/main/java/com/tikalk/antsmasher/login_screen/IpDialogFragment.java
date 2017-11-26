@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.teams;
+package com.tikalk.antsmasher.login_screen;
 
 import android.app.Dialog;
 import android.content.Context;
