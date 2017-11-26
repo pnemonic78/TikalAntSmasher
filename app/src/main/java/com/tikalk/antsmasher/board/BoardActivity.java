@@ -53,14 +53,14 @@ public class BoardActivity extends AppCompatActivity implements
     private Game game;
     private SoundHelper soundHelper;
     private ProgressBar progressBar;
-    private String teamId;
+    private long teamId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
 
-        teamId = getIntent().getStringExtra(EXTRA_TEAM);
+        teamId = getIntent().getLongExtra(EXTRA_TEAM, 0);
 
         setContentView(R.layout.activity_board);
         ActionBar actionBar = getSupportActionBar();

@@ -30,6 +30,7 @@ public class AntSpecies {
     private float size = 1;
     @SerializedName("speed")
     private float speed = 1;
+
     private final Map<String, Ant> antsById = new HashMap<>();
     private final List<Ant> ants = new ArrayList<>();
 

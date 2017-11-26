@@ -20,7 +20,7 @@ public class Team {
     @SerializedName("name")
     private String name;
     @SerializedName("players")
-    private final List<Player> players = new ArrayList<>();
+    private List<Player> players;
     @SerializedName("antSpecies")
     private AntSpecies antSpecies;
     @SerializedName("score")
@@ -49,6 +49,9 @@ public class Team {
 
     @NonNull
     public List<Player> getPlayers() {
+        if (players == null) {
+            players = new ArrayList<>();
+        }
         return players;
     }
 

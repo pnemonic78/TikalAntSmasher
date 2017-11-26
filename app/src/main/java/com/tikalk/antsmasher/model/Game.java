@@ -19,9 +19,9 @@ public class Game {
     @SerializedName("id")
     private long id;
     @SerializedName("teams")
-    private final List<Team> teams = new ArrayList<>();
-
-    GameState state = GameState.NOT_STARTED;
+    private List<Team> teams;
+    @SerializedName("state")
+    private GameState state = GameState.NOT_STARTED;
 
     public long getId() {
         return id;
@@ -33,14 +33,16 @@ public class Game {
 
     @NonNull
     public List<Team> getTeams() {
+        if (teams == null) {
+            teams = new ArrayList<>();
+        }
         return teams;
     }
-
 
     @NonNull
     public List<Ant> getAllAnts() {
         final List<Ant> ants = new ArrayList<>();
-        for (Team team : teams) {
+        for (Team team : getTeams()) {
             ants.addAll(team.getAllAnts());
         }
         return ants;
@@ -49,7 +51,7 @@ public class Game {
     @NonNull
     public Map<String, Ant> getAnts() {
         final Map<String, Ant> ants = new HashMap<>();
-        for (Team team : teams) {
+        for (Team team : getTeams()) {
             ants.putAll(team.getAnts());
         }
         return ants;
@@ -62,7 +64,7 @@ public class Game {
     @Nullable
     public Ant addAnt(String antId, long speciesId) {
         AntSpecies species;
-        for (Team team : teams) {
+        for (Team team : getTeams()) {
             species = team.getAntSpecies();
             if (speciesId == species.getId()) {
                 Ant ant = new Ant(antId);
@@ -74,7 +76,7 @@ public class Game {
     }
 
     public boolean removeAnt(Ant ant) {
-        for (Team team : teams) {
+        for (Team team : getTeams()) {
             if (team.remove(ant)) {
                 return true;
             }
@@ -82,21 +84,20 @@ public class Game {
         return false;
     }
 
-    public boolean isSameTeam(String teamId, Ant ant) {
+    public boolean isSameTeam(long teamId, Ant ant) {
         for (Team team : getTeams()) {
-            if (team.contains(ant)) {
+            if ((team.getId() == teamId) && team.contains(ant)) {
                 return true;
             }
         }
         return false;
     }
 
-
     public void setState(GameState state) {
         this.state = state;
     }
 
-    public void setState(String state){
-        this.state = GameState.valueOf(state);
+    public GameState getState() {
+        return state;
     }
 }
