@@ -11,7 +11,7 @@ public class ApiContract {
 
     //Requests Endpoints
     public static final String LOGIN_ENDPOINT = "/users";
-    public static final String UPDATE_ENDPOINT = "/users/:id";
+    public static final String UPDATE_ENDPOINT = "/users/{id}";
     public static final String CREATE_PLAYER = "/players";
     public static final String GAMES = "/games/latest";
     public static final String TEAMS = "/teams/current";
@@ -19,6 +19,7 @@ public class ApiContract {
     public static final String LATEST_TEAMS = "/teams/latest";
 
     //Query Params
+    public static final String ID_PARAM = "id";
     public static final String UPDATE_PARAM = "name";
     public static final String TEAM_PARAM = "teamId";
     public static final String USERID_PARAM = "userId";

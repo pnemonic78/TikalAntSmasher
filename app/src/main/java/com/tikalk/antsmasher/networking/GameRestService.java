@@ -17,30 +17,38 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
+import static com.tikalk.antsmasher.networking.ApiContract.CREATE_PLAYER;
+import static com.tikalk.antsmasher.networking.ApiContract.GAMES;
+import static com.tikalk.antsmasher.networking.ApiContract.ID_PARAM;
+import static com.tikalk.antsmasher.networking.ApiContract.LATEST_TEAMS;
+import static com.tikalk.antsmasher.networking.ApiContract.LEADERS;
+import static com.tikalk.antsmasher.networking.ApiContract.LOGIN_ENDPOINT;
+import static com.tikalk.antsmasher.networking.ApiContract.TEAM_PARAM;
+import static com.tikalk.antsmasher.networking.ApiContract.UPDATE_ENDPOINT;
+import static com.tikalk.antsmasher.networking.ApiContract.USERID_PARAM;
 
 public interface GameRestService {
 
     @Headers("Content-Type: application/json")
-    @POST(ApiContract.LOGIN_ENDPOINT)
+    @POST(LOGIN_ENDPOINT)
     Observable<User> createUser(@Body CreateBody createBody);
 
-    @PUT(ApiContract.UPDATE_ENDPOINT)
-    Observable<String> updateUser(@Query(ApiContract.UPDATE_ENDPOINT) String name);
+    @PUT(UPDATE_ENDPOINT)
+    Observable<String> updateUser(@Query(ID_PARAM) String name);
 
-    //createPlayer (join the game)
-    @PUT(ApiContract.CREATE_PLAYER)
-    Observable<Player> joinGame(@Query(ApiContract.TEAM_PARAM) long teamId, @Query(ApiContract.USERID_PARAM) String userId);
+    @PUT(CREATE_PLAYER)
+    Observable<Player> joinGame(@Query(TEAM_PARAM) long teamId, @Query(USERID_PARAM) String userId);
 
-    @GET(ApiContract.GAMES)
+    @GET(GAMES)
     Observable<LatestGame> getLatestGame();
 
-    @GET(ApiContract.TEAM_PARAM)
+    @GET(TEAM_PARAM)
     Observable<List<Team>> getCurrentTeams();
 
-    @GET(ApiContract.LEADERS)
+    @GET(LEADERS)
     Observable<Player> getLeaderPlayer(); //Join the game
 
-    @GET(ApiContract.LATEST_TEAMS)
+    @GET(LATEST_TEAMS)
     Observable<LatestTeam> getLatestTeams(); //Join the game
 
 }
