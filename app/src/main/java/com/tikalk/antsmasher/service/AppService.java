@@ -135,7 +135,7 @@ public class AppService extends Service {
             gameWebSocket = new MockWebSocket(userName, this);
         } else {
             String socketUrl = prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL);
-            String sessionId = prefsHelper.getStringPref(PrefsHelper.GAME_ID) + "_" + prefsHelper.getStringPref(PrefsHelper.PLAYER_ID);
+            String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
             Log.i(TAG, "Real web socket");
             gameWebSocket = new GameWebSocket(socketUrl, sessionId, this);
             smashWebSocket = new SmashWebSocket(socketUrl, sessionId, this);

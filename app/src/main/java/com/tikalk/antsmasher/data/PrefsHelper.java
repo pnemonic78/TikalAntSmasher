@@ -12,12 +12,12 @@ import javax.inject.Inject;
 
 public class PrefsHelper {
 
-    public static final String USER_NAME = "user_name";
-    public static final String USER_ID = "user_id";
-    public static final String TEAM_ID = "team_id";
-    public static final String PLAYER_ID = "player_id";
-    public static final String GAME_ID = "game_id";
-    public static final String DEV_TEAM = "dev_team";
+    private static final String USER_NAME = "user_name";
+    private static final String USER_ID = "user_id";
+    private static final String TEAM_ID = "team_id";
+    private static final String PLAYER_ID = "player_id";
+    private static final String GAME_ID = "game_id";
+    private static final String DEV_TEAM = "dev_team";
     public static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
     public static final String ADMIN_IP = "admin_ip";
     public static final String SMASH_SOCKET_URL = "smash_ip";
@@ -97,11 +97,27 @@ public class PrefsHelper {
         return getBoolean("interactive_vibrate");
     }
 
+    public long getTeamId() {
+        return getLong(TEAM_ID);
+    }
+
     public void setTeamId(long teamId) {
         saveLongToPrefs(TEAM_ID, teamId);
     }
 
-    public long getTeamId() {
-        return getLong(TEAM_ID);
+    public long getGameId() {
+        return getLong(GAME_ID);
+    }
+
+    public void setGameId(long gameId) {
+        saveLongToPrefs(GAME_ID, gameId);
+    }
+
+    public long getPlayerId() {
+        return getLong(PLAYER_ID);
+    }
+
+    public void setPlayerId(long playerId) {
+        saveLongToPrefs(PLAYER_ID, playerId);
     }
 }
