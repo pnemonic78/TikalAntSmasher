@@ -66,7 +66,7 @@ public class NetworkManager {
 
             @Override
             public void onNext(AppWebSocket webSocket) {
-                Log.i(TAG, "clear socket: " + webSocket.getSocketBaseUrl());
+                Log.v(TAG, "clear socket: " + webSocket.getSocketBaseUrl());
                 remove(webSocket);
             }
 
@@ -77,7 +77,7 @@ public class NetworkManager {
 
             @Override
             public void onComplete() {
-                Log.i(TAG, "onComplete");
+                Log.v(TAG, "onComplete");
                 webSockets.clear();
             }
         });

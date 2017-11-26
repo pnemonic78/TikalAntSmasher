@@ -161,7 +161,7 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onGameFinished() {
-        Log.i(TAG, "onGameFinished: ");
+        Log.v(TAG, "onGameFinished: ");
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {
@@ -214,7 +214,7 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy");
+        Log.v(TAG, "onDestroy");
         super.onDestroy();
         presenter.stop();
         soundHelper.dispose();

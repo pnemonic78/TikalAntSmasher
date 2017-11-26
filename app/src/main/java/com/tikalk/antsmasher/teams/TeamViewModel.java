@@ -37,7 +37,7 @@ public class TeamViewModel extends ViewModel {
 
     @Inject
     public TeamViewModel(GameRestService gameRestService){
-        Log.i(TAG, "TeamViewModel: ");
+        Log.v(TAG, "TeamViewModel: ");
         teams = new MutableLiveData<>();
         this.gameRestService = gameRestService;
     }
@@ -52,7 +52,7 @@ public class TeamViewModel extends ViewModel {
     }
 
     private void loadTeams(Context context) {
-        Log.i(TAG, "about to load game teams from server...");
+        Log.v(TAG, "about to load game teams from server...");
 
         gameRestService.getCurrentTeams("")
                 .subscribeOn(Schedulers.io())
@@ -60,7 +60,7 @@ public class TeamViewModel extends ViewModel {
                 .subscribe(new DisposableObserver<String>() {
                     @Override
                     public void onNext(String response) {
-                        Log.i(TAG, "onNext: got teams!!, showing teams list");
+                        Log.v(TAG, "onNext: got teams!!, showing teams list");
                         Game game = BoardViewModel.createGame();
                         teams.setValue(game.getTeams());
                     }
@@ -82,7 +82,7 @@ public class TeamViewModel extends ViewModel {
     }
 
     public void teamClicked(Team team) {
-        Log.i(TAG, "onNext: about to join the game");
+        Log.v(TAG, "onNext: about to join the game");
 
         gameRestService.createPlayer("")
                 .subscribeOn(Schedulers.io())
@@ -90,8 +90,7 @@ public class TeamViewModel extends ViewModel {
                 .subscribe(new DisposableObserver<String>() {
                     @Override
                     public void onNext(String s) {
-                        Log.i(TAG, "onNext: joined!! opening game screen");
-
+                        Log.v(TAG, "onNext: joined!! opening game screen");
                         onTeamJoined(team);
                     }
 
@@ -104,7 +103,6 @@ public class TeamViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
     }

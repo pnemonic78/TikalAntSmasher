@@ -26,8 +26,8 @@ public class MockWebSocket extends AppWebSocket {
     private Thread server;
     private Game game;
 
-    public MockWebSocket(String baseUrl, String deviceId, Context context) {
-        super(baseUrl, deviceId, context);
+    public MockWebSocket(String deviceId, Context context) {
+        super("", deviceId, context);
     }
 
     @Override

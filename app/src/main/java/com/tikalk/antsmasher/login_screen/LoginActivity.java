@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.i(TAG, "onCreate: ");
+        Log.v(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
         if(mLoginPresenter != null){

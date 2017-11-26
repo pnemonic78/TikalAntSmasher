@@ -76,7 +76,7 @@ public class AppService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "onCreate");
+        Log.v(TAG, "onCreate");
         networkManager = new NetworkManager();
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
@@ -87,7 +87,7 @@ public class AppService extends Service {
 
     @Override
     public LocalBinder onBind(Intent intent) {
-        Log.i(TAG, "onBind");
+        Log.v(TAG, "onBind");
         return binder;
     }
 
@@ -125,7 +125,7 @@ public class AppService extends Service {
     private void startWebSockets() {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Debug, creating mock web socket");
-            gameWebSocket = new MockWebSocket(GameNetworkContract.GAME_SERVER_BASE_URL, userName, this);
+            gameWebSocket = new MockWebSocket(userName, this);
         } else {
             Log.i(TAG, "Real web socket");
             gameWebSocket = new GameWebSocket(GameNetworkContract.GAME_SERVER_BASE_URL, userName, this);

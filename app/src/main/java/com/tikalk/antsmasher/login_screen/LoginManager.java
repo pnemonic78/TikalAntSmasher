@@ -18,8 +18,7 @@ public class LoginManager implements LoginInterceptor {
     GameRestService loginService;
 
     LoginManager(GameRestService apiService){
-
-        Log.i(TAG, "LoginManager: " + (apiService == null));
+        Log.v(TAG, "LoginManager: " + (apiService == null));
         this.loginService = apiService;
     }
 
@@ -32,7 +31,7 @@ public class LoginManager implements LoginInterceptor {
                 .subscribe(new DisposableObserver<String>() {
                     @Override
                     public void onNext(String response) {
-                        Log.i(TAG, "onNext: got user ID from server" + response);
+                        Log.v(TAG, "onNext: got user ID from server" + response);
                         listener.onLoginSuccess(response);
                     }
 
@@ -44,7 +43,6 @@ public class LoginManager implements LoginInterceptor {
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
     }

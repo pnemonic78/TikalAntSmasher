@@ -60,7 +60,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     protected final Handler mHandler = new Handler(Looper.getMainLooper());
 
     protected AppWebSocket(String baseUrl, String deviceId, Context context) {
-        Log.i(TAG, "AppWebSocket created.. url: " + baseUrl);
+        Log.v(TAG, "AppWebSocket created. url: " + baseUrl);
         ((AntApplication) context.getApplicationContext()).getApplicationComponent().inject(this);
         Uri.Builder builder = new Uri.Builder()
                 .scheme("http")
@@ -82,21 +82,19 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         client = okHttpClientBuilder.build();
 
         mRequest = new Request.Builder().url(socketUrl).build();
-        Log.i(TAG, "initSocket: " + mRequest.toString());
-
+        Log.v(TAG, "initSocket: " + mRequest);
     }
 
     synchronized public void openConnection() {
         if (mSocket == null) {
-            Log.i(TAG, "openConnection: ");
+            Log.v(TAG, "openConnection: ");
             client.newWebSocket(mRequest, mSocketListener);
         }
     }
 
     public void closeConnection() {
-
         if (mSocket != null || socketOpened) {
-            Log.i(TAG, "about to closeConnection: " + socketBaseUrl);
+            Log.v(TAG, "about to closeConnection: " + socketBaseUrl);
             mSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye");
             socketOpened = false;
             mSocket = null;
@@ -105,30 +103,29 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         if (pingDisposable != null) {
             pingDisposable.dispose();
             pingDisposable = null;
-            Log.i(TAG, "closeConnection: ping stopped for " + socketBaseUrl);
+            Log.v(TAG, "closeConnection: ping stopped for " + socketBaseUrl);
         }
     }
 
 
     private void ping(WebSocket webSocket) {
-
         pingDisposable = Observable.interval(5000, TimeUnit.MILLISECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         (l) -> {
-//                            Log.i(TAG, "startTimer: onNext " + l);
+//                            Log.v(TAG, "startTimer: onNext " + l);
 //                            observableRoadUsersList.subscribe(roadUserObserver);
                             if (socketOpened && weakContext.get() != null) {
                                 webSocket.send("[\"{\\\"type\\\":\\\"ping\\\"}\"]");
                             }
-                            Log.i(TAG, "ping socket: " + socketBaseUrl);
+                            Log.v(TAG, "ping socket: " + socketBaseUrl);
                         },
                         (throwable) -> {
                             Log.e(TAG, "ping exception: ", throwable);
                         },
                         () -> {
                             //do on complete
-                            Log.i(TAG, "ping completed");
+                            Log.v(TAG, "ping completed");
                         },
                         onSubscribe -> {
                         });
@@ -137,20 +134,19 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
 
     public boolean sendMessage(String message) {
-
         if (socketOpened && internetConnected) {
             message = "[\"" + message.replace("\\", "\\\\").replace("\"", "\\\"") + "\"]";
-            Log.i(TAG, "Sending Message: " + message);
+            Log.v(TAG, "Sending Message: " + message);
             return mSocket.send(message);
         } else {
-            Log.i(TAG, "sendMessage: there was an attempt to send message from " + socketBaseUrl + ", but the socket is: " + socketOpened + " and internet connection = " + internetConnected);
+            Log.v(TAG, "sendMessage: there was an attempt to send message from " + socketBaseUrl + ", but the socket is: " + socketOpened + " and internet connection = " + internetConnected);
         }
         return false;
     }
 
 
     public void updateInternetConnection(boolean isConnected) {
-        Log.i(TAG, "updateInternetConnection: ");
+        Log.v(TAG, "updateInternetConnection: ");
         if (isConnected && !internetConnected) {
             Log.i(TAG, "Internet connected");
             openConnection();
@@ -207,7 +203,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     WebSocketListener mSocketListener = new WebSocketListener() {
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
-            Log.i(TAG, "onOpen: socket opened: " + socketBaseUrl + webSocket.toString());
+            Log.v(TAG, "onOpen: socket opened: " + socketBaseUrl + webSocket.toString());
             mSocket = webSocket;
             socketOpened = true;
             ping(mSocket);
@@ -217,7 +213,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         @Override
         public void onMessage(WebSocket webSocket, String text) {
             if (!"h".equals(text) && !"o".equals(text)) {
-                Log.i(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
+                Log.v(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
                 if (text.substring(0, 2).contains("c[")) {  //This means close go away..
 //                    openConnection();
                     return;
@@ -228,7 +224,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
                 strippedString = strippedString.substring(0, strippedString.lastIndexOf("]"));
 
                 SocketMessage message = new Gson().fromJson(strippedString, SocketMessage.class);
-//                Log.i(TAG, "checking message type:  " + message.type);
+//                Log.v(TAG, "checking message type:  " + message.type);
 
                 if (message.type.equals(SocketMessage.TYPE_ERROR)) {
                     Log.e(TAG, "message type error: ");
@@ -242,14 +238,14 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
-            Log.i(TAG, "onClosing: " + reason);
+            Log.v(TAG, "onClosing: " + reason);
         }
 
         @Override
         public void onClosed(WebSocket webSocket, int code, String reason) {
             super.onClosed(webSocket, code, reason);
             socketOpened = false;
-            Log.i(TAG, "onClosed: " + socketBaseUrl);
+            Log.v(TAG, "onClosed: " + socketBaseUrl);
             handleSocketClose(webSocket, code, reason);
         }
 
@@ -269,12 +265,12 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
         if (internetConnected) {
             mHandler.postDelayed(() -> {
-                Log.i(TAG, "onFailure: internet is connected, trying to reopen socket");
+                Log.v(TAG, "onFailure: internet is connected, trying to reopen socket");
                 openConnection();
 
             }, 5000);
         } else {
-            Log.i(TAG, "onFailure, internet disconnected...");
+            Log.v(TAG, "onFailure, internet disconnected...");
         }
     }
 

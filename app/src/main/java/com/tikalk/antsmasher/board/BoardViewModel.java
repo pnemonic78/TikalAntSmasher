@@ -120,7 +120,7 @@ public class BoardViewModel extends AndroidViewModel implements
                 .subscribe(new DisposableObserver<String>() {
                     @Override
                     public void onNext(String response) {
-                        Log.i(TAG, "onNext: got teams!!, showing teams list");
+                        Log.v(TAG, "onNext: got teams!!, showing teams list");
                         Game data = createGame();
                         game.postValue(data);
                     }
