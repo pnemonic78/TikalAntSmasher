@@ -41,18 +41,18 @@ public class TeamsActivity extends AppCompatActivity implements
         IpDialogFragment.EditDialogEventListener {
 
     private static final String TAG = "TAG_TeamsActivity";
-    @Inject
-    protected PrefsHelper prefsHelper;
 
     @BindView(android.R.id.list)
     protected RecyclerView listView;
 
-    private TeamViewModel presenter;
-    private TeamAdapter adapter;
-
+    @Inject
+    protected PrefsHelper prefsHelper;
     @Inject
     @Named("Teams")
-    ViewModelProvider.Factory mViewModelFactory;
+    protected ViewModelProvider.Factory viewModelFactory;
+
+    private TeamViewModel presenter;
+    private TeamAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class TeamsActivity extends AppCompatActivity implements
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(adapter);
 
-        presenter = ViewModelProviders.of(this, mViewModelFactory).get(TeamViewModel.class);
+        presenter = ViewModelProviders.of(this, viewModelFactory).get(TeamViewModel.class);
         presenter.setView(this);
         presenter.getTeams().observe(this, this);
     }

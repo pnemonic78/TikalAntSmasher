@@ -8,14 +8,15 @@ import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.tikalk.antsmasher.board.BoardViewModel;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.networking.GameRestService;
-
-import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -33,18 +34,19 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     private View view;
+    private final MutableLiveData<List<AntSpecies>> species = new MutableLiveData<>();
     private final MutableLiveData<List<Team>> teams = new MutableLiveData<>();
     private Team team;
     private GameRestService gameRestService;
-    private PrefsHelper mPrefsHelper;
-    private String userId;
+    private PrefsHelper prefsHelper;
+    private long userId;
 
     @Inject
     public TeamViewModel(Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
         super(application);
         Log.v(TAG, "TeamViewModel: ");
         this.gameRestService = gameRestService;
-        this.mPrefsHelper = prefsHelper;
+        this.prefsHelper = prefsHelper;
         this.userId = prefsHelper.getUserId();
     }
 
@@ -53,12 +55,42 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Team>> getTeams() {
-        loadTeams();
+        if (species.getValue() == null) {
+            loadSpecies();
+        } else {
+            loadTeams();
+        }
         return teams;
     }
 
+    private void loadSpecies() {
+        Log.v(TAG, "Load ant species...");
+
+        gameRestService.getAntSpecies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<List<AntSpecies>>() {
+                    @Override
+                    public void onNext(List<AntSpecies> response) {
+                        Log.v(TAG, "onNext: have ant species");
+                        species.setValue(response);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: Failed to fetch ant species: " + e.getLocalizedMessage(), e);
+                        //TODO view.showLoadSpeciesError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        loadTeams();
+                    }
+                });
+    }
+
     private void loadTeams() {
-        Log.i(TAG, "about to load game teams from server...");
+        Log.v(TAG, "Load game teams from server...");
 
         gameRestService.getCurrentTeams()
                 .subscribeOn(Schedulers.io())
@@ -66,21 +98,19 @@ public class TeamViewModel extends AndroidViewModel {
                 .subscribe(new DisposableObserver<List<Team>>() {
                     @Override
                     public void onNext(List<Team> response) {
-                        Log.v(TAG, "onNext: got teams!!, showing teams list");
-                        Game game = BoardViewModel.createGame();
-                        teams.setValue(game.getTeams());
+                        Log.v(TAG, "onNext: teams");
+                        teams.setValue(response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        //TODO Remove this when server is up...
-                        Log.e(TAG, "onNext: Something happened, can't get teams list from server...");
-                        Game game = BoardViewModel.createGame();
-                        teams.setValue(game.getTeams());
+                        Log.e(TAG, "onError: Failed to fetch teams: " + e.getLocalizedMessage(), e);
+                        //TODO view.showLoadTeamsError();
                     }
 
                     @Override
                     public void onComplete() {
+                        Log.v(TAG, "onComplete: teams");
                     }
                 });
     }
@@ -102,7 +132,7 @@ public class TeamViewModel extends AndroidViewModel {
                     @Override
                     public void onError(Throwable e) {
                         //TODO Remove this when server is up...
-                        Log.e(TAG, "onError: something happened, can't join the game.. ");
+                        Log.e(TAG, "onError: something happened, can't join the game.", e);
                         onTeamJoined(team);
                     }
 

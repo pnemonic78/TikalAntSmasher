@@ -17,11 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class GameRestServiceModule {
-    @Provides
-    GameRestService provideGameRestService(Retrofit gameRestRetrofit) {
-
-        return gameRestRetrofit.create(GameRestService.class);
-    }
 
     @Provides
     public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson) {
@@ -33,4 +28,8 @@ public class GameRestServiceModule {
                 .build();
     }
 
+    @Provides
+    GameRestService provideGameRestService(Retrofit gameRestRetrofit) {
+        return gameRestRetrofit.create(GameRestService.class);
+    }
 }

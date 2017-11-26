@@ -21,8 +21,6 @@ public class ApiClient {
     private GameRestService gameRestService;
 
     public GameRestService getApiService() {
-
-
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();

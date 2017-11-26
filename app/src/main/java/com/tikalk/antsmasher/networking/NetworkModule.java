@@ -42,14 +42,12 @@ public class NetworkModule {
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient() {
-        OkHttpClient client;
-        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
-
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okHttpClientBuilder.addInterceptor(logging);
-        client = okHttpClientBuilder.build();
-        return client;
+
+        return new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
     }
 
 }

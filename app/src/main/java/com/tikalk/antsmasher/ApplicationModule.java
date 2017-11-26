@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.board.BoardVmFactory;
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.teams.TeamsVmFactory;
+import com.tikalk.antsmasher.teams.TeamsViewModelFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -41,7 +41,7 @@ class ApplicationModule {
 
     @Provides
     @Named("Teams")
-    ViewModelProvider.Factory provideTeamsViewModelFactory(TeamsVmFactory factory) {
+    ViewModelProvider.Factory provideTeamsViewModelFactory(TeamsViewModelFactory factory) {
         return factory;
     }
 

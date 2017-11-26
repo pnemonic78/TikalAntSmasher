@@ -6,7 +6,6 @@ import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.login_screen.LoginActivity;
 import com.tikalk.antsmasher.login_screen.LoginModule;
 import com.tikalk.antsmasher.networking.AppWebSocket;
-import com.tikalk.antsmasher.networking.GameRestService;
 import com.tikalk.antsmasher.networking.GameRestServiceModule;
 import com.tikalk.antsmasher.networking.NetworkModule;
 import com.tikalk.antsmasher.service.AppService;
@@ -17,8 +16,6 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class, NetworkModule.class, GameRestServiceModule.class, LoginModule.class})
 @Singleton
 public interface ApplicationComponent {
-
-    GameRestService getGameRestService();
 
     void inject(LoginActivity activity);
 

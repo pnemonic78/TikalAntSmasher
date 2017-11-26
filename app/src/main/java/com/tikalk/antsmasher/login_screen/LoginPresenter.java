@@ -66,7 +66,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     private void checkUserId(String username) {
-        if (TextUtils.isEmpty(prefsHelper.getUserId())) {
+        if (prefsHelper.getUserId() == 0) {
             Log.v(TAG, "checkUserId: about to createUser to server");
             loginManager.login(username, this);
         } else {

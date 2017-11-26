@@ -58,6 +58,10 @@ public class PrefsHelper {
         return preferences.getBoolean(key, false);
     }
 
+    private long getLong(String key) {
+        return preferences.getLong(key, 0L);
+    }
+
     public String getDeveloperTeam() {
         return preferences.getString(DEV_TEAM, null);
     }
@@ -66,12 +70,12 @@ public class PrefsHelper {
         preferences.edit().putString(DEV_TEAM, value).apply();
     }
 
-    public String getUserId() {
-        return getString(USER_ID);
+    public long getUserId() {
+        return getLong(USER_ID);
     }
 
-    public void setUserId(String value) {
-        saveStringToPrefs(USER_ID, value);
+    public void setUserId(long value) {
+        saveLongToPrefs(USER_ID, value);
     }
 
     public String getUserName() {
