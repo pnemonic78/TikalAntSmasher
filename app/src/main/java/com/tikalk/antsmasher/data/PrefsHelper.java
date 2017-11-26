@@ -39,6 +39,10 @@ public class PrefsHelper {
         preferences.edit().putString(key, value).apply();
     }
 
+
+    public void saveLongToPrefs(String key, long value){
+        preferences.edit().putLong(key, value).apply();
+    }
     private boolean getBoolean(String key) {
         return preferences.getBoolean(key, false);
     }

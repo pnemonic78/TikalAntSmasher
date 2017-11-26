@@ -1,5 +1,7 @@
 package com.tikalk.antsmasher.teams;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
@@ -9,7 +11,9 @@ import android.util.Log;
 import java.util.List;
 
 import com.tikalk.antsmasher.board.BoardViewModel;
+import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.networking.GameRestService;
 
@@ -23,7 +27,7 @@ import io.reactivex.schedulers.Schedulers;
  * Team presenter.
  */
 
-public class TeamViewModel extends ViewModel {
+public class TeamViewModel extends AndroidViewModel {
     private static final String TAG = "TAG_TeamViewModel";
 
     public interface View {
@@ -34,12 +38,17 @@ public class TeamViewModel extends ViewModel {
     private MutableLiveData<List<Team>> teams;
     private Team team;
     private GameRestService gameRestService;
+    PrefsHelper mPrefsHelper;
+    private String user;
 
     @Inject
-    public TeamViewModel(GameRestService gameRestService) {
-        Log.v(TAG, "TeamViewModel: ");
+    public TeamViewModel(Application application, GameRestService gameRestService, PrefsHelper prefsHelper){
+        super(application);
+        Log.i(TAG, "TeamViewModel: ");
         teams = new MutableLiveData<>();
         this.gameRestService = gameRestService;
+        this.mPrefsHelper = prefsHelper;
+        user = prefsHelper.getUserName();
     }
 
     public void setView(View view) {
@@ -52,15 +61,15 @@ public class TeamViewModel extends ViewModel {
     }
 
     private void loadTeams(Context context) {
-        Log.v(TAG, "about to load game teams from server...");
+        Log.i(TAG, "about to load game teams from server...");
 
-        gameRestService.getCurrentTeams("")
+        gameRestService.getCurrentTeams()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<String>() {
+                .subscribe(new DisposableObserver<List<Team>>() {
                     @Override
-                    public void onNext(String response) {
-                        Log.v(TAG, "onNext: got teams!!, showing teams list");
+                    public void onNext(List<Team> response) {
+                        Log.i(TAG, "onNext: got teams!!, showing teams list");
                         Game game = BoardViewModel.createGame();
                         teams.setValue(game.getTeams());
                     }
@@ -82,15 +91,16 @@ public class TeamViewModel extends ViewModel {
     }
 
     public void teamClicked(Team team) {
-        Log.v(TAG, "onNext: about to join the game");
+        Log.i(TAG, "onNext: about to join the game");
 
-        gameRestService.createPlayer("")
+        gameRestService.joinGame(team.getId(), user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<String>() {
+                .subscribe(new DisposableObserver<Player>() {
                     @Override
-                    public void onNext(String s) {
-                        Log.v(TAG, "onNext: joined!! opening game screen");
+                    public void onNext(Player player) {
+                        Log.i(TAG, "onNext: joined!! opening game screen");
+
                         onTeamJoined(team);
                     }
 
@@ -103,6 +113,7 @@ public class TeamViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
+
                     }
                 });
     }

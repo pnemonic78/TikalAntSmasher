@@ -2,6 +2,8 @@ package com.tikalk.antsmasher.login_screen;
 
 import android.util.Log;
 
+import com.tikalk.antsmasher.model.rest_response.CreateBody;
+import com.tikalk.antsmasher.model.rest_response.CreateUserResp;
 import com.tikalk.antsmasher.networking.GameRestService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -17,22 +19,25 @@ public class LoginManager implements LoginInterceptor {
     private static final String TAG = "TAG_LoginManager";
     GameRestService loginService;
 
-    LoginManager(GameRestService apiService) {
-        Log.v(TAG, "LoginManager: " + (apiService == null));
+    LoginManager(GameRestService apiService){
+
+        Log.i(TAG, "LoginManager injections status = " + (apiService != null));
         this.loginService = apiService;
     }
 
     @Override
     public void login(String userName, OnLoginFinishedListener listener) {
 
-        loginService.createUser(userName)
+        CreateBody body = new CreateBody(userName);
+
+        loginService.createUser(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<String>() {
+                .subscribe(new DisposableObserver<CreateUserResp>() {
                     @Override
-                    public void onNext(String response) {
-                        Log.v(TAG, "onNext: got user ID from server" + response);
-                        listener.onLoginSuccess(response);
+                    public void onNext(CreateUserResp response) {
+                        Log.i(TAG, "onNext: got user ID from server" + response);
+                        listener.onLoginSuccess(response.getId());
                     }
 
                     @Override
@@ -43,6 +48,7 @@ public class LoginManager implements LoginInterceptor {
 
                     @Override
                     public void onComplete() {
+
                     }
                 });
     }

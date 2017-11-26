@@ -3,9 +3,8 @@ package com.tikalk.antsmasher.login_screen;
 
 public interface LoginInterceptor {
 
-    interface OnLoginFinishedListener {
-        void onLoginSuccess(String userUniqueId);
-
+    interface OnLoginFinishedListener{
+        void onLoginSuccess(long userUniqueId);
         void onLoginFailed(Throwable e);
     }
 

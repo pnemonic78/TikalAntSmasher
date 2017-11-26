@@ -15,6 +15,12 @@ public class Player {
     @SerializedName("avatar")
     private String avatarUri;
 
+    @SerializedName("score")
+    private long score;
+
+    @SerializedName("teamName")
+    private String teamName;
+
     public Player(String name) {
         this(0, name);
     }
@@ -22,6 +28,14 @@ public class Player {
     public Player(long id, String name) {
         setId(id);
         setName(name);
+    }
+
+    public Player(long id, String name, long score, String teamName) {
+        setId(id);
+        setName(name);
+        setAvatarUri(null);
+        setScore(score);
+        setTeamName(teamName);
     }
 
     public long getId() {
@@ -46,5 +60,22 @@ public class Player {
 
     public void setAvatarUri(String avatarUri) {
         this.avatarUri = avatarUri;
+    }
+
+
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }
