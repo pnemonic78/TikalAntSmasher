@@ -4,8 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.content.Context;
 import android.util.Log;
 
 import java.util.List;
@@ -35,32 +33,31 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     private View view;
-    private MutableLiveData<List<Team>> teams;
+    private final MutableLiveData<List<Team>> teams = new MutableLiveData<>();
     private Team team;
     private GameRestService gameRestService;
-    PrefsHelper mPrefsHelper;
-    private String user;
+    private PrefsHelper mPrefsHelper;
+    private String userId;
 
     @Inject
     public TeamViewModel(Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
         super(application);
-        Log.i(TAG, "TeamViewModel: ");
-        teams = new MutableLiveData<>();
+        Log.v(TAG, "TeamViewModel: ");
         this.gameRestService = gameRestService;
         this.mPrefsHelper = prefsHelper;
-        user = prefsHelper.getUserName();
+        this.userId = prefsHelper.getUserId();
     }
 
     public void setView(View view) {
         this.view = view;
     }
 
-    public LiveData<List<Team>> getTeams(Context context) {
-        loadTeams(context);
+    public LiveData<List<Team>> getTeams() {
+        loadTeams();
         return teams;
     }
 
-    private void loadTeams(Context context) {
+    private void loadTeams() {
         Log.i(TAG, "about to load game teams from server...");
 
         gameRestService.getCurrentTeams()
@@ -69,7 +66,7 @@ public class TeamViewModel extends AndroidViewModel {
                 .subscribe(new DisposableObserver<List<Team>>() {
                     @Override
                     public void onNext(List<Team> response) {
-                        Log.i(TAG, "onNext: got teams!!, showing teams list");
+                        Log.v(TAG, "onNext: got teams!!, showing teams list");
                         Game game = BoardViewModel.createGame();
                         teams.setValue(game.getTeams());
                     }
@@ -84,23 +81,21 @@ public class TeamViewModel extends AndroidViewModel {
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
-
     }
 
-    public void teamClicked(Team team) {
-        Log.i(TAG, "onNext: about to join the game");
+    public void teamClicked(final Team team) {
+        Log.v(TAG, "onNext: about to join the game");
 
-        gameRestService.joinGame(team.getId(), user)
+        gameRestService.createPlayer(team.getId(), userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<Player>() {
                     @Override
                     public void onNext(Player player) {
-                        Log.i(TAG, "onNext: joined!! opening game screen");
-
+                        Log.v(TAG, "onNext: joined!! opening game screen");
+                        team.addPlayer(player);
                         onTeamJoined(team);
                     }
 
@@ -113,7 +108,6 @@ public class TeamViewModel extends AndroidViewModel {
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
     }

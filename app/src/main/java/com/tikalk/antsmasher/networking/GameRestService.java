@@ -17,7 +17,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 import static com.tikalk.antsmasher.networking.ApiContract.CREATE_PLAYER;
-import static com.tikalk.antsmasher.networking.ApiContract.GAMES;
+import static com.tikalk.antsmasher.networking.ApiContract.GAMES_LATEST;
 import static com.tikalk.antsmasher.networking.ApiContract.ID_PARAM;
 import static com.tikalk.antsmasher.networking.ApiContract.LATEST_TEAMS;
 import static com.tikalk.antsmasher.networking.ApiContract.LEADERS;
@@ -35,9 +35,9 @@ public interface GameRestService {
     Observable<User> updateUser(@Query(ID_PARAM) String id);
 
     @PUT(CREATE_PLAYER)
-    Observable<Player> joinGame(@Query(TEAM_PARAM) long teamId, @Query(USERID_PARAM) String userId);
+    Observable<Player> createPlayer(@Query(TEAM_PARAM) long teamId, @Query(USERID_PARAM) String userId);
 
-    @GET(GAMES)
+    @GET(GAMES_LATEST)
     Observable<LatestGame> getLatestGame();
 
     @GET(TEAM_PARAM)

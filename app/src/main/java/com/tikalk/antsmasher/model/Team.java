@@ -94,4 +94,8 @@ public class Team {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
 }

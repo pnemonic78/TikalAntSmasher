@@ -67,7 +67,7 @@ public class TeamsActivity extends AppCompatActivity implements
 
         presenter = ViewModelProviders.of(this, mViewModelFactory).get(TeamViewModel.class);
         presenter.setView(this);
-        presenter.getTeams(this).observe(this, this);
+        presenter.getTeams().observe(this, this);
     }
 
     @Override

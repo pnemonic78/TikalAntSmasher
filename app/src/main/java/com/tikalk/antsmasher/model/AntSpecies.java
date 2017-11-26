@@ -25,7 +25,7 @@ public class AntSpecies {
     private String name;
     @ColorInt
     @SerializedName("color")
-    private int tint = Color.BLACK;
+    private int tint = Color.TRANSPARENT;
     @SerializedName("size")
     private float size = 1;
     @SerializedName("speed")
@@ -59,6 +59,19 @@ public class AntSpecies {
 
     @ColorInt
     public int getTint() {
+        if (tint == Color.TRANSPARENT) {
+            switch ((int) id) {
+                case 1:
+                    tint = 0xFFcc0000;
+                    break;
+                case 2:
+                    tint = 0xFF00cc00;
+                    break;
+                case 3:
+                    tint = Color.BLACK;
+                    break;
+            }
+        }
         return tint;
     }
 

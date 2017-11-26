@@ -13,7 +13,7 @@ public class ApiContract {
     public static final String LOGIN_ENDPOINT = "/users";
     public static final String UPDATE_ENDPOINT = "/users";
     public static final String CREATE_PLAYER = "/players";
-    public static final String GAMES = "/games/latest";
+    public static final String GAMES_LATEST = "/games/latest";
     public static final String TEAMS = "/teams/current";
     public static final String LEADERS = "/players/leaders";
     public static final String LATEST_TEAMS = "/teams/latest";

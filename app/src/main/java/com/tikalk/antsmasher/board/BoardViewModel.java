@@ -167,15 +167,12 @@ public class BoardViewModel extends AndroidViewModel implements
         switch ((int) team.getId()) {
             case 10:
                 species.setId(1);
-                species.setTint(0xFF00cc00);
                 break;
             case 20:
                 species.setId(2);
-                species.setTint(0xFFcc0000);
                 break;
             case 30:
                 species.setId(3);
-                species.setTint(Color.BLACK);
                 break;
         }
     }
