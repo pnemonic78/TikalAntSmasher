@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.model.rest_response;
+package com.tikalk.antsmasher.networking.response;
 
 import com.tikalk.antsmasher.model.Team;
 
@@ -6,7 +6,7 @@ import com.tikalk.antsmasher.model.Team;
  * Created by motibartov on 26/11/2017.
  */
 
-public class LatestTeam {
+public class TeamResponse {
 
     Team team;
     long score;

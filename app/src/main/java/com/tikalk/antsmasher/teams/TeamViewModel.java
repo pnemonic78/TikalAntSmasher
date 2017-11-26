@@ -27,7 +27,7 @@ public class TeamViewModel extends AndroidViewModel {
     private static final String TAG = "TAG_TeamViewModel";
 
     public interface View {
-        void onTeamJoined(Team team);
+        void onTeamJoined(Team team, Player player);
     }
 
     private View view;
@@ -111,9 +111,10 @@ public class TeamViewModel extends AndroidViewModel {
     private void onTeamJoined(Team team, Player player) {
         team.addPlayer(player);
         prefsHelper.setTeamId(team.getId());
+        prefsHelper.setPlayerId(player.getId());
         this.team = team;
         if (view != null) {
-            view.onTeamJoined(team);
+            view.onTeamJoined(team, player);
         }
     }
 

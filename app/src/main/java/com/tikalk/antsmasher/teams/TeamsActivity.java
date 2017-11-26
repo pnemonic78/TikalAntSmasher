@@ -27,6 +27,7 @@ import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.DeveloperTeam;
+import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.settings.SettingsActivity;
 import com.tikalk.antsmasher.utils.Utils;
@@ -37,7 +38,8 @@ import butterknife.ButterKnife;
 public class TeamsActivity extends AppCompatActivity implements
         TeamViewModel.View,
         TeamViewHolder.TeamViewHolderListener,
-        Observer<List<Team>> , IpDialogFragment.EditDialogEventListener{
+        Observer<List<Team>>,
+        IpDialogFragment.EditDialogEventListener {
 
     private static final String TAG = "TAG_TeamsActivity";
     @Inject
@@ -90,9 +92,10 @@ public class TeamsActivity extends AppCompatActivity implements
         presenter.teamClicked(team);
     }
 
-    public void onTeamJoined(Team team) {
+    public void onTeamJoined(Team team, Player player) {
         Intent intent = new Intent(this, BoardActivity.class);
         intent.putExtra(BoardActivity.EXTRA_TEAM, team.getId());
+        intent.putExtra(BoardActivity.EXTRA_PLAYER, player.getId());
         startActivity(intent);
     }
 
@@ -147,8 +150,7 @@ public class TeamsActivity extends AppCompatActivity implements
 
     @Override
     public void onEditDone(String enteredAntIp, String enteredAdminIp, String enteredSmashIp) {
-
-        if(!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)){
+        if (!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)) {
             Log.i(TAG, "onEditDone: ip invalid");
             new AlertDialog.Builder(this)
                     .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
@@ -160,15 +162,12 @@ public class TeamsActivity extends AppCompatActivity implements
                             enterIpDialog();
                         }
                     }).create().show();
-        }else{
+        } else {
             prefsHelper.saveStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL, "http://" + enteredAntIp);
             prefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
             prefsHelper.saveStringPref(PrefsHelper.SMASH_SOCKET_URL, "http://" + enteredSmashIp);
         }
 
         Log.i(TAG, "onEditDone: ip valid");
-
-
-
     }
 }

@@ -39,6 +39,7 @@ public class BoardActivity extends AppCompatActivity implements
     private static final String TAG = "BoardActivity";
 
     public static final String EXTRA_TEAM = "team_id";
+    public static final String EXTRA_PLAYER = "player_id";
 
     @Inject
     protected PrefsHelper prefsHelper;
@@ -47,13 +48,13 @@ public class BoardActivity extends AppCompatActivity implements
     @Named("Board")
     ViewModelProvider.Factory mBoardViewModelFactory;
 
-
     private BoardView boardView;
     private BoardViewModel presenter;
     private Game game;
     private SoundHelper soundHelper;
     private ProgressBar progressBar;
     private long teamId;
+    private long playerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class BoardActivity extends AppCompatActivity implements
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
 
         teamId = getIntent().getLongExtra(EXTRA_TEAM, 0);
+        playerId = getIntent().getLongExtra(EXTRA_PLAYER, 0);
 
         setContentView(R.layout.activity_board);
         ActionBar actionBar = getSupportActionBar();

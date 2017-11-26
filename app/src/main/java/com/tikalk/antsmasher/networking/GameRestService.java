@@ -6,9 +6,9 @@ import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.User;
-import com.tikalk.antsmasher.model.rest_response.LatestGame;
-import com.tikalk.antsmasher.model.rest_response.LatestTeam;
 import com.tikalk.antsmasher.networking.requests.CreateUserRequest;
+import com.tikalk.antsmasher.networking.response.GameResponse;
+import com.tikalk.antsmasher.networking.response.TeamResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -41,7 +41,7 @@ public interface GameRestService {
     Observable<Player> createPlayer(@Query(TEAM_PARAM) long teamId, @Query(USERID_PARAM) long userId);
 
     @GET(GAMES_LATEST)
-    Observable<LatestGame> getLatestGame();
+    Observable<GameResponse> getLatestGame();
 
     @GET(TEAMS_CURRENT)
     Observable<List<Team>> getCurrentTeams();
@@ -50,7 +50,7 @@ public interface GameRestService {
     Observable<Player> getLeaderPlayer();
 
     @GET(LATEST_TEAMS)
-    Observable<LatestTeam> getLatestTeams();
+    Observable<TeamResponse> getLatestTeams();
 
     @GET(ANT_SPECIES)
     Observable<List<AntSpecies>> getAntSpecies();

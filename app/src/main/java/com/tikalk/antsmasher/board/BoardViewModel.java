@@ -12,7 +12,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -27,6 +26,7 @@ import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.networking.GameRestService;
+import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.service.AppService;
 
 import javax.inject.Inject;
@@ -88,7 +88,7 @@ public class BoardViewModel extends AndroidViewModel implements
     private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
 
     private View view;
-    private MutableLiveData<Game> game;
+    private final MutableLiveData<Game> game = new MutableLiveData<>();
     private final Handler handler = new Handler();
     private AppService.AppServiceProxy appService;
     private boolean serviceBound = false;
@@ -107,38 +107,36 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     public LiveData<Game> getGame() {
-        if (game == null) {
-            game = new MutableLiveData<>();
+        if (game.getValue() == null) {
             loadGame();
         }
         return game;
     }
 
     private void loadGame() {
-//        gameRestService.getDevelopentDeams().subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new DisposableObserver<String>() {
-//                    @Override
-//                    public void onNext(String response) {
-//                        Log.i(TAG, "onNext: got teams!!, showing teams list");
-//                        Game data = createGame();
-//                        game.postValue(data);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        //TODO Remove this when server is up...
-//                        Log.e(TAG, "onError: Something happened, can't get teams list from server...");
-//                        Game data = createGame();
-//                        game.postValue(data);
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
+        gameRestService.getLatestGame()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<GameResponse>() {
+                    @Override
+                    public void onNext(GameResponse response) {
+                        Log.v(TAG, "onNext: have game");
+                        Game data = new Game();
+                        data.setId(response.id);
+                        data.setState(response.state);
+                        game.postValue(data);
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: Failed to fetch game: " + e.getLocalizedMessage(), e);
+                        //TODO view.showFetchGameError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     public static Game createGame() {
