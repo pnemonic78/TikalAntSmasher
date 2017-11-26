@@ -41,12 +41,14 @@ class ApplicationModule {
 
     @Provides
     @Named("Teams")
+    @Singleton
     ViewModelProvider.Factory provideTeamsViewModelFactory(TeamsViewModelFactory factory) {
         return factory;
     }
 
     @Provides
     @Named("Board")
+    @Singleton
     ViewModelProvider.Factory provideBoardViewModelFactory(BoardViewModelFactory factory) {
         return factory;
     }
