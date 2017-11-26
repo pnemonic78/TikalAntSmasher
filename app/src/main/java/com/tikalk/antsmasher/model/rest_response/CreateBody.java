@@ -7,7 +7,7 @@ package com.tikalk.antsmasher.model.rest_response;
 public class CreateBody {
     String name;
 
-    public CreateBody(String name){
+    public CreateBody(String name) {
         this.name = name;
     }
 }

@@ -42,7 +42,7 @@ public class TeamViewModel extends AndroidViewModel {
     private String user;
 
     @Inject
-    public TeamViewModel(Application application, GameRestService gameRestService, PrefsHelper prefsHelper){
+    public TeamViewModel(Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
         super(application);
         Log.i(TAG, "TeamViewModel: ");
         teams = new MutableLiveData<>();

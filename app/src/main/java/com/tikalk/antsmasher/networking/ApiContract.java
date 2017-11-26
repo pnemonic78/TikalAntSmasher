@@ -9,7 +9,6 @@ public class ApiContract {
     //URL's
     public static final String SERVICE_BASE_URL = "http://localhost:8080";
 
-
     //Requests Endpoints
     public static final String LOGIN_ENDPOINT = "/users";
     public static final String UPDATE_ENDPOINT = "/users/:id";
@@ -18,8 +17,6 @@ public class ApiContract {
     public static final String TEAMS = "/teams/current";
     public static final String LEADERS = "/players/leaders";
     public static final String LATEST_TEAMS = "/teams/latest";
-
-
 
     //Query Params
     public static final String UPDATE_PARAM = "name";

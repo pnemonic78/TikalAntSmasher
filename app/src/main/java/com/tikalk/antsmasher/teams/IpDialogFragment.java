@@ -186,7 +186,7 @@ public class IpDialogFragment extends DialogFragment {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                posButton = ((AlertDialog)dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+                posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
                 posButton.setEnabled(false);
             }
         });
@@ -266,11 +266,10 @@ public class IpDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    void updateButtonState(){
-
-        if((etAntIp.getText().length() > 0) && (etAdminIp.getText().length() > 0) && (etSmashIp.getText().length() > 0)){
+    void updateButtonState() {
+        if ((etAntIp.getText().length() > 0) && (etAdminIp.getText().length() > 0) && (etSmashIp.getText().length() > 0)) {
             posButton.setEnabled(true);
-        }else {
+        } else {
             posButton.setEnabled(false);
         }
     }
@@ -281,8 +280,6 @@ public class IpDialogFragment extends DialogFragment {
 
 
     InputFilter[] filters = new InputFilter[1];
-
-
 
 
 }

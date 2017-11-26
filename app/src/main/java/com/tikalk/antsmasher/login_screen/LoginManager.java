@@ -19,7 +19,7 @@ public class LoginManager implements LoginInterceptor {
     private static final String TAG = "TAG_LoginManager";
     GameRestService loginService;
 
-    LoginManager(GameRestService apiService){
+    LoginManager(GameRestService apiService) {
 
         Log.i(TAG, "LoginManager injections status = " + (apiService != null));
         this.loginService = apiService;

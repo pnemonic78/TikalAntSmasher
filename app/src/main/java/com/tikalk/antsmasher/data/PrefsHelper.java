@@ -42,17 +42,18 @@ public class PrefsHelper {
         preferences.edit().putString(key, value).apply();
     }
 
-    public String getStringPref(String key){
+    public String getStringPref(String key) {
         return preferences.getString(key, null);
     }
 
-    public void saveStringPref(String key, String value){
+    public void saveStringPref(String key, String value) {
         preferences.edit().putString(key, value).apply();
     }
 
-    public void saveLongToPrefs(String key, long value){
+    public void saveLongToPrefs(String key, long value) {
         preferences.edit().putLong(key, value).apply();
     }
+
     private boolean getBoolean(String key) {
         return preferences.getBoolean(key, false);
     }

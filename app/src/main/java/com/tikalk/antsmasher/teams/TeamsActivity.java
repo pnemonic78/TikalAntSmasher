@@ -37,7 +37,8 @@ import butterknife.ButterKnife;
 public class TeamsActivity extends AppCompatActivity implements
         TeamViewModel.View,
         TeamViewHolder.TeamViewHolderListener,
-        Observer<List<Team>> , IpDialogFragment.EditDialogEventListener{
+        Observer<List<Team>>,
+        IpDialogFragment.EditDialogEventListener {
 
     private static final String TAG = "TAG_TeamsActivity";
     @Inject
@@ -144,11 +145,9 @@ public class TeamsActivity extends AppCompatActivity implements
         dialogFragment.show(getSupportFragmentManager(), "IpDialog");
     }
 
-
     @Override
     public void onEditDone(String enteredAntIp, String enteredAdminIp, String enteredSmashIp) {
-
-        if(!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)){
+        if (!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)) {
             Log.i(TAG, "onEditDone: ip invalid");
             new AlertDialog.Builder(this)
                     .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
@@ -160,15 +159,12 @@ public class TeamsActivity extends AppCompatActivity implements
                             enterIpDialog();
                         }
                     }).create().show();
-        }else{
+        } else {
             prefsHelper.saveStringPref(PrefsHelper.ANTS_IP, "http://" + enteredAntIp);
             prefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
             prefsHelper.saveStringPref(PrefsHelper.SMASH_IP, "http://" + enteredSmashIp);
         }
 
         Log.i(TAG, "onEditDone: ip valid");
-
-
-
     }
 }
