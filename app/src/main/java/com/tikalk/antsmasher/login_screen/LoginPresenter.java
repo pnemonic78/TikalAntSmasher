@@ -81,8 +81,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     @Override
-    public void onLoginSuccess(String userId) {
-        prefsHelper.setUserId(userId);
+    public void onLoginSuccess(long userId) {
+        prefsHelper.saveLongToPrefs(PrefsHelper.USER_ID, userId);
         view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
     }
 
