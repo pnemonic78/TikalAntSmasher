@@ -244,7 +244,7 @@ public class BoardViewModel extends AndroidViewModel implements
                 }
                 view.addAnt(ant);
             }
-            ant.setLocation(event.xPercent, event.yPercent);
+            ant.setLocation(event.xPromil / 1000f, event.yPromil / 1000f);
             if (ant.isVisible()) {
                 view.moveAnt(ant);
             } else {
