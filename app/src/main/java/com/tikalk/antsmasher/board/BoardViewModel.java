@@ -114,30 +114,29 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     private void loadGame() {
-        gameRestService.getDeveloperTeams("")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<String>() {
-                    @Override
-                    public void onNext(String response) {
-                        Log.i(TAG, "onNext: got teams!!, showing teams list");
-                        Game data = createGame();
-                        game.postValue(data);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        //TODO Remove this when server is up...
-                        Log.e(TAG, "onError: Something happened, can't get teams list from server...");
-                        Game data = createGame();
-                        game.postValue(data);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+//        gameRestService.getDevelopentDeams().subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new DisposableObserver<String>() {
+//                    @Override
+//                    public void onNext(String response) {
+//                        Log.i(TAG, "onNext: got teams!!, showing teams list");
+//                        Game data = createGame();
+//                        game.postValue(data);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        //TODO Remove this when server is up...
+//                        Log.e(TAG, "onError: Something happened, can't get teams list from server...");
+//                        Game data = createGame();
+//                        game.postValue(data);
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
 
     }
 

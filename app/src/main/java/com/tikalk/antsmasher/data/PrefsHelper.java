@@ -15,6 +15,9 @@ public class PrefsHelper {
     public static final String USER_NAME = "user_name";
     public static final String USER_ID = "user_id";
     public static final String DEV_TEAM = "dev_team";
+    public static final String ANTS_IP = "ants_ip";
+    public static final String ADMIN_IP = "admin_ip";
+    public static final String SMASH_IP = "smash_ip";
 
     private final SharedPreferences preferences;
 
@@ -39,6 +42,17 @@ public class PrefsHelper {
         preferences.edit().putString(key, value).apply();
     }
 
+    public String getStringPref(String key){
+        return preferences.getString(key, null);
+    }
+
+    public void saveStringPref(String key, String value){
+        preferences.edit().putString(key, value).apply();
+    }
+
+    public void saveLongToPrefs(String key, long value){
+        preferences.edit().putLong(key, value).apply();
+    }
     private boolean getBoolean(String key) {
         return preferences.getBoolean(key, false);
     }
