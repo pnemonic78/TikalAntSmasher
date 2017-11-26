@@ -22,6 +22,7 @@ import android.util.Log;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
@@ -214,6 +215,19 @@ public class BoardViewModel extends AndroidViewModel implements
     @Override
     public void onGameFinished() {
         view.onGameFinished();
+    }
+
+    @Override
+    public void onGameStateMessage(GameState state) {
+        switch (state) {
+            case STARTED:
+                view.paint();
+                view.onGameStarted();
+                break;
+            case FINISH:
+                view.onGameFinished();
+                break;
+        }
     }
 
     @Override

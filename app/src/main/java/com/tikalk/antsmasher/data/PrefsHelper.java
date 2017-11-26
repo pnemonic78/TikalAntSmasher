@@ -14,10 +14,13 @@ public class PrefsHelper {
 
     public static final String USER_NAME = "user_name";
     public static final String USER_ID = "user_id";
+    public static final String TEAM_ID = "team_id";
+    public static final String PLAYER_ID = "player_id";
+    public static final String GAME_ID = "game_id";
     public static final String DEV_TEAM = "dev_team";
-    public static final String ANTS_IP = "ants_ip";
+    public static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
     public static final String ADMIN_IP = "admin_ip";
-    public static final String SMASH_IP = "smash_ip";
+    public static final String SMASH_SOCKET_URL = "smash_ip";
 
     private final SharedPreferences preferences;
 

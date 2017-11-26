@@ -37,22 +37,21 @@ import butterknife.ButterKnife;
 public class TeamsActivity extends AppCompatActivity implements
         TeamViewModel.View,
         TeamViewHolder.TeamViewHolderListener,
-        Observer<List<Team>>,
-        IpDialogFragment.EditDialogEventListener {
+        Observer<List<Team>> , IpDialogFragment.EditDialogEventListener{
 
     private static final String TAG = "TAG_TeamsActivity";
+    @Inject
+    protected PrefsHelper prefsHelper;
 
     @BindView(android.R.id.list)
     protected RecyclerView listView;
 
-    @Inject
-    protected PrefsHelper prefsHelper;
-    @Inject
-    @Named("Teams")
-    protected ViewModelProvider.Factory viewModelFactory;
-
     private TeamViewModel presenter;
     private TeamAdapter adapter;
+
+    @Inject
+    @Named("Teams")
+    ViewModelProvider.Factory mViewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +64,17 @@ public class TeamsActivity extends AppCompatActivity implements
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setAdapter(adapter);
 
-        presenter = ViewModelProviders.of(this, viewModelFactory).get(TeamViewModel.class);
+        presenter = ViewModelProviders.of(this, mViewModelFactory).get(TeamViewModel.class);
         presenter.setView(this);
-        presenter.getTeams().observe(this, this);
+        presenter.getTeams(this).observe(this, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ADMIN_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTS_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_IP))) {
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL))
+                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL))) {
 //            chooseDeveloperTeam();
             enterIpDialog();
         }
@@ -138,16 +137,18 @@ public class TeamsActivity extends AppCompatActivity implements
         Bundle b = new Bundle();
         b.putString("Title", getString(R.string.dev_ip_dialog_header));
         b.putString("Message", getString(R.string.dev_ip_dialog_body));
-        b.putString(PrefsHelper.ANTS_IP, prefsHelper.getStringPref(PrefsHelper.ANTS_IP));
+        b.putString(PrefsHelper.ANTPUBLISH_SOCKET_URL, prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL));
         b.putString(PrefsHelper.ADMIN_IP, prefsHelper.getStringPref(PrefsHelper.ADMIN_IP));
-        b.putString(PrefsHelper.SMASH_IP, prefsHelper.getStringPref(PrefsHelper.SMASH_IP));
+        b.putString(PrefsHelper.SMASH_SOCKET_URL, prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL));
         dialogFragment.setArguments(b);
         dialogFragment.show(getSupportFragmentManager(), "IpDialog");
     }
 
+
     @Override
     public void onEditDone(String enteredAntIp, String enteredAdminIp, String enteredSmashIp) {
-        if (!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)) {
+
+        if(!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)){
             Log.i(TAG, "onEditDone: ip invalid");
             new AlertDialog.Builder(this)
                     .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
@@ -159,12 +160,15 @@ public class TeamsActivity extends AppCompatActivity implements
                             enterIpDialog();
                         }
                     }).create().show();
-        } else {
-            prefsHelper.saveStringPref(PrefsHelper.ANTS_IP, "http://" + enteredAntIp);
+        }else{
+            prefsHelper.saveStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL, "http://" + enteredAntIp);
             prefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
-            prefsHelper.saveStringPref(PrefsHelper.SMASH_IP, "http://" + enteredSmashIp);
+            prefsHelper.saveStringPref(PrefsHelper.SMASH_SOCKET_URL, "http://" + enteredSmashIp);
         }
 
         Log.i(TAG, "onEditDone: ip valid");
+
+
+
     }
 }

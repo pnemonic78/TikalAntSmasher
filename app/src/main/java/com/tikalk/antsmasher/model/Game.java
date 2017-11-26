@@ -21,6 +21,8 @@ public class Game {
     @SerializedName("teams")
     private final List<Team> teams = new ArrayList<>();
 
+    GameState state = GameState.NOT_STARTED;
+
     public long getId() {
         return id;
     }
@@ -33,6 +35,7 @@ public class Game {
     public List<Team> getTeams() {
         return teams;
     }
+
 
     @NonNull
     public List<Ant> getAllAnts() {
@@ -86,5 +89,14 @@ public class Game {
             }
         }
         return false;
+    }
+
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
+    public void setState(String state){
+        this.state = GameState.valueOf(state);
     }
 }

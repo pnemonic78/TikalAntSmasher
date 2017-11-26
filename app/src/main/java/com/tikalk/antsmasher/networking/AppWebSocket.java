@@ -49,6 +49,10 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     @Named("SocketMessageGson")
     protected Gson socketMessageGson;
 
+    @Inject
+    @Named("PlainGson")
+    Gson plainGson;
+
     private boolean socketOpened = false;
 
     private WeakReference<Context> weakContext;
@@ -59,14 +63,14 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     protected final Handler mHandler = new Handler(Looper.getMainLooper());
 
-    protected AppWebSocket(String baseUrl, String deviceId, Context context) {
+    protected AppWebSocket(String baseUrl, String session_id, Context context) {
         Log.v(TAG, "AppWebSocket created. url: " + baseUrl);
         ((AntApplication) context.getApplicationContext()).getApplicationComponent().inject(this);
         Uri uri = new Uri.Builder()
                 .scheme("http")
                 .encodedAuthority(baseUrl)
                 .appendPath("11")
-                .appendPath("xyz_" + deviceId)
+                .appendPath(session_id)
                 .appendPath("websocket")
                 .build();
         weakContext = new WeakReference<>(context);

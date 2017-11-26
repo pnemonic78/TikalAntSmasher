@@ -25,4 +25,14 @@ public class ApiContract {
     public static final String TEAM_PARAM = "teamId";
     public static final String USERID_PARAM = "userId";
 
+
+    //Websockets endpoints
+    public static final String LR_MESSAGE = "lr-message/";
+    public static final String GAME_STATE_MESSAGE = "game-state-message/";
+    public static final String SMASH_MESSAGE = "smash-message/";
+    public static final String SELF_SMASH_MESSAGE = "self_smash-message/";
+    public static final String PLAY_SCORE_MESSAGE = "playerScore-message/";
+    public static final String TEAM_SCORE_MESSAGE = "teamScore-message/";
+
+
 }

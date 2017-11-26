@@ -14,6 +14,7 @@ import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.DeveloperTeam;
+import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.AntSmashMessage;
@@ -21,6 +22,7 @@ import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.GameWebSocket;
 import com.tikalk.antsmasher.networking.MockWebSocket;
 import com.tikalk.antsmasher.networking.NetworkManager;
+import com.tikalk.antsmasher.networking.SmashWebSocket;
 
 
 public class AppService extends Service {
@@ -38,6 +40,8 @@ public class AppService extends Service {
          * Notification from the server that the game has finished.
          */
         void onGameFinished();
+
+        void onGameStateMessage(GameState state);
 
         /**
          * Notification from the server that the ant has been moved.
@@ -63,6 +67,7 @@ public class AppService extends Service {
     private NetworkManager networkManager;
     private AppServiceEventListener serviceEventListener;
     private AppWebSocket gameWebSocket;
+    private AppWebSocket smashWebSocket;
     private final LocalBinder binder = new LocalBinder();
     private String userName;
     private DeveloperTeam developerTeam;
@@ -129,8 +134,11 @@ public class AppService extends Service {
             Log.i(TAG, "Debug, creating mock web socket");
             gameWebSocket = new MockWebSocket(userName, this);
         } else {
+            String socketUrl = prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL);
+            String sessionId = prefsHelper.getStringPref(PrefsHelper.GAME_ID) + "_" + prefsHelper.getStringPref(PrefsHelper.PLAYER_ID);
             Log.i(TAG, "Real web socket");
-            gameWebSocket = new GameWebSocket(developerTeam.getAddress1(), userName, this);
+            gameWebSocket = new GameWebSocket(socketUrl, sessionId, this);
+            smashWebSocket = new SmashWebSocket(socketUrl, sessionId, this);
         }
     }
 
