@@ -108,6 +108,7 @@ public class BoardView extends AppCompatImageView {
 
         final AntSpecies species = ant.getSpecies();
         final long speciesId = species.getId();
+        final float speciesSize = species.getSize();
 
         float x = ant.getLocation().x * width;
         float y = ant.getLocation().y * height;
@@ -128,15 +129,15 @@ public class BoardView extends AppCompatImageView {
             final Resources res = getResources();
 
             Bitmap antNormal = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
-            antNormal = Bitmap.createScaledBitmap(antNormal, antWidth, antHeight, false);
+            antNormal = Bitmap.createScaledBitmap(antNormal, (int) (antWidth * speciesSize), (int) (antHeight * speciesSize), false);
             bitmap = tintImage(antNormal, species.getTint());
             bitmapsAlive.put(speciesId, bitmap);
 
             Bitmap antSmashed = BitmapFactory.decodeResource(res, R.drawable.ant_squashed);
-            antSmashed = Bitmap.createScaledBitmap(antSmashed, antDeadWidth, antDeadHeight, false);
+            antSmashed = Bitmap.createScaledBitmap(antSmashed, (int) (antDeadWidth * speciesSize), (int) (antDeadHeight * speciesSize), false);
             antSmashed = tintImage(antSmashed, species.getTint());
             Bitmap antBlood = BitmapFactory.decodeResource(res, R.drawable.ant_blood);
-            bitmap = Bitmap.createScaledBitmap(antBlood, antDeadWidth, antDeadHeight, false);
+            bitmap = Bitmap.createScaledBitmap(antBlood, (int) (antDeadWidth * speciesSize), (int) (antDeadHeight * speciesSize), false);
             Canvas canvas = new Canvas(bitmap);
             canvas.drawBitmap(antSmashed, 0, 0, null);
             bitmapsDead.put(speciesId, bitmap);
