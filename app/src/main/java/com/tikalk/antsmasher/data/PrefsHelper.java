@@ -96,4 +96,12 @@ public class PrefsHelper {
     public boolean isInteractiveVibrate() {
         return getBoolean("interactive_vibrate");
     }
+
+    public void setTeamId(long teamId) {
+        saveLongToPrefs(TEAM_ID, teamId);
+    }
+
+    public long getTeamId() {
+        return getLong(TEAM_ID);
+    }
 }

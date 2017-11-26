@@ -10,10 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.tikalk.antsmasher.board.BoardViewModel;
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.model.AntSpecies;
-import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.networking.GameRestService;
@@ -34,7 +31,6 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     private View view;
-    private final MutableLiveData<List<AntSpecies>> species = new MutableLiveData<>();
     private final MutableLiveData<List<Team>> teams = new MutableLiveData<>();
     private Team team;
     private GameRestService gameRestService;
@@ -55,38 +51,10 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Team>> getTeams() {
-        if (species.getValue() == null) {
-            loadSpecies();
-        } else {
+        if (teams.getValue() == null) {
             loadTeams();
         }
         return teams;
-    }
-
-    private void loadSpecies() {
-        Log.v(TAG, "Load ant species...");
-
-        gameRestService.getAntSpecies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<List<AntSpecies>>() {
-                    @Override
-                    public void onNext(List<AntSpecies> response) {
-                        Log.v(TAG, "onNext: have ant species");
-                        species.setValue(response);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "onError: Failed to fetch ant species: " + e.getLocalizedMessage(), e);
-                        //TODO view.showLoadSpeciesError();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        loadTeams();
-                    }
-                });
     }
 
     private void loadTeams() {
@@ -124,16 +92,14 @@ public class TeamViewModel extends AndroidViewModel {
                 .subscribe(new DisposableObserver<Player>() {
                     @Override
                     public void onNext(Player player) {
-                        Log.v(TAG, "onNext: joined!! opening game screen");
-                        team.addPlayer(player);
-                        onTeamJoined(team);
+                        Log.v(TAG, "onNext: Joined team: " + team);
+                        onTeamJoined(team, player);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        //TODO Remove this when server is up...
-                        Log.e(TAG, "onError: something happened, can't join the game.", e);
-                        onTeamJoined(team);
+                        Log.e(TAG, "onError: Failed to join team: " + e.getLocalizedMessage(), e);
+                        //TODO view.showFailedJoinTeam();
                     }
 
                     @Override
@@ -142,7 +108,9 @@ public class TeamViewModel extends AndroidViewModel {
                 });
     }
 
-    private void onTeamJoined(Team team) {
+    private void onTeamJoined(Team team, Player player) {
+        team.addPlayer(player);
+        prefsHelper.setTeamId(team.getId());
         this.team = team;
         if (view != null) {
             view.onTeamJoined(team);
