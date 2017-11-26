@@ -29,6 +29,7 @@ public class LoginManager implements LoginInterceptor {
     public void login(String userName, OnLoginFinishedListener listener) {
 
         CreateBody body = new CreateBody(userName);
+        Log.i(TAG, "login: " + body);
 
         loginService.createUser(body)
                 .subscribeOn(Schedulers.io())

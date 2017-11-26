@@ -7,8 +7,11 @@ package com.tikalk.antsmasher.networking;
 public class ApiContract {
 
     //URL's
-    public static final String SERVICE_BASE_URL = "http://localhost:8080";
+    public static final String ADMIN_BASE_URL = "http://10.100.10.62:8080";
 
+    public static final int ADMIN_PORT = 8080;
+    public static final int ANT_PUBLISH_PORT = 6080;
+    public static final int SMASH_PORT = 5080;
 
     //Requests Endpoints
     public static final String LOGIN_ENDPOINT = "/users";

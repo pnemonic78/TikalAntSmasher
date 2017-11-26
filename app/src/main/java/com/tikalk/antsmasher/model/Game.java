@@ -29,6 +29,8 @@ public class Game {
         this.id = id;
     }
 
+    GameState state = GameState.NOT_STARTED;
+
     @NonNull
     public List<Team> getTeams() {
         return teams;
@@ -86,5 +88,13 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
+    public void setState(String state){
+        this.state = GameState.valueOf(state);
     }
 }

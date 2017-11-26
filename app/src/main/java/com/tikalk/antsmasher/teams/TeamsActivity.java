@@ -26,8 +26,11 @@ import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.login_screen.IpDialogFragment;
 import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.Team;
+import com.tikalk.antsmasher.networking.ApiContract;
+import com.tikalk.antsmasher.networking.GameRestServiceModule;
 import com.tikalk.antsmasher.settings.SettingsActivity;
 import com.tikalk.antsmasher.utils.Utils;
 
@@ -37,7 +40,7 @@ import butterknife.ButterKnife;
 public class TeamsActivity extends AppCompatActivity implements
         TeamViewModel.View,
         TeamViewHolder.TeamViewHolderListener,
-        Observer<List<Team>> , IpDialogFragment.EditDialogEventListener{
+        Observer<List<Team>> {
 
     private static final String TAG = "TAG_TeamsActivity";
     @Inject
@@ -69,16 +72,6 @@ public class TeamsActivity extends AppCompatActivity implements
         presenter.getTeams(this).observe(this, this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ADMIN_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTS_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_IP))) {
-//            chooseDeveloperTeam();
-            enterIpDialog();
-        }
-    }
 
     @Override
     public void onChanged(@Nullable List<Team> teams) {
@@ -132,43 +125,4 @@ public class TeamsActivity extends AppCompatActivity implements
                 .show();
     }
 
-    private void enterIpDialog() {
-        IpDialogFragment dialogFragment = new IpDialogFragment();
-        Bundle b = new Bundle();
-        b.putString("Title", getString(R.string.dev_ip_dialog_header));
-        b.putString("Message", getString(R.string.dev_ip_dialog_body));
-        b.putString(PrefsHelper.ANTS_IP, prefsHelper.getStringPref(PrefsHelper.ANTS_IP));
-        b.putString(PrefsHelper.ADMIN_IP, prefsHelper.getStringPref(PrefsHelper.ADMIN_IP));
-        b.putString(PrefsHelper.SMASH_IP, prefsHelper.getStringPref(PrefsHelper.SMASH_IP));
-        dialogFragment.setArguments(b);
-        dialogFragment.show(getSupportFragmentManager(), "IpDialog");
-    }
-
-
-    @Override
-    public void onEditDone(String enteredAntIp, String enteredAdminIp, String enteredSmashIp) {
-
-        if(!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)){
-            Log.i(TAG, "onEditDone: ip invalid");
-            new AlertDialog.Builder(this)
-                    .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
-                    .setTitle(R.string.invalid_ip_header)
-                    .setMessage(R.string.invalid_ip_body)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            enterIpDialog();
-                        }
-                    }).create().show();
-        }else{
-            prefsHelper.saveStringPref(PrefsHelper.ANTS_IP, "http://" + enteredAntIp);
-            prefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
-            prefsHelper.saveStringPref(PrefsHelper.SMASH_IP, "http://" + enteredSmashIp);
-        }
-
-        Log.i(TAG, "onEditDone: ip valid");
-
-
-
-    }
 }

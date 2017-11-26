@@ -1,6 +1,7 @@
 package com.tikalk.antsmasher.networking;
 
 import com.google.gson.Gson;
+import com.tikalk.antsmasher.data.PrefsHelper;
 
 import javax.inject.Named;
 
@@ -17,20 +18,32 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class GameRestServiceModule {
+
+    public static String apiBaseUrl = "http://localhost";
+
+
+    public GameRestServiceModule(){
+
+    }
+
     @Provides
     GameRestService provideGameRestService(Retrofit gameRestRetrofit) {
-
         return gameRestRetrofit.create(GameRestService.class);
     }
 
     @Provides
-    public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson) {
+    public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson, PrefsHelper prefsHelper) {
         return new Retrofit.Builder()
-                .baseUrl(ApiContract.SERVICE_BASE_URL)
+                .baseUrl(ApiContract.ADMIN_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+    }
+
+
+    public static void updateServiceBaseUrl(String baseUrl){
+        apiBaseUrl = baseUrl;
     }
 
 }
