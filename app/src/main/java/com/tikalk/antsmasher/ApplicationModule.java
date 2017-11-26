@@ -39,13 +39,15 @@ class ApplicationModule {
     }
 
 
-    @Provides @Named("Teams")
-    ViewModelProvider.Factory provideTeamsViewModelFactory(TeamsVmFactory factory){
+    @Provides
+    @Named("Teams")
+    ViewModelProvider.Factory provideTeamsViewModelFactory(TeamsVmFactory factory) {
         return factory;
     }
 
-    @Provides @Named("Board")
-    ViewModelProvider.Factory provideBoardViewModelFactory(BoardVmFactory factory){
+    @Provides
+    @Named("Board")
+    ViewModelProvider.Factory provideBoardViewModelFactory(BoardVmFactory factory) {
         return factory;
     }
 }

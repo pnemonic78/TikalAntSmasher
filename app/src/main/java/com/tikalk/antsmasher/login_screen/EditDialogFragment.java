@@ -105,7 +105,7 @@ public class EditDialogFragment extends DialogFragment {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                posButton = ((AlertDialog)dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+                posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
                 posButton.setEnabled(false);
             }
         });
@@ -119,9 +119,9 @@ public class EditDialogFragment extends DialogFragment {
                 String text = input.getText().toString().trim();
                 // FIXME move this to strings.xml %1$d/%2$d
                 chars.setText(text.length() + "/" + COMMENT_MAX_LENGTH);
-                if(text.length() > 0){
+                if (text.length() > 0) {
                     posButton.setEnabled(true);
-                }else {
+                } else {
                     posButton.setEnabled(false);
                 }
             }

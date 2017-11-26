@@ -2,7 +2,6 @@ package com.tikalk.antsmasher;
 
 import javax.inject.Singleton;
 
-import com.google.gson.Gson;
 import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.login_screen.LoginActivity;
 import com.tikalk.antsmasher.login_screen.LoginModule;

@@ -43,7 +43,8 @@ public class BoardActivity extends AppCompatActivity implements
     @Inject
     protected PrefsHelper prefsHelper;
 
-    @Inject @Named("Board")
+    @Inject
+    @Named("Board")
     ViewModelProvider.Factory mBoardViewModelFactory;
 
 

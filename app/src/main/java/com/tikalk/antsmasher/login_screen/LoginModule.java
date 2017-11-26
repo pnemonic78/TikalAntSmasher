@@ -18,10 +18,9 @@ import dagger.Provides;
 public class LoginModule {
 
 
-
     @Provides
     @Singleton
-    LoginPresenter provideLoginPresenter(Application context, PrefsHelper prefsHelper, GameRestService restApiService){
+    LoginPresenter provideLoginPresenter(Application context, PrefsHelper prefsHelper, GameRestService restApiService) {
         return new LoginPresenter(context, prefsHelper, restApiService);
     }
 }

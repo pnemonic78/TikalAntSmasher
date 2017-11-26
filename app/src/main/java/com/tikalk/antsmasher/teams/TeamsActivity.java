@@ -44,7 +44,8 @@ public class TeamsActivity extends AppCompatActivity implements
     private TeamViewModel presenter;
     private TeamAdapter adapter;
 
-    @Inject @Named("Teams")
+    @Inject
+    @Named("Teams")
     ViewModelProvider.Factory mViewModelFactory;
 
     @Override

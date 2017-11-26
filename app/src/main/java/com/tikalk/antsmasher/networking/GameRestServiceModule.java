@@ -18,13 +18,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class GameRestServiceModule {
     @Provides
-    GameRestService provideGameRestService(Retrofit gameRestRetrofit){
+    GameRestService provideGameRestService(Retrofit gameRestRetrofit) {
 
         return gameRestRetrofit.create(GameRestService.class);
     }
 
     @Provides
-    public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson){
+    public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(ApiContract.SERVICE_BASE_URL)
                 .client(client)

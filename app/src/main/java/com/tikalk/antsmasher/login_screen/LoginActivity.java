@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         Log.v(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        if(mLoginPresenter != null){
+        if (mLoginPresenter != null) {
             mLoginPresenter.setView(this);
         }
     }

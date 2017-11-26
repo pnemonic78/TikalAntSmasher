@@ -28,8 +28,6 @@ public interface GameRestService {
     Observable<String> getDeveloperTeams(@Query(ApiContract.LOGIN_ENDPOINT) String username); //Join the game
 
 
-
     //Player API requests
-
 
 }

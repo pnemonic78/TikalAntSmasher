@@ -10,18 +10,18 @@ import javax.inject.Inject;
  * Created by motibartov on 25/11/2017.
  */
 
-public class BoardVmFactory implements ViewModelProvider.Factory{
+public class BoardVmFactory implements ViewModelProvider.Factory {
 
     private BoardViewModel mViewModel;
 
     @Inject
-    public BoardVmFactory(BoardViewModel viewModel){
+    public BoardVmFactory(BoardViewModel viewModel) {
         this.mViewModel = viewModel;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if(modelClass.isAssignableFrom(BoardViewModel.class)){
+        if (modelClass.isAssignableFrom(BoardViewModel.class)) {
             return (T) mViewModel;
         }
         throw new IllegalArgumentException("Unknown class name");

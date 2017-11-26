@@ -39,7 +39,6 @@ public class NetworkModule {
         return gsonBuilder.create();
     }
 
-
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient() {
@@ -52,9 +51,5 @@ public class NetworkModule {
         client = okHttpClientBuilder.build();
         return client;
     }
-
-
-
-
 
 }

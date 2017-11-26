@@ -41,7 +41,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
 
-    public void setView(LoginContract.View view){
+    public void setView(LoginContract.View view) {
         this.view = view;
     }
 

@@ -36,7 +36,7 @@ public class TeamViewModel extends ViewModel {
     private GameRestService gameRestService;
 
     @Inject
-    public TeamViewModel(GameRestService gameRestService){
+    public TeamViewModel(GameRestService gameRestService) {
         Log.v(TAG, "TeamViewModel: ");
         teams = new MutableLiveData<>();
         this.gameRestService = gameRestService;

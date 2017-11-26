@@ -8,14 +8,17 @@ import com.tikalk.antsmasher.base.MvpView;
 
 public interface LoginContract {
 
-    interface View extends MvpView{
+    interface View extends MvpView {
         void showUserNameDialog();
+
         void showLoginFailedDialog();
+
         void completeSplash(long timeout);
     }
 
-    interface Presetner{
+    interface Presetner {
         void login();
+
         void saveUserName(String userName);
     }
 }
