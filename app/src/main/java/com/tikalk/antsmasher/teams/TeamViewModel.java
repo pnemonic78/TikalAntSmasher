@@ -66,7 +66,7 @@ public class TeamViewModel extends AndroidViewModel {
                 .subscribe(new DisposableObserver<List<Team>>() {
                     @Override
                     public void onNext(List<Team> response) {
-                        Log.v(TAG, "onNext: teams" + response.size());
+                        Log.v(TAG, "onNext: teams " + response.size());
                         teams.setValue(response);
                     }
 
@@ -84,7 +84,7 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     public void teamClicked(final Team team) {
-        Log.v(TAG, "onNext: about to join the game");
+        Log.v(TAG, "onNext: about to join the game " + userId);
 
         gameRestService.createPlayer(team.getId(), userId)
                 .subscribeOn(Schedulers.io())

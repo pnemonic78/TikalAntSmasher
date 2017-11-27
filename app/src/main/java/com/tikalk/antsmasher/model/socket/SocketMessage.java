@@ -15,17 +15,14 @@ public class SocketMessage<B> {
     public String type;
     @SerializedName("address")
     public String address;
-    @SerializedName("body")
-    public B body;
 
     public SocketMessage(String type, String address) {
         this(type, address, null);
     }
 
-    public SocketMessage(String type, String address, B body) {
+    public SocketMessage(String type, String address, String body) {
         this.type = type;
         this.address = address;
-        this.body = body;
     }
 
     @NonNull
@@ -33,8 +30,6 @@ public class SocketMessage<B> {
     public String toString() {
         return "SocketMessage{" +
                 "type='" + type + '\'' +
-                ", address='" + address + '\'' +
-                ", body='" + body + '\'' +
-                '}';
+                ", address='" + address + '\'';
     }
 }

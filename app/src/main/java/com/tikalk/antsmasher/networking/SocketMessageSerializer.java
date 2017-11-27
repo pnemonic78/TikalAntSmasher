@@ -16,9 +16,9 @@ public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
         JsonObject message = new JsonObject();
         message.add("type", serializer.serialize(src.type));
         message.add("address", serializer.serialize(src.address));
-        if (src.body != null) {
-            message.add("body", serializer.serialize(src.body));
-        }
+//        if (src.body != null) {
+//            message.add("body", serializer.serialize(src.body));
+//        }
         message.add("headers", new JsonObject());
         return message;
     }

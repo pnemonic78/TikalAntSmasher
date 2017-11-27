@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.networking;
 import android.content.Context;
 import android.util.Log;
 
+import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
@@ -44,8 +45,9 @@ public class SmashWebSocket extends AppWebSocket {
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
         if (socketMessage.address.equals(ApiContract.SMASH_MESSAGE)) {
-            AntSmashMessage smash = socketMessageGson.fromJson(message, AntSmashMessage.class);
-            socketMessageListener.onAntSmashed(smash.body);
+//            AntSmashMessage smashMessage = socketMessageGson.fromJson(message, AntSmashMessage.class);
+//            AntSmash smash = socketMessageGson.fromJson(smashMessage, AntSmash.class);
+//            socketMessageListener.onAntSmashed(smash);
         }
     }
 
