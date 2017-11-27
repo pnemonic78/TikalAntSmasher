@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.tikalk.antsmasher.AntApplication;
-import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.GameState;
@@ -20,7 +19,6 @@ import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.networking.AppWebSocket;
 import com.tikalk.antsmasher.networking.GameWebSocket;
-import com.tikalk.antsmasher.networking.MockWebSocket;
 import com.tikalk.antsmasher.networking.NetworkManager;
 import com.tikalk.antsmasher.networking.SmashWebSocket;
 

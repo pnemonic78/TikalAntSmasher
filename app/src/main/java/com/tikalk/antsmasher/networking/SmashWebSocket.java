@@ -3,8 +3,6 @@ package com.tikalk.antsmasher.networking;
 import android.content.Context;
 import android.util.Log;
 
-import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
 

@@ -1,10 +1,10 @@
 package com.tikalk.antsmasher.networking;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import android.content.Context;
+import android.util.Log;
 
 import com.tikalk.antsmasher.model.socket.AntLocationMessage;
 import com.tikalk.antsmasher.model.socket.GameStateMessage;

@@ -11,8 +11,6 @@ import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.socket.AntLocation;
-import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.model.socket.AntSmashMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
 

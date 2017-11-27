@@ -1,17 +1,17 @@
 package com.tikalk.antsmasher.networking.gson_deserializers;
 
-import android.util.Log;
-
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import com.tikalk.antsmasher.model.GameState;
-import com.tikalk.antsmasher.model.socket.GameStateMessage;
+import android.util.Log;
 
 import java.lang.reflect.Type;
+
+import com.tikalk.antsmasher.model.GameState;
+import com.tikalk.antsmasher.model.socket.GameStateMessage;
 
 /**
  * Created by motibartov on 26/11/2017.

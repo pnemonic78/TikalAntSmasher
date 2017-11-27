@@ -3,7 +3,6 @@ package com.tikalk.antsmasher.board;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-
 import javax.inject.Inject;
 
 /**
