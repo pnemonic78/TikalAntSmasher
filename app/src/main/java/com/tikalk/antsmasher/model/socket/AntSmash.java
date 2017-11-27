@@ -16,7 +16,7 @@ public class AntSmash {
     public final long timestamp;
 
     public AntSmash(String antId, long playerId) {
-        this(antId, System.currentTimeMillis(), playerId);
+        this(antId, playerId, System.currentTimeMillis());
     }
 
     public AntSmash(String antId, long playerId, long timestamp) {
