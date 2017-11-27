@@ -3,6 +3,9 @@ package com.tikalk.antsmasher.networking;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntLocationMessage;
 import com.tikalk.antsmasher.model.socket.GameStateMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
@@ -13,9 +16,19 @@ import okhttp3.WebSocket;
 
 public class GameWebSocket extends AppWebSocket {
     private static final String TAG = "TAG_GameWebSocket";
+    GsonBuilder stateGsonBuilder = new GsonBuilder();
+    GsonBuilder gameGsonBuilder = new GsonBuilder();
+    Gson stateMessageGson;
+    Gson gameMessageGson;
 
     public GameWebSocket(String baseUrl, String deviceId, Context context) {
         super(baseUrl, deviceId, context);
+        stateGsonBuilder.registerTypeAdapter(GameStateMessage.class, new GameStateDeserializer());
+        stateMessageGson = stateGsonBuilder.create();
+
+        gameGsonBuilder.registerTypeAdapter(AntLocationMessage.class, new AntPublishDeserializer());
+        gameMessageGson = gameGsonBuilder.create();
+
     }
 
     public void setMessageListener(AppService.AppServiceEventListener eventListener) {
@@ -37,11 +50,15 @@ public class GameWebSocket extends AppWebSocket {
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
         if (socketMessage.address.equals(ApiContract.LR_MESSAGE)) {
-            AntLocationMessage antLocation = socketMessageGson.fromJson(message, AntLocationMessage.class);
-            socketMessageListener.onAntMoved(antLocation.body);
+            AntLocationMessage antLocationMessage = gameMessageGson.fromJson(message, AntLocationMessage.class);
+            Log.i(TAG, "handleNewMessage: lr message" + antLocationMessage);
+            socketMessageListener.onAntMoved(antLocationMessage.getAntLocation());
+
         } else if (socketMessage.address.equals(ApiContract.GAME_STATE_MESSAGE)) {
-            GameStateMessage stateMessage = socketMessageGson.fromJson(message, GameStateMessage.class);
-            socketMessageListener.onGameStateMessage(stateMessage.body);
+            Log.i(TAG, "handleNewMessage: game state message");
+            GameStateMessage stateMessage = stateMessageGson.fromJson(message, GameStateMessage.class);
+            Log.i(TAG, "handleNewMessage: " + stateMessage);
+            socketMessageListener.onGameStateMessage(stateMessage.getState());
         }
     }
 

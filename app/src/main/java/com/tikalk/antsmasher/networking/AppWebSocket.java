@@ -218,6 +218,8 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
         @Override
         public void onMessage(WebSocket webSocket, String text) {
+
+
             if (!"h".equals(text) && !"o".equals(text)) {
                 Log.v(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
                 if (text.substring(0, 2).contains("c[")) {  //This means close go away..

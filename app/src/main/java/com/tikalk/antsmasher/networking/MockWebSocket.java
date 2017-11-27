@@ -43,17 +43,17 @@ public class MockWebSocket extends AppWebSocket {
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
-        if (AntSmashMessage.TYPE_SMASH.equals(socketMessage.type)) {
-            AntSmashMessage smashMessage = socketMessageGson.fromJson(message, AntSmashMessage.class);
-            AntSmash smash = smashMessage.body;
-            if ((game != null) && (smash.id != null)) {
-                Ant ant = game.getAnt(smash.id);
-                if (ant != null) {
-                    ant.setAlive(false);
-                    socketMessageListener.onAntSmashed(smash);
-                }
-            }
-        }
+//        if (AntSmashMessage.TYPE_SMASH.equals(socketMessage.type)) {
+//            AntSmashMessage smashMessage = socketMessageGson.fromJson(message, AntSmashMessage.class);
+//            AntSmash smash = socketMessageGson.toJson(smashMessage.body, AntSmash.class);
+//            if ((game != null) && (smash.id != null)) {
+//                Ant ant = game.getAnt(smash.id);
+//                if (ant != null) {
+//                    ant.setAlive(false);
+//                    socketMessageListener.onAntSmashed(smash);
+//                }
+//            }
+//        }
     }
 
     @Override
