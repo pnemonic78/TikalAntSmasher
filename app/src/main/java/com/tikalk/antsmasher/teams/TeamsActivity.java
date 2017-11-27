@@ -26,12 +26,10 @@ import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.login_screen.IpDialogFragment;
 import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.settings.SettingsActivity;
-import com.tikalk.antsmasher.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

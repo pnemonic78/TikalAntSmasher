@@ -65,17 +65,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         }
     }
 
-    @Override
-    public void checkServersIp() {
-        if (TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ADMIN_IP))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL))
-                || TextUtils.isEmpty(prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL))) {
-            view.showIpDialog();
-        }else{
-            login();
-        }
-    }
-
     private void checkUserId(String username) {
         if (prefsHelper.getUserId() == 0) {
             Log.v(TAG, "checkUserId: about to createUser to server");
@@ -99,7 +88,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Override
     public void onLoginFailed(Throwable e) {
-        view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
-        //view.loginFailed();
+        view.showLoginFailedDialog();
+      //  view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
     }
 }

@@ -16,15 +16,12 @@ import javax.inject.Inject;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.networking.ApiContract;
-import com.tikalk.antsmasher.networking.GameRestServiceModule;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
-import com.tikalk.antsmasher.utils.Utils;
 
-public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, LoginContract.View, IpDialogFragment.EditDialogEventListener {
+public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, LoginContract.View {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "TAG_LoginActivity";
 
     public static final long SPLASH_TIMEOUT = 3000;
     public static final long SPLASH_EDIT_TIMEOUT = 1000;
@@ -51,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     @Override
     protected void onResume() {
         super.onResume();
-        mLoginPresenter.checkServersIp();
+        mLoginPresenter.login();
     }
 
     private void showLoginDialog() {
@@ -77,19 +74,6 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         mLoginPresenter.saveUserName(value);
     }
 
-
-    @Override
-    public void showIpDialog() {
-            IpDialogFragment dialogFragment = new IpDialogFragment();
-            Bundle b = new Bundle();
-            b.putString("Title", getString(R.string.dev_ip_dialog_header));
-            b.putString("Message", getString(R.string.dev_ip_dialog_body));
-            b.putString(PrefsHelper.ANTPUBLISH_SOCKET_URL, mPrefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL));
-            b.putString(PrefsHelper.ADMIN_IP, mPrefsHelper.getStringPref(PrefsHelper.ADMIN_IP));
-            b.putString(PrefsHelper.SMASH_SOCKET_URL, mPrefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL));
-            dialogFragment.setArguments(b);
-            dialogFragment.show(getSupportFragmentManager(), "IpDialog");
-    }
 
     @Override
     public void showUserNameDialog() {
@@ -130,30 +114,5 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     }
 
 
-    @Override
-    public void onEditDone(String enteredAntIp, String enteredAdminIp, String enteredSmashIp) {
-
-        if(!Utils.validateIpAddress(enteredAntIp) || !Utils.validateIpAddress(enteredAdminIp) || !Utils.validateIpAddress(enteredSmashIp)){
-            Log.i(TAG, "onEditDone: ip invalid");
-            new AlertDialog.Builder(this)
-                    .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
-                    .setTitle(R.string.invalid_ip_header)
-                    .setMessage(R.string.invalid_ip_body)
-                    .setPositiveButton("OK", (dialogInterface, i) -> {
-
-                    }).create().show();
-        }else{
-            mPrefsHelper.saveStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL, enteredAntIp + ":" + ApiContract.ANT_PUBLISH_PORT);
-            mPrefsHelper.saveStringPref(PrefsHelper.ADMIN_IP, "http://" + enteredAdminIp);
-            mPrefsHelper.saveStringPref(PrefsHelper.SMASH_SOCKET_URL, enteredSmashIp + ":" + ApiContract.SMASH_PORT);
-
-            mLoginPresenter.login();
-        }
-
-        Log.i(TAG, "onEditDone: ip valid");
-
-
-
-    }
 }
 
