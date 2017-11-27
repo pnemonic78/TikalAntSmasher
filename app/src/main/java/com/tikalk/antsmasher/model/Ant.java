@@ -48,7 +48,7 @@ public class Ant implements Comparable<Ant> {
     }
 
     public boolean isVisible() {
-        return (location.x >= 0f) && (location.x <= 1f) && (location.y >= 0f) && (location.y <= 1f);
+        return (location.x >= 0f) && (location.x < 1f) && (location.y >= 0f) && (location.y < 1f);
     }
 
     public boolean isAlive() {
