@@ -10,7 +10,7 @@ import com.tikalk.antsmasher.model.GameState;
 
 public class GameResponse {
 
-    @SerializedName("id")
+    @SerializedName("antId")
     public int id;
     @SerializedName("createdAt")
     public long createdAt;

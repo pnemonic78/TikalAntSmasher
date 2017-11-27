@@ -48,4 +48,12 @@ public class User {
         this.avatarUri = avatarUri;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", avatarUri='" + avatarUri + '\'' +
+                '}';
+    }
 }

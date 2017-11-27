@@ -189,6 +189,8 @@ public class BoardActivity extends AppCompatActivity implements
         }
     }
 
+
+
     private void showGameOverDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.app_name)).setMessage("Game Over").setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
@@ -203,7 +205,7 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void smashAnt(@NonNull Ant ant, long playerId) {
+    public void smashAnt(@NonNull Ant ant, boolean user) {
         boardView.smashAnt(ant);
         final boolean sound = prefsHelper.isInteractiveSounds();
         if (playerId == this.playerId) {

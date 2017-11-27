@@ -5,19 +5,22 @@ import com.google.gson.annotations.SerializedName;
 import android.support.annotation.NonNull;
 
 
-public class SocketMessage {
+public class SocketMessage<B> {
 
     public static final String TYPE_SEND = "send";
     public static final String TYPE_ERROR = "err";
     public static final String TYPE_REGISTER = "register";
-    public static final String TYPE_RECORD = "rec";
+    public static final String TYPE_HIT = "hit";
+
+    public static final String HIT_TRAIL_ADDRESS = "hit-trial-message";
+    public static final String SMASH_MESSAGE_ADDRESS = "smash-message";
+    public static final String PLAY_SCORE_ADDRESS = "playerScore-message";
+    public static final String TEAM_SCORE_ADDRESS = "teamScore-message";
 
     @SerializedName("type")
     public String type;
     @SerializedName("address")
     public String address;
-    @SerializedName("body")
-    public String body;
 
     public SocketMessage(String type, String address) {
         this(type, address, null);
@@ -26,7 +29,6 @@ public class SocketMessage {
     public SocketMessage(String type, String address, String body) {
         this.type = type;
         this.address = address;
-        this.body = body;
     }
 
     @NonNull
@@ -34,8 +36,6 @@ public class SocketMessage {
     public String toString() {
         return "SocketMessage{" +
                 "type='" + type + '\'' +
-                ", address='" + address + '\'' +
-                ", body='" + body + '\'' +
-                '}';
+                ", address='" + address + '\'';
     }
 }

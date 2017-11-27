@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class Game {
 
-    @SerializedName("id")
+    @SerializedName("antId")
     private long id;
     @SerializedName("teams")
     private List<Team> teams;

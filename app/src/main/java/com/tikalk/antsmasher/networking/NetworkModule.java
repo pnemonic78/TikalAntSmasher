@@ -7,7 +7,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.model.socket.SocketMessage;
-import com.tikalk.antsmasher.networking.gson.SocketMessageSerializer;
 
 import dagger.Module;
 import dagger.Provides;
@@ -33,7 +32,7 @@ public class NetworkModule {
     @Singleton
     Gson provideSocketGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(SocketMessage.class, new SocketMessageSerializer());
+        gsonBuilder.registerTypeAdapter(SocketMessage.class, new com.tikalk.antsmasher.networking.gson.SocketMessageSerializer());
         return gsonBuilder.create();
     }
 

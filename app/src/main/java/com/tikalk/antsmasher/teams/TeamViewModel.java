@@ -31,7 +31,7 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     private View view;
-    private final MutableLiveData<List<Team>> teams = new MutableLiveData<>();
+    private MutableLiveData<List<Team>> teams;
     private Team team;
     private GameRestService gameRestService;
     private PrefsHelper prefsHelper;
@@ -44,6 +44,7 @@ public class TeamViewModel extends AndroidViewModel {
         this.gameRestService = gameRestService;
         this.prefsHelper = prefsHelper;
         this.userId = prefsHelper.getUserId();
+        teams = new MutableLiveData<>();
     }
 
     public void setView(View view) {
@@ -52,11 +53,17 @@ public class TeamViewModel extends AndroidViewModel {
 
     public LiveData<List<Team>> getTeams() {
         if (teams.getValue() == null) {
+            Log.i(TAG, "getTeams:");
             loadTeams();
+        }else {
+            Log.i(TAG, "getTeams: return live data");
         }
         return teams;
     }
 
+    public void refreshTeams(){
+        loadTeams();
+    }
     private void loadTeams() {
         Log.v(TAG, "Load game teams from server...");
 
@@ -66,7 +73,7 @@ public class TeamViewModel extends AndroidViewModel {
                 .subscribe(new DisposableObserver<List<Team>>() {
                     @Override
                     public void onNext(List<Team> response) {
-                        Log.v(TAG, "onNext: teams " + response.size());
+                        Log.v(TAG, "onNext: teams " + response.size() + ", teams: " + response.toString());
                         teams.setValue(response);
                     }
 
@@ -120,5 +127,10 @@ public class TeamViewModel extends AndroidViewModel {
 
     public Team getTeam() {
         return team;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
     }
 }
