@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +43,9 @@ public class TeamsActivity extends AppCompatActivity implements
     @BindView(android.R.id.list)
     protected RecyclerView listView;
 
+    @BindView(R.id.swipeContainer)
+    protected SwipeRefreshLayout swipeContainer;
+
     private TeamViewModel presenter;
     private TeamAdapter adapter;
 
@@ -63,6 +67,17 @@ public class TeamsActivity extends AppCompatActivity implements
         presenter = ViewModelProviders.of(this, mViewModelFactory).get(TeamViewModel.class);
         presenter.setView(this);
         presenter.getTeams().observe(this, this);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.refreshTeams();
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     @Override
@@ -74,6 +89,7 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     public void onChanged(@Nullable List<Team> teams) {
         adapter.setData(teams);
+        swipeContainer.setRefreshing(false);
     }
 
     @Override

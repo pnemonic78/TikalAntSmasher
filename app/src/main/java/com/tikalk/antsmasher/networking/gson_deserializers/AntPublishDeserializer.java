@@ -26,7 +26,7 @@ public class AntPublishDeserializer implements JsonDeserializer<AntLocationMessa
 
         return new AntLocationMessage(jObject.get("type").getAsString(),
                 jObject.get("address").getAsString(),
-                new AntLocation(body.get("id").getAsString()
+                new AntLocation(body.get("antId").getAsString()
                         , body.get("species").getAsLong()
                         , body.get("xRate").getAsFloat()
                         , body.get("yRate").getAsFloat()));

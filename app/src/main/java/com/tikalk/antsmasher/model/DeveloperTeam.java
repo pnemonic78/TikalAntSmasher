@@ -17,7 +17,7 @@ public enum DeveloperTeam {
     DEV_TEAM_5("dev_team_5", "Dev. Team 5", "http://socket1.tikalk.com", "http://socket2.tikalk.com", "http://socket3.tikalk.com"),
     DEV_TEAM_6("dev_team_6", "Dev. Team 6", "http://socket1.tikalk.com", "http://socket2.tikalk.com", "http://socket3.tikalk.com");
 
-    @SerializedName("id")
+    @SerializedName("antId")
     private final String id;
     @SerializedName("name")
     private final String name;

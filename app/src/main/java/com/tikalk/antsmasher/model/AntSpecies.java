@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class AntSpecies {
 
-    @SerializedName("id")
+    @SerializedName("antId")
     private long id;
     @SerializedName("name")
     private String name;

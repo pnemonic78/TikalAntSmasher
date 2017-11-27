@@ -17,7 +17,7 @@ public class ApiContract {
 
     public static final String ANT_PUBLISHER_URL = BASE_URL + ":" + ANT_PUBLISH_PORT + "/" + REGISTRY_URL_PATH;
     public static final String SMASH_SERVICE_URL = BASE_URL + ":" + SMASH_SERVICE_PORT + "/" + REGISTRY_URL_PATH;
-    public static final String ADMIN_SERVICE_URL = "http://" + BASE_URL + ":" + ADMIN_REST_PORT;
+    public static final String ADMIN_SERVICE_URL = "http://" + BASE_URL + ":" + ADMIN_REST_PORT + "/";
 
 
     //Requests Endpoints
@@ -31,7 +31,7 @@ public class ApiContract {
     public static final String ANT_SPECIES = "/antspecies";
 
     //Query Params
-    public static final String ID_PARAM = "id";
+    public static final String ID_PARAM = "antId";
     public static final String UPDATE_PARAM = "name";
     public static final String TEAM_PARAM = "teamId";
     public static final String USERID_PARAM = "userId";

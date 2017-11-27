@@ -16,7 +16,8 @@ import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.model.socket.AntSmashMessage;
+import com.tikalk.antsmasher.model.socket.AntHitMessage;
+import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 import com.tikalk.antsmasher.networking.websockets.GameWebSocket;
 import com.tikalk.antsmasher.networking.websockets.NetworkManager;
@@ -121,20 +122,19 @@ public class AppService extends Service {
     }
 
     private void smashAnt(AntSmash smash) {
-        AntSmashMessage antSocketMessage = new AntSmashMessage(socketMessageGson.toJson(smash));
+        AntHitMessage antSocketMessage = new AntHitMessage(smash);
         if (gameWebSocket != null) {
-            gameWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
+            Log.i(TAG, "smashAnt: about to send antSmash");
+            smashWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
         }
     }
 
     private void startWebSockets() {
 
-        String antPublishUrl = prefsHelper.getStringPref(PrefsHelper.ANTPUBLISH_SOCKET_URL);
-        String smashSocketUrl = prefsHelper.getStringPref(PrefsHelper.SMASH_SOCKET_URL);
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
         Log.i(TAG, "Real web socket");
-        gameWebSocket = new GameWebSocket(antPublishUrl, sessionId, this);
-        smashWebSocket = new SmashWebSocket(smashSocketUrl, sessionId, this, prefsHelper.getPlayerId());
+        gameWebSocket = new GameWebSocket(ApiContract.ANT_PUBLISHER_URL, sessionId, this);
+        smashWebSocket = new SmashWebSocket(ApiContract.SMASH_SERVICE_URL, sessionId, this, prefsHelper.getPlayerId());
         gameWebSocket.setMessageListener(serviceEventListener);
         smashWebSocket.setMessageListener(serviceEventListener);
 

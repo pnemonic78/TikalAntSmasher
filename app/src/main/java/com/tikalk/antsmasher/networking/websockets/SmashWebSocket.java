@@ -25,11 +25,11 @@ public class SmashWebSocket extends AppWebSocket {
 
     @Override
     protected void handleSocketOpen(WebSocket webSocket, Response response) {
-        SocketMessage smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SMASH_MESSAGE + playerId);
+        SocketMessage smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SMASH_MESSAGE);
         Log.i(TAG, "handleSocketOpen: registering to smash socket: " + socketMessageGson.toJson(smash_register));
         sendMessage(socketMessageGson.toJson(smash_register));
 
-        SocketMessage self_smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SELF_SMASH_MESSAGE + playerId);
+        SocketMessage self_smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SELF_SMASH_MESSAGE);
         sendMessage(socketMessageGson.toJson(self_smash_register));
 
         SocketMessage play_score_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.PLAY_SCORE_MESSAGE);
@@ -44,7 +44,7 @@ public class SmashWebSocket extends AppWebSocket {
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
         if (socketMessage.address.equals(ApiContract.SMASH_MESSAGE)) {
-//            AntSmashMessage smashMessage = socketMessageGson.fromJson(message, AntSmashMessage.class);
+//            AntHitMessage smashMessage = socketMessageGson.fromJson(message, AntHitMessage.class);
 //            AntSmash smash = socketMessageGson.fromJson(smashMessage, AntSmash.class);
 //            socketMessageListener.onAntSmashed(smash);
         }

@@ -27,6 +27,7 @@ import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.REST.GameRestService;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.service.AppService;
@@ -190,7 +191,7 @@ public class BoardViewModel extends AndroidViewModel implements
 
     public void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
-        AntSmash event = new AntSmash(antId, true);
+        AntSmash event = new AntSmash(SocketMessage.TYPE_HIT, antId);
         onAntSmashed(event);
         appService.smashAnt(event);
     }
@@ -259,10 +260,10 @@ public class BoardViewModel extends AndroidViewModel implements
     public void onAntSmashed(AntSmash event) {
         Game game = getGame().getValue();
         if (game != null) {
-            Ant ant = game.getAnt(event.id);
+            Ant ant = game.getAnt(event.antId);
             if (ant != null) {
                 ant.setAlive(false);
-                view.smashAnt(ant, event.user);
+                view.smashAnt(ant, event.smashedByUser);
                 removeAntDelayed(game, ant, DELAY_REMOVE);
             }
         }
