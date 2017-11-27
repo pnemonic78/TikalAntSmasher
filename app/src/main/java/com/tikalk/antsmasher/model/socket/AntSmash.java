@@ -1,30 +1,27 @@
 package com.tikalk.antsmasher.model.socket;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Ant smash to server.
  */
 
 public class AntSmash {
 
-    public final String id;
+    @SerializedName("antId")
+    public final String antId;
+    @SerializedName("playerId")
+    public final long playerId;
+    @SerializedName("timestamp")
     public final long timestamp;
-    public final boolean user;
 
-    public AntSmash(String id) {
-        this(id, System.currentTimeMillis());
+    public AntSmash(String antId, long playerId) {
+        this(antId, System.currentTimeMillis(), playerId);
     }
 
-    public AntSmash(String id, long timestamp) {
-        this(id, timestamp, false);
-    }
-
-    public AntSmash(String id, boolean user) {
-        this(id, System.currentTimeMillis(), user);
-    }
-
-    public AntSmash(String id, long timestamp, boolean user) {
-        this.id = id;
+    public AntSmash(String antId, long playerId, long timestamp) {
+        this.antId = antId;
         this.timestamp = timestamp;
-        this.user = user;
+        this.playerId = playerId;
     }
 }

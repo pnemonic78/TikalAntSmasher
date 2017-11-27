@@ -95,6 +95,7 @@ public class BoardActivity extends AppCompatActivity implements
 
         presenter = ViewModelProviders.of(this, boardViewModelFactory).get(BoardViewModel.class);
         presenter.setView(this);
+        presenter.setPlayerId(playerId);
         getLifecycle().addObserver(presenter);
         presenter.getGame().observe(this, this);
 
@@ -202,10 +203,10 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void smashAnt(@NonNull Ant ant, boolean user) {
+    public void smashAnt(@NonNull Ant ant, long playerId) {
         boardView.smashAnt(ant);
         final boolean sound = prefsHelper.isInteractiveSounds();
-        if (user) {
+        if (playerId == this.playerId) {
             if (prefsHelper.isInteractiveVibrate()) {
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 if ((vibrator != null) && vibrator.hasVibrator()) {

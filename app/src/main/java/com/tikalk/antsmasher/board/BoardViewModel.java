@@ -20,6 +20,7 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
+import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
@@ -82,7 +83,7 @@ public class BoardViewModel extends AndroidViewModel implements
          */
         void onGameFinished();
 
-        void smashAnt(@NonNull Ant ant, boolean user);
+        void smashAnt(@NonNull Ant ant, long playerId);
     }
 
     private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
@@ -94,16 +95,21 @@ public class BoardViewModel extends AndroidViewModel implements
     private boolean serviceBound = false;
     private Intent serviceIntent;
     private GameRestService gameRestService;
+    private  long playerId;
 
     @Inject
-    public BoardViewModel(@NonNull Application application, GameRestService gameRestService) {
+    public BoardViewModel(@NonNull Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
         super(application);
-
         this.gameRestService = gameRestService;
+        this.playerId = prefsHelper.getPlayerId();
     }
 
     public void setView(View view) {
         this.view = view;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
     }
 
     public LiveData<Game> getGame() {
@@ -190,7 +196,7 @@ public class BoardViewModel extends AndroidViewModel implements
 
     public void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
-        AntSmash event = new AntSmash(antId, true);
+        AntSmash event = new AntSmash(antId, playerId);
         onAntSmashed(event);
         appService.smashAnt(event);
     }
@@ -259,10 +265,10 @@ public class BoardViewModel extends AndroidViewModel implements
     public void onAntSmashed(AntSmash event) {
         Game game = getGame().getValue();
         if (game != null) {
-            Ant ant = game.getAnt(event.id);
+            Ant ant = game.getAnt(event.antId);
             if (ant != null) {
                 ant.setAlive(false);
-                view.smashAnt(ant, event.user);
+                view.smashAnt(ant, event.playerId);
                 removeAntDelayed(game, ant, DELAY_REMOVE);
             }
         }
