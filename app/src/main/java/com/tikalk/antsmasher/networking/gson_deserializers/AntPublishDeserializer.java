@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.networking;
+package com.tikalk.antsmasher.networking.gson_deserializers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

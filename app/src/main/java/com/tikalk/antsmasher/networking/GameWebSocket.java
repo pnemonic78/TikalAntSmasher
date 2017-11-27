@@ -5,10 +5,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntLocationMessage;
 import com.tikalk.antsmasher.model.socket.GameStateMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.networking.gson_deserializers.AntPublishDeserializer;
+import com.tikalk.antsmasher.networking.gson_deserializers.GameStateDeserializer;
 import com.tikalk.antsmasher.service.AppService;
 
 import okhttp3.Response;
