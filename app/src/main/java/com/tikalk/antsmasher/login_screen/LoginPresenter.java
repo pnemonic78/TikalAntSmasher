@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.User;
-import com.tikalk.antsmasher.networking.REST.GameRestService;
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import io.reactivex.disposables.Disposable;
 

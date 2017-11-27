@@ -2,7 +2,7 @@ package com.tikalk.antsmasher.model.socket;
 
 import com.tikalk.antsmasher.model.GameState;
 
-public class GameStateMessage extends SocketMessage<String> {
+public class GameStateMessage extends SocketMessage {
 
     GameState state;
 
@@ -18,6 +18,6 @@ public class GameStateMessage extends SocketMessage<String> {
     @Override
     public String toString() {
         return super.toString() +
-                ", state=" + state + '}';
+                ", state=" + state;
     }
 }

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.tikalk.antsmasher.model.User;
 import com.tikalk.antsmasher.networking.requests.CreateUserRequest;
-import com.tikalk.antsmasher.networking.REST.GameRestService;
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;

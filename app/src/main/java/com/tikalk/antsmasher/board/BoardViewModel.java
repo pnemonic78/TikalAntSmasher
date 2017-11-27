@@ -27,7 +27,7 @@ import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.networking.REST.GameRestService;
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.service.AppService;
 
@@ -244,7 +244,7 @@ public class BoardViewModel extends AndroidViewModel implements
                 }
                 view.addAnt(ant);
             }
-            ant.setLocation(event.xPromil / 1000f, event.yPromil / 1000f);
+            ant.setLocation(event.xRate, event.yRate);
             if (ant.isVisible()) {
                 view.moveAnt(ant);
             } else {

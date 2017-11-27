@@ -14,21 +14,21 @@ public class AntLocation {
     public final String antId;
     @SerializedName("species")
     public final long speciesId;
-    @SerializedName("xPromil")
-    public final int xPromil;
-    @SerializedName("yPromil")
-    public final int yPromil;
+    @SerializedName("xRate")
+    public final float xRate;
+    @SerializedName("yRate")
+    public final float yRate;
 
     public AntLocation(String antId, long speciesId, float xPercent, float yPercent) {
         this.antId = antId;
         this.speciesId = speciesId;
-        this.xPromil = (int) (xPercent * 1000);
-        this.yPromil = (int) (yPercent * 1000);
+        this.xRate = xPercent;
+        this.yRate = yPercent;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "{id:" + antId + ", species:" + speciesId + ", x:" + xPromil + ", y:" + yPromil + "}";
+        return "{id:" + antId + ", species:" + speciesId + ", x:" + xRate + ", y:" + yRate + "}";
     }
 }

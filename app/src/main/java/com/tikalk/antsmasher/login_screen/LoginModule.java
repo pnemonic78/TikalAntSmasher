@@ -5,7 +5,7 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.networking.REST.GameRestService;
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import dagger.Module;
 import dagger.Provides;

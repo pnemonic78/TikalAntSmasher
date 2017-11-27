@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
-import com.tikalk.antsmasher.networking.REST.GameRestService;
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;

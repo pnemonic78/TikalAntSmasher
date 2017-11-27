@@ -1,7 +1,7 @@
 package com.tikalk.antsmasher.networking;
 
 import com.google.gson.Gson;
-import com.tikalk.antsmasher.networking.REST.GameRestService;
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import javax.inject.Named;
 

@@ -1,6 +1,6 @@
 package com.tikalk.antsmasher.model.socket;
 
-public class AntLocationMessage extends SocketMessage<AntLocation> {
+public class AntLocationMessage extends SocketMessage {
 
 
     AntLocation antLocation;
@@ -20,6 +20,6 @@ public class AntLocationMessage extends SocketMessage<AntLocation> {
     @Override
     public String toString() {
         return super.toString() +
-                ", antLocation=" + antLocation + '}';
+                ", antLocation=" + antLocation;
     }
 }
