@@ -26,7 +26,7 @@ public class SmashWebSocket extends AppWebSocket {
 
     @Override
     protected void handleSocketOpen(WebSocket webSocket, Response response) {
-        SocketMessage smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SMASH_MESSAGE  + playerId);
+        SocketMessage smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SMASH_MESSAGE + playerId);
         Log.i(TAG, "handleSocketOpen: registering to smash socket: " + socketMessageGson.toJson(smash_register));
         sendMessage(socketMessageGson.toJson(smash_register));
 

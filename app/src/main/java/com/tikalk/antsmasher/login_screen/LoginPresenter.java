@@ -89,6 +89,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     @Override
     public void onLoginFailed(Throwable e) {
         view.showLoginFailedDialog();
-      //  view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
+        //  view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
     }
 }

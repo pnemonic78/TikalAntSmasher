@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.tikalk.antsmasher.model.socket.AntLocationMessage;
 import com.tikalk.antsmasher.model.socket.GameStateMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;

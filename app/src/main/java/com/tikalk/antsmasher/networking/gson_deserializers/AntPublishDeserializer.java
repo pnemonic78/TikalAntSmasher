@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
