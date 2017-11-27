@@ -7,6 +7,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.networking.gson_deserializers.SocketMessageSerializer;
 
 import dagger.Module;
 import dagger.Provides;

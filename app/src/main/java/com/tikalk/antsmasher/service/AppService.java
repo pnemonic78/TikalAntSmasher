@@ -17,10 +17,10 @@ import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.AntSmashMessage;
-import com.tikalk.antsmasher.networking.AppWebSocket;
-import com.tikalk.antsmasher.networking.GameWebSocket;
-import com.tikalk.antsmasher.networking.NetworkManager;
-import com.tikalk.antsmasher.networking.SmashWebSocket;
+import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
+import com.tikalk.antsmasher.networking.websockets.GameWebSocket;
+import com.tikalk.antsmasher.networking.websockets.NetworkManager;
+import com.tikalk.antsmasher.networking.websockets.SmashWebSocket;
 
 
 public class AppService extends Service {

@@ -1,6 +1,8 @@
-package com.tikalk.antsmasher.networking;
+package com.tikalk.antsmasher.networking.websockets;
 
 import android.util.Log;
+
+import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;

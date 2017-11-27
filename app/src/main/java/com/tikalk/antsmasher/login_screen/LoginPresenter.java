@@ -9,8 +9,7 @@ import javax.inject.Inject;
 import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.User;
-import com.tikalk.antsmasher.networking.ApiClient;
-import com.tikalk.antsmasher.networking.GameRestService;
+import com.tikalk.antsmasher.networking.REST.GameRestService;
 
 import io.reactivex.disposables.Disposable;
 
@@ -26,7 +25,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     private Disposable mDisposable;
 
     private LoginContract.View view;
-    private ApiClient apiClient;
     private PrefsHelper prefsHelper;
     private Context context;
 
@@ -35,7 +33,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Inject
     public LoginPresenter(Context context, PrefsHelper prefsHelper, GameRestService gameRestService) {
-        apiClient = new ApiClient();
         this.prefsHelper = prefsHelper;
         loginManager = new LoginManager(gameRestService);
         this.context = context;

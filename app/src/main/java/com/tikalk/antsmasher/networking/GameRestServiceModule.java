@@ -1,6 +1,7 @@
 package com.tikalk.antsmasher.networking;
 
 import com.google.gson.Gson;
+import com.tikalk.antsmasher.networking.REST.GameRestService;
 
 import javax.inject.Named;
 
@@ -21,7 +22,7 @@ public class GameRestServiceModule {
     @Provides
     public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson) {
         return new Retrofit.Builder()
-                .baseUrl(ApiContract.SERVICE_BASE_URL)
+                .baseUrl(ApiContract.ADMIN_SERVICE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

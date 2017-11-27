@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.networking;
+package com.tikalk.antsmasher.networking.REST;
 
 import java.util.List;
 

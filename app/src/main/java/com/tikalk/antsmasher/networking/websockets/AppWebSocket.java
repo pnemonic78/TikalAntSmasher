@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.networking;
+package com.tikalk.antsmasher.networking.websockets;
 
 import com.google.gson.Gson;
 
@@ -69,11 +69,11 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         Uri uri = new Uri.Builder()
                 .scheme("http")
                 .encodedAuthority(baseUrl)
-                .appendPath("client.register")
                 .appendPath("123")
                 .appendPath(session_id)
                 .appendPath("websocket")
                 .build();
+
         weakContext = new WeakReference<>(context);
         socketBaseUrl = baseUrl;
         this.deviceId = deviceId;

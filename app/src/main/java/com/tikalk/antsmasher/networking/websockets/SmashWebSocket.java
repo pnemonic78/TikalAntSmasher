@@ -1,9 +1,10 @@
-package com.tikalk.antsmasher.networking;
+package com.tikalk.antsmasher.networking.websockets;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.service.AppService;
 
 import okhttp3.Response;
