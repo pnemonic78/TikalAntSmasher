@@ -58,7 +58,14 @@ public class Game {
     }
 
     public Ant getAnt(String id) {
-        return getAnts().get(id);
+        Ant ant;
+        for (Team team : getTeams()) {
+            ant = team.getAnts().get(id);
+            if (ant != null) {
+                return ant;
+            }
+        }
+        return null;
     }
 
     @Nullable
