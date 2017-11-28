@@ -29,7 +29,6 @@ import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
-import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.service.AppService;
 
@@ -197,7 +196,8 @@ public class BoardViewModel extends AndroidViewModel implements
 
     public void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
-        AntSmash event = new AntSmash(SocketMessage.TYPE_HIT, antId);
+
+        AntSmash event = new AntSmash(antId == null ? AntSmash.MISS_TYPE : AntSmash.HIT_TYPE, antId);
         onAntSmashed(event);
         appService.smashAnt(event);
     }
@@ -232,6 +232,7 @@ public class BoardViewModel extends AndroidViewModel implements
                 view.paint();
                 view.onGameStarted();
                 break;
+            case STOPPED:
             case FINISH:
                 view.onGameFinished();
                 break;

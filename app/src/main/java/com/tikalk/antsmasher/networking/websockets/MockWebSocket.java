@@ -41,8 +41,8 @@ public class MockWebSocket extends AppWebSocket {
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
-//        if (AntHitMessage.TYPE_SMASH.equals(socketMessage.type)) {
-//            AntHitMessage smashMessage = socketMessageGson.fromJson(message, AntHitMessage.class);
+//        if (HitSocketMessage.TYPE_SMASH.equals(socketMessage.type)) {
+//            HitSocketMessage smashMessage = socketMessageGson.fromJson(message, HitSocketMessage.class);
 //            AntSmash smash = socketMessageGson.toJson(smashMessage.body, AntSmash.class);
 //            if ((game != null) && (smash.antId != null)) {
 //                Ant ant = game.getAnt(smash.antId);
