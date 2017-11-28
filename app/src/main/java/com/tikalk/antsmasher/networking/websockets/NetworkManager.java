@@ -32,7 +32,7 @@ public class NetworkManager {
     }
 
     public boolean remove(AppWebSocket webSocket) {
-        webSocket.closeConnection();
+        webSocket.stopSocket();
         return webSockets.remove(webSocket);
     }
 

@@ -11,7 +11,7 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 
 public class SmashWebSocket extends AppWebSocket {
-    private static final String TAG = "TAG_GameWebSocket";
+    private static final String TAG = "TAG_SmashWebSocket";
     long playerId;
 
     public SmashWebSocket(String baseUrl, String sessionId, Context context, long playerId) {
@@ -41,6 +41,7 @@ public class SmashWebSocket extends AppWebSocket {
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
+        Log.i(TAG, "handleNewMessage: " + message);
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
         if (socketMessage.address.equals(ApiContract.SMASH_MESSAGE)) {

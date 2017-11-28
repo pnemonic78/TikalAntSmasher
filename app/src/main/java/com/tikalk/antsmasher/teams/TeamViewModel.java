@@ -91,7 +91,7 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     public void teamClicked(final Team team) {
-        Log.v(TAG, "onNext: about to join the game " + userId);
+        Log.v(TAG, "onNext: about to join the game team: " + team.getId() + ", user: " + userId);
 
         gameRestService.createPlayer(team.getId(), userId)
                 .subscribeOn(Schedulers.io())

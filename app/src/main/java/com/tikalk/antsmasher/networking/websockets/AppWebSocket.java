@@ -44,6 +44,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     private OkHttpClient client;
     private OkHttpClient.Builder okHttpClientBuilder;
     private String deviceId;
+    private boolean connectionClosed = true;
 
     @Inject
     @Named("SocketMessageGson")
@@ -91,6 +92,11 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         Log.v(TAG, "initSocket: " + mRequest);
     }
 
+    public void startSocket(){
+        connectionClosed = false;
+        openConnection();
+
+    }
     synchronized public void openConnection() {
         if (mSocket == null) {
             Log.v(TAG, "openConnection: ");
@@ -99,8 +105,11 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     }
 
     public void closeConnection() {
+
+        Log.v(TAG, "about to closeConnection: " + socketBaseUrl);
+
         if (mSocket != null || socketOpened) {
-            Log.v(TAG, "about to closeConnection: " + socketBaseUrl);
+            Log.v(TAG, "closing: " + socketBaseUrl);
             mSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye");
             socketOpened = false;
             mSocket = null;
@@ -113,6 +122,10 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         }
     }
 
+    public void stopSocket(){
+        connectionClosed = true;
+        closeConnection();
+    }
 
     private void ping(WebSocket webSocket) {
         pingDisposable = Observable.interval(5000, TimeUnit.MILLISECONDS, Schedulers.io())
@@ -221,7 +234,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
 
             if (!"h".equals(text) && !"o".equals(text)) {
-                Log.v(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
+       //         Log.v(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
                 if (text.substring(0, 2).contains("c[")) {  //This means close go away..
 //                    openConnection();
                     return;
@@ -263,7 +276,9 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
             super.onFailure(webSocket, t, response);
             Log.e(TAG, "onFailure: ", t);
             handleSocketFailure(webSocket, t, response);
-            recoverConnection();
+            if(!connectionClosed){
+                recoverConnection();
+            }
         }
     };
 

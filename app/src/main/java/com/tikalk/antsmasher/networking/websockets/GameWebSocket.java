@@ -41,10 +41,11 @@ public class GameWebSocket extends AppWebSocket {
     @Override
     protected void handleSocketOpen(WebSocket webSocket, Response response) {
         SocketMessage lr_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.LR_MESSAGE);
-        Log.i(TAG, "handleSocketOpen: registering to collision socket: " + socketMessageGson.toJson(lr_register));
+        Log.i(TAG, "handleSocketOpen: registering to ant-publish: " + socketMessageGson.toJson(lr_register));
         sendMessage(socketMessageGson.toJson(lr_register));
 
         SocketMessage game_state_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.GAME_STATE_MESSAGE);
+        Log.i(TAG, "handleSocketOpen: registering to game state: " + socketMessageGson.toJson(game_state_register));
         sendMessage(socketMessageGson.toJson(game_state_register));
     }
 
@@ -58,9 +59,8 @@ public class GameWebSocket extends AppWebSocket {
             socketMessageListener.onAntMoved(antLocationMessage.getAntLocation());
 
         } else if (socketMessage.address.equals(ApiContract.GAME_STATE_MESSAGE)) {
-            Log.i(TAG, "handleNewMessage: game state message");
             GameStateMessage stateMessage = stateMessageGson.fromJson(message, GameStateMessage.class);
-            Log.i(TAG, "handleNewMessage: " + stateMessage);
+            Log.i(TAG, "handleNewMessage: game state message" + stateMessage);
             socketMessageListener.onGameStateMessage(stateMessage.getState());
         }
     }

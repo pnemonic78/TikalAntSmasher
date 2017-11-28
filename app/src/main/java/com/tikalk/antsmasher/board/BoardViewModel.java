@@ -96,7 +96,7 @@ public class BoardViewModel extends AndroidViewModel implements
     private boolean serviceBound = false;
     private Intent serviceIntent;
     private GameRestService gameRestService;
-    private  long playerId;
+    private long playerId;
 
     @Inject
     public BoardViewModel(@NonNull Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
@@ -292,27 +292,18 @@ public class BoardViewModel extends AndroidViewModel implements
         context.bindService(serviceIntent, connection, Service.BIND_AUTO_CREATE);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    void onStop() {
-        Log.v(TAG, "onStop");
-        //This means that onStop called due to screen rotation, therefore it's crucial to unbind
-        //the service and clean its reference to insure that the destroyed Activity reference will be released.
-        //Service will rebound in onStart after mActivity recreation.
-        //If this is not due to screen rotation service will be killed in onDestroy ( stopService() ).
-        final Context context = getApplication();
-        context.unbindService(connection); //This will not stop the service as it started with startService()
-        serviceBound = false;
-        appService = null;
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void onDestroy() {
         Log.v(TAG, "onDestroy");
         if (appService != null && serviceBound) {
+            Log.i(TAG, "onDestroy: about to stop the service");
             final Context context = getApplication();
             context.unbindService(connection);
             context.stopService(serviceIntent);
+            serviceBound = false;
+            appService = null;
         }
+
     }
 
     private final ServiceConnection connection = new ServiceConnection() {
