@@ -201,7 +201,7 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void onAntTouch(@Nullable String antId) {
-        presenter.onAntTouch(antId);
+       presenter.onAntTouch(antId);
     }
 
     @Override
