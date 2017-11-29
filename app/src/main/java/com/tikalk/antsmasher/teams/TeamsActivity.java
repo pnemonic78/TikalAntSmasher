@@ -65,9 +65,10 @@ public class TeamsActivity extends AppCompatActivity implements
 
         presenter = ViewModelProviders.of(this, mViewModelFactory).get(TeamViewModel.class);
         presenter.setView(this);
+        getLifecycle().addObserver(presenter);
         presenter.getTeams().observe(this, this);
-        swipeContainer.setOnRefreshListener(() -> presenter.refreshTeams());
 
+        swipeContainer.setOnRefreshListener(() -> presenter.refreshTeams());
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,

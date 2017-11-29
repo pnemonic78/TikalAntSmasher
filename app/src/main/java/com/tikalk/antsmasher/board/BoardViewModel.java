@@ -313,7 +313,6 @@ public class BoardViewModel extends AndroidViewModel implements
             serviceBound = false;
             appService = null;
         }
-
     }
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -334,4 +333,10 @@ public class BoardViewModel extends AndroidViewModel implements
             appService = null;
         }
     };
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        view = null;
+    }
 }
