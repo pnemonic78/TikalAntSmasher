@@ -1,6 +1,8 @@
 package com.tikalk.antsmasher.service;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import android.app.Service;
 import android.content.Intent;
@@ -9,10 +11,6 @@ import android.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.data.PrefsHelper;
@@ -23,13 +21,10 @@ import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.HitSocketMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
-import com.tikalk.antsmasher.networking.gson.SocketMessageSerializer;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 import com.tikalk.antsmasher.networking.websockets.GameWebSocket;
 import com.tikalk.antsmasher.networking.websockets.NetworkManager;
 import com.tikalk.antsmasher.networking.websockets.SmashWebSocket;
-
-import java.net.Socket;
 
 
 public class AppService extends Service {

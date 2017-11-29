@@ -3,7 +3,6 @@ package com.tikalk.antsmasher.networking.websockets;
 import android.content.Context;
 import android.util.Log;
 
-import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.HitSocketMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
