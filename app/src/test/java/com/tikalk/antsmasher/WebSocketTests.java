@@ -20,6 +20,7 @@ import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 
 import static com.tikalk.antsmasher.networking.ApiContract.GAME_STATE_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.LR_MESSAGE;
+import static com.tikalk.antsmasher.networking.ApiContract.SELF_SMASH_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.SMASH_MESSAGE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -76,7 +77,31 @@ public class WebSocketTests extends TestSuite {
         AntSmash event = gson.fromJson(body.getAsString(), AntSmash.class);
         assertNotNull(event);
         assertEquals("11122", event.antId);
-        //TODO assertEquals(9, event.playerId);
+        assertEquals(9, event.playerId);
+    }
+
+    @Test
+    public void parseSmash2() throws Exception {
+        InputStream in = getClass().getResourceAsStream("/ant_smash_2.json");
+        assertNotNull(in);
+        Reader reader = new InputStreamReader(in);
+        assertEquals(AppWebSocket.TYPE_ARRAY, reader.read());
+
+        Gson gson = new Gson();
+        String[] content = gson.fromJson(reader, String[].class);
+        reader.close();
+        assertNotNull(content);
+        assertEquals(1, content.length);
+        SocketMessage socketMessage = gson.fromJson(content[0], SocketMessage.class);
+        assertNotNull(socketMessage);
+        assertEquals(SocketMessage.TYPE_RECORD, socketMessage.type);
+        assertEquals(SELF_SMASH_MESSAGE, socketMessage.address);
+        JsonElement body = socketMessage.body;
+        assertNotNull(body);
+        AntSmash event = gson.fromJson(body, AntSmash.class);
+        assertNotNull(event);
+        assertEquals("b4fd14a6-2a0d-40a6-b342-bd1cecda74e3", event.antId);
+        assertEquals(169, event.playerId);
     }
 
     @Test
