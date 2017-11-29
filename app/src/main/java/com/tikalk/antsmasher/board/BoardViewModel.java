@@ -192,6 +192,7 @@ public class BoardViewModel extends AndroidViewModel implements
      * Start the game.
      */
     public void start() {
+        onGameStarted();
     }
 
     /**
