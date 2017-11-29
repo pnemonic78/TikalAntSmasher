@@ -1,7 +1,9 @@
 package com.tikalk.antsmasher.board;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
@@ -9,20 +11,21 @@ import javax.inject.Inject;
  * Created by motibartov on 25/11/2017.
  */
 
-public class BoardViewModelFactory implements ViewModelProvider.Factory {
+public class BoardViewModelFactory extends ViewModelProviders.DefaultFactory {
 
-    private BoardViewModel mViewModel;
+    private BoardViewModel viewModel;
 
     @Inject
-    public BoardViewModelFactory(BoardViewModel viewModel) {
-        this.mViewModel = viewModel;
+    public BoardViewModelFactory(@NonNull Application application, BoardViewModel viewModel) {
+        super(application);
+        this.viewModel = viewModel;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(BoardViewModel.class)) {
-            return (T) mViewModel;
+        if (BoardViewModel.class.isAssignableFrom(modelClass)) {
+            return (T) viewModel;
         }
-        throw new IllegalArgumentException("Unknown class name");
+        return super.create(modelClass);
     }
 }
