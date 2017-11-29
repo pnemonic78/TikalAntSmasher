@@ -92,11 +92,12 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         Log.v(TAG, "initSocket: " + mRequest);
     }
 
-    public void startSocket(){
+    public void startSocket() {
         connectionClosed = false;
         openConnection();
 
     }
+
     synchronized public void openConnection() {
         if (mSocket == null) {
             Log.v(TAG, "openConnection: ");
@@ -122,7 +123,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         }
     }
 
-    public void stopSocket(){
+    public void stopSocket() {
         connectionClosed = true;
         closeConnection();
     }
@@ -234,7 +235,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
 
             if (!"h".equals(text) && !"o".equals(text)) {
-       //         Log.v(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
+                //         Log.v(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
                 if (text.substring(0, 2).contains("c[")) {  //This means close go away..
 //                    openConnection();
                     return;
@@ -276,7 +277,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
             super.onFailure(webSocket, t, response);
             Log.e(TAG, "onFailure: ", t);
             handleSocketFailure(webSocket, t, response);
-            if(!connectionClosed){
+            if (!connectionClosed) {
                 recoverConnection();
             }
         }

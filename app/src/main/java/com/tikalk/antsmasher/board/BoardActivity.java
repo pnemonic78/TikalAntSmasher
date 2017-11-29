@@ -189,8 +189,6 @@ public class BoardActivity extends AppCompatActivity implements
         }
     }
 
-
-
     private void showGameOverDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.app_name)).setMessage("Game Over").setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))

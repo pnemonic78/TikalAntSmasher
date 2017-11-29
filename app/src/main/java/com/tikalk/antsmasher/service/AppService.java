@@ -136,10 +136,10 @@ public class AppService extends Service {
         gameWebSocket = new GameWebSocket(ApiContract.ANT_PUBLISHER_URL, sessionId, this);
         //smashWebSocket = new SmashWebSocket(ApiContract.SMASH_SERVICE_URL, sessionId, this, prefsHelper.getPlayerId());
         gameWebSocket.setMessageListener(serviceEventListener);
-      //  smashWebSocket.setMessageListener(serviceEventListener);
+        //  smashWebSocket.setMessageListener(serviceEventListener);
 
         gameWebSocket.startSocket();
-      //  smashWebSocket.startSocket();
+        //  smashWebSocket.startSocket();
 
         networkManager.add(gameWebSocket);
         //networkManager.add(smashWebSocket);

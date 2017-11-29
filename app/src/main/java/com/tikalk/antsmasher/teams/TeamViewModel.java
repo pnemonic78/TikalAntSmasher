@@ -55,15 +55,16 @@ public class TeamViewModel extends AndroidViewModel {
         if (teams.getValue() == null) {
             Log.i(TAG, "getTeams:");
             loadTeams();
-        }else {
+        } else {
             Log.i(TAG, "getTeams: return live data");
         }
         return teams;
     }
 
-    public void refreshTeams(){
+    public void refreshTeams() {
         loadTeams();
     }
+
     private void loadTeams() {
         Log.v(TAG, "Load game teams from server...");
 

@@ -20,12 +20,12 @@ public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
         JsonObject body = null;
 
-        if(src instanceof AntHitMessage){
+        if (src instanceof AntHitMessage) {
             body = new JsonObject();
-            body.addProperty("type" , ((AntHitMessage)src).antSmash.type);
-            body.addProperty("antId" , ((AntHitMessage)src).antSmash.antId);
+            body.addProperty("type", ((AntHitMessage) src).antSmash.type);
+            body.addProperty("antId", ((AntHitMessage) src).antSmash.antId);
             message.add("body", body);
-         }
+        }
 
         message.add("headers", new JsonObject());
         return message;

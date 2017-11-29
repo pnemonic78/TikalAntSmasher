@@ -19,7 +19,7 @@ public class AntSmash {
         this.antId = id;
     }
 
-    public AntSmash(String type, String id, boolean smashedByUser){
+    public AntSmash(String type, String id, boolean smashedByUser) {
         this.type = type;
         this.antId = id;
         this.smashedByUser = smashedByUser;
