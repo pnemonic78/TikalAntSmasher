@@ -13,6 +13,7 @@ import javax.inject.Named;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.DeveloperTeam;

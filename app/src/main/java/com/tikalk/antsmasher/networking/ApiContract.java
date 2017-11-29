@@ -48,6 +48,4 @@ public class ApiContract {
     public static final String PLAY_SCORE_ADDRESS = "playerScore-message";
     public static final String TEAM_SCORE_ADDRESS = "teamScore-message";
 
-
-
 }

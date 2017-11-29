@@ -14,6 +14,7 @@ public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
 
     public static final String TAG = "TAG_SocketSerializer";
+
     @Override
     public JsonElement serialize(SocketMessage src, Type typeOfSrc, JsonSerializationContext serializer) {
         JsonObject message = new JsonObject();
@@ -22,22 +23,20 @@ public class SocketMessageSerializer implements JsonSerializer<SocketMessage> {
 
         JsonObject body = null;
 
-        if(src instanceof HitSocketMessage){
+        if (src instanceof HitSocketMessage) {
             body = new JsonObject();
-            body.addProperty("type" , ((HitSocketMessage)src).antSmash.type);
-            body.addProperty("antId" , ((HitSocketMessage)src).antSmash.antId);
-         }
+            body.addProperty("type", ((HitSocketMessage) src).antSmash.type);
+            body.addProperty("antId", ((HitSocketMessage) src).antSmash.antId);
+        }
 
-        if(body != null){
-            message.add("body",  body);
+        if (body != null) {
+            message.add("body", body);
         }
 
         message.add("headers", new JsonObject());
-      //  Log.i(TAG, "serialized message: " + message);
+        //  Log.i(TAG, "serialized message: " + message);
 
         return message;
     }
-
-
 
 }

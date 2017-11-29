@@ -249,7 +249,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 //                Log.v(TAG, "checking message type:  " + message.type);
 
                 if (message.type.equals(SocketMessage.TYPE_ERROR)) {
-                    Log.e(TAG, "message type error: " + socketBaseUrl + ": " + message) ;
+                    Log.e(TAG, "message type error: " + socketBaseUrl + ": " + message);
                 } else {
                     handleNewMessage(webSocket, strippedString);
                 }

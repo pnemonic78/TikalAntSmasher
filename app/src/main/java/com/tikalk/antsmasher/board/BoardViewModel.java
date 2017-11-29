@@ -198,7 +198,7 @@ public class BoardViewModel extends AndroidViewModel implements
         // Send hit/miss to server via socket.
 
         AntSmash event = new AntSmash(antId == null ? AntSmash.MISS_TYPE : AntSmash.HIT_TYPE, antId);
-       // onAntSmashed(event);
+        // onAntSmashed(event);
         appService.smashAnt(event);
     }
 

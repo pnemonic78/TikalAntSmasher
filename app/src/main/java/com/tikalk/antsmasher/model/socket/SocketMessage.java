@@ -29,7 +29,7 @@ public class SocketMessage {
                 ", address='" + address + '\'';
     }
 
-    public String toSockJs(){
+    public String toSockJs() {
         return "[\"{\\\"type\\\":\\\"" + type + "\\\",\\\"address\\\":\\\"" + address + "\\\"";
     }
 }

@@ -124,7 +124,7 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == TEAMS_ACTIVITY){
+        if (requestCode == TEAMS_ACTIVITY) {
             presenter.refreshTeams();
         }
     }
