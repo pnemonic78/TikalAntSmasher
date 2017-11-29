@@ -96,6 +96,7 @@ public class BoardActivity extends AppCompatActivity implements
         presenter = ViewModelProviders.of(this, boardViewModelFactory).get(BoardViewModel.class);
         presenter.setView(this);
         presenter.setPlayerId(playerId);
+        presenter.setTeamId(teamId);
         getLifecycle().addObserver(presenter);
         presenter.getGame().observe(this, this);
 

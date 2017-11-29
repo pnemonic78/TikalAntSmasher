@@ -92,9 +92,15 @@ public class Game {
     }
 
     public boolean isSameTeam(long teamId, Ant ant) {
+        return isSameTeam(teamId, ant.getId());
+    }
+
+    public boolean isSameTeam(long teamId, String antId) {
         for (Team team : getTeams()) {
-            if ((team.getId() == teamId) && team.contains(ant)) {
-                return true;
+            if (team.getId() == teamId) {
+                if (team.getAntSpecies().getAnts().containsKey(antId)) {
+                    return true;
+                }
             }
         }
         return false;

@@ -77,7 +77,6 @@ public class AppService extends Service {
     @Inject
     PrefsHelper prefsHelper;
 
-
     @Inject
     @Named("SocketMessageGson")
     Gson socketMessageGson;
@@ -109,7 +108,6 @@ public class AppService extends Service {
         public void registerServiceEventListener(AppServiceEventListener serviceEventListener) {
             AppService.this.registerServiceEventListener(serviceEventListener);
             startWebSockets();
-
         }
 
         @Override
@@ -142,9 +140,7 @@ public class AppService extends Service {
         }
     }
 
-
     private void startWebSockets() {
-
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
         Log.i(TAG, "Real web socket");
         gameWebSocket = new GameWebSocket(ApiContract.ANT_PUBLISHER_URL, sessionId, this);

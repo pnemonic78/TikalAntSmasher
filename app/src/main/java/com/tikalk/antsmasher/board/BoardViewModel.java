@@ -96,12 +96,14 @@ public class BoardViewModel extends AndroidViewModel implements
     private Intent serviceIntent;
     private GameRestService gameRestService;
     private long playerId;
+    private long teamId;
 
     @Inject
     public BoardViewModel(@NonNull Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
         super(application);
         this.gameRestService = gameRestService;
         this.playerId = prefsHelper.getPlayerId();
+        this.teamId = prefsHelper.getTeamId();
     }
 
     public void setView(View view) {
@@ -110,6 +112,10 @@ public class BoardViewModel extends AndroidViewModel implements
 
     public void setPlayerId(long playerId) {
         this.playerId = playerId;
+    }
+
+    public void setTeamId(long teamId) {
+        this.teamId = teamId;
     }
 
     public LiveData<Game> getGame() {
@@ -196,10 +202,12 @@ public class BoardViewModel extends AndroidViewModel implements
 
     public void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
-
-        AntSmash event = new AntSmash(antId == null ? AntSmash.MISS_TYPE : AntSmash.HIT_TYPE, antId);
-        // onAntSmashed(event);
-        appService.smashAnt(event);
+        Game game = this.game.getValue();
+        if (game != null) {
+            AntSmash event = new AntSmash(antId == null ? AntSmash.MISS_TYPE : AntSmash.HIT_TYPE, antId);
+            onAntSmashed(event);
+            appService.smashAnt(event);
+        }
     }
 
     public void onBoardReady() {
