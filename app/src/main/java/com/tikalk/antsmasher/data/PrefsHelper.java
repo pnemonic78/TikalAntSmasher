@@ -17,7 +17,6 @@ public class PrefsHelper {
     private static final String TEAM_ID = "team_id";
     private static final String PLAYER_ID = "player_id";
     private static final String GAME_ID = "game_id";
-    private static final String DEV_TEAM = "dev_team";
     public static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
     public static final String ADMIN_IP = "admin_ip";
     public static final String SMASH_SOCKET_URL = "smash_ip";
@@ -63,14 +62,6 @@ public class PrefsHelper {
 
     private long getLong(String key) {
         return preferences.getLong(key, 0L);
-    }
-
-    public String getDeveloperTeam() {
-        return preferences.getString(DEV_TEAM, null);
-    }
-
-    public void setDeveloperTeam(String value) {
-        preferences.edit().putString(DEV_TEAM, value).apply();
     }
 
     public long getUserId() {

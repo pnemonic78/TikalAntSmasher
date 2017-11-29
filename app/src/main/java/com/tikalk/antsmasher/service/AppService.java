@@ -14,7 +14,6 @@ import javax.inject.Named;
 
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
@@ -72,7 +71,6 @@ public class AppService extends Service {
     private AppWebSocket smashWebSocket;
     private final LocalBinder binder = new LocalBinder();
     private String userName;
-    private DeveloperTeam developerTeam;
 
     @Inject
     PrefsHelper prefsHelper;
@@ -89,7 +87,6 @@ public class AppService extends Service {
 
         networkManager = new NetworkManager();
         userName = prefsHelper.getUserName();
-        developerTeam = DeveloperTeam.find(prefsHelper.getDeveloperTeam());
     }
 
     @Override

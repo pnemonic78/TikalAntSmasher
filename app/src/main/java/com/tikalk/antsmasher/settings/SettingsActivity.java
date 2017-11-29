@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import java.util.List;
 
 import com.tikalk.antsmasher.R;
-import com.tikalk.antsmasher.model.DeveloperTeam;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -154,8 +153,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
-            initDeveloperTeams();
-
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
@@ -172,21 +169,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
-        }
-
-        private void initDeveloperTeams() {
-            DeveloperTeam[] teams = DeveloperTeam.values();
-            final int length = teams.length;
-            final CharSequence[] entries = new CharSequence[length];
-            final CharSequence[] values = new CharSequence[length];
-            for (int i = 0; i < teams.length; i++) {
-                entries[i] = teams[i].getName();
-                values[i] = teams[i].getId();
-            }
-
-            ListPreference pref = (ListPreference) findPreference("dev_team");
-            pref.setEntries(entries);
-            pref.setEntryValues(values);
         }
     }
 

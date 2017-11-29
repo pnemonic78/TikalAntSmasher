@@ -12,11 +12,4 @@
         android:singleLine="true"
         android:title="@string/login_dialog_header"/>
 
-    <ListPreference
-        android:defaultValue="dev_team_1"
-        android:key="dev_team"
-        android:negativeButtonText="@android:string/cancel"
-        android:positiveButtonText="@android:string/ok"
-        android:title="@string/dev_team_choose"/>
-
 </PreferenceScreen>
