@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 import com.tikalk.antsmasher.model.GameState;
 
-public class GameStateMessage extends SocketMessage {
+public class GameStateBody extends SocketMessage {
 
     @SerializedName("state")
     private GameState state;
 
-    public GameStateMessage(String type, String address, GameState state) {
+    public GameStateBody(String type, String address, GameState state) {
         super(type, address);
         this.state = state;
     }

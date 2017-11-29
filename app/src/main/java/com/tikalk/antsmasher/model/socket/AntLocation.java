@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 
 public class AntLocation {
 
-    @SerializedName("antId")
+    @SerializedName("id")
     public final String antId;
     @SerializedName("species")
     public final long speciesId;

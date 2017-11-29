@@ -35,11 +35,11 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     private static final String TAG = "TAG_AppWebSocket";
 
-    private static final char TYPE_OPEN = 'o';
-    private static final char TYPE_HEARTBEAT = 'h';
-    private static final char TYPE_ARRAY = 'a';
-    private static final char TYPE_MESSAGE = 'm';
-    private static final char TYPE_CLOSE = 'c';
+    public static final char TYPE_OPEN = 'o';
+    public static final char TYPE_HEARTBEAT = 'h';
+    public static final char TYPE_ARRAY = 'a';
+    public static final char TYPE_MESSAGE = 'm';
+    public static final char TYPE_CLOSE = 'c';
 
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private boolean internetConnected = true;
