@@ -124,7 +124,7 @@ public class AppService extends Service {
         Log.i(TAG, "smashAnt: " + smash);
 
         if (smashWebSocket != null) {
-            HitSocketMessage socketMessage = new HitSocketMessage(SocketMessage.TYPE_SEND, ApiContract.HIT_TRAIL_MESSAGE, smash);
+            HitSocketMessage socketMessage = new HitSocketMessage(SocketMessage.TYPE_SEND, ApiContract.HIT_TRIAL_MESSAGE, smash);
             String messageJson = socketMessageGson.toJson(socketMessage);  //Convert the message to json string
             JsonParser jsonParser = new JsonParser();
             JsonObject jo = (JsonObject) jsonParser.parse(messageJson); //Creating JSON object from the message

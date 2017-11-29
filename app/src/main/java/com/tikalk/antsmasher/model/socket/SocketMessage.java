@@ -10,6 +10,7 @@ public class SocketMessage {
     public static final String TYPE_SEND = "send";
     public static final String TYPE_ERROR = "err";
     public static final String TYPE_REGISTER = "register";
+    public static final String TYPE_RECORD = "rec";
 
     @SerializedName("type")
     public String type;

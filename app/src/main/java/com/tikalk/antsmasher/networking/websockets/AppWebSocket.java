@@ -35,6 +35,12 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     private static final String TAG = "TAG_AppWebSocket";
 
+    private static final char TYPE_OPEN = 'o';
+    private static final char TYPE_HEARTBEAT = 'h';
+    private static final char TYPE_ARRAY = 'a';
+    private static final char TYPE_MESSAGE = 'm';
+    private static final char TYPE_CLOSE = 'c';
+
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private boolean internetConnected = true;
 
@@ -95,7 +101,6 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     public void startSocket() {
         connectionClosed = false;
         openConnection();
-
     }
 
     synchronized public void openConnection() {
@@ -220,7 +225,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         return socketBaseUrl;
     }
 
-    WebSocketListener mSocketListener = new WebSocketListener() {
+    private final WebSocketListener mSocketListener = new WebSocketListener() {
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
             Log.v(TAG, "onOpen: socket opened: " + socketBaseUrl + webSocket.toString());
@@ -232,31 +237,31 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
         @Override
         public void onMessage(WebSocket webSocket, String text) {
+            Log.v(TAG, "onMessage socket: + " + socketBaseUrl + ", open=" + socketOpened + " text=~" + text + "~");
 
-
-            if (!"h".equals(text) && !"o".equals(text)) {
-                //         Log.v(TAG, "onMessage in socket: + " + socketBaseUrl + ", socket open = " + socketOpened + "\n" + text);
-                if (text.substring(0, 2).contains("c[")) {  //This means close go away..
-//                    openConnection();
+            final char type = text.charAt(0);
+            // first check for messages that don't need a payload
+            switch (type) {
+                case TYPE_OPEN:
+                case TYPE_HEARTBEAT:
+                case TYPE_CLOSE:
                     return;
-                }
+            }
 
+            //FIXME only use gson
+            String strippedString = text.replaceAll("\\\\", "").replace("}\"", "}").replace("\"{", "{").substring(text.indexOf("[") + 1);
+            strippedString = strippedString.substring(0, strippedString.lastIndexOf("]"));
 
-                String strippedString = text.replaceAll("\\\\", "").replace("}\"", "}").replace("\"{", "{").substring(text.indexOf("[") + 1);
-                strippedString = strippedString.substring(0, strippedString.lastIndexOf("]"));
-
-                SocketMessage message = new Gson().fromJson(strippedString, SocketMessage.class);
+            SocketMessage message = new Gson().fromJson(strippedString, SocketMessage.class);
 //                Log.v(TAG, "checking message type:  " + message.type);
 
-                if (message.type.equals(SocketMessage.TYPE_ERROR)) {
-                    Log.e(TAG, "message type error: " + socketBaseUrl + ": " + message);
-                } else {
-                    handleNewMessage(webSocket, strippedString);
-                }
-//            webSocketEventListener.onNewMessage(strippedString);
+            if (message.type.equals(SocketMessage.TYPE_ERROR)) {
+                Log.e(TAG, "message type error: " + socketBaseUrl + ": " + message);
+            } else {
+                handleNewMessage(webSocket, strippedString);
             }
+//            webSocketEventListener.onNewMessage(strippedString);
         }
-
 
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
@@ -271,7 +276,6 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
             handleSocketClose(webSocket, code, reason);
         }
 
-
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, Response response) {
             super.onFailure(webSocket, t, response);
@@ -284,14 +288,12 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     };
 
     void recoverConnection() {
-
         closeConnection();
 
         if (internetConnected) {
             mHandler.postDelayed(() -> {
                 Log.v(TAG, "onFailure: internet is connected, trying to reopen socket");
                 openConnection();
-
             }, 5000);
         } else {
             Log.v(TAG, "onFailure, internet disconnected...");

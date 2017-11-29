@@ -31,21 +31,18 @@ public class ApiContract {
     public static final String ANT_SPECIES = "/antspecies";
 
     //Query Params
-    public static final String ID_PARAM = "antId";
+    public static final String ID_PARAM = "id";
     public static final String UPDATE_PARAM = "name";
     public static final String TEAM_PARAM = "teamId";
     public static final String USERID_PARAM = "userId";
-
 
     //Websockets endpoints
     public static final String LR_MESSAGE = "lr-message";
     public static final String GAME_STATE_MESSAGE = "game-state-message";
     public static final String PLAY_SCORE_MESSAGE = "playerScore-message";
     public static final String TEAM_SCORE_MESSAGE = "teamScore-message";
-    public static final String HIT_TRAIL_MESSAGE = "hit-trial-message";
-    public static final String SELF_SMASH_ADDRESS = "self-smash-message";
-    public static final String SMASH_ADDRESS = "smash-message";
-    public static final String PLAY_SCORE_ADDRESS = "playerScore-message";
-    public static final String TEAM_SCORE_ADDRESS = "teamScore-message";
+    public static final String HIT_TRIAL_MESSAGE = "hit-trial-message";
+    public static final String SELF_SMASH_MESSAGE = "self-smash-message";
+    public static final String SMASH_MESSAGE = "smash-message";
 
 }
