@@ -102,4 +102,26 @@ public class WebSocketTests extends TestSuite {
         assertEquals(GameState.STARTED, event.getState());
     }
 
+    @Test
+    public void parseGameStopped() throws Exception {
+        InputStream in = getClass().getResourceAsStream("/game_state_stopped.json");
+        assertNotNull(in);
+        Reader reader = new InputStreamReader(in);
+        assertEquals(AppWebSocket.TYPE_ARRAY, reader.read());
+
+        Gson gson = new Gson();
+        String[] content = gson.fromJson(reader, String[].class);
+        reader.close();
+        assertNotNull(content);
+        assertEquals(1, content.length);
+        SocketMessage socketMessage = gson.fromJson(content[0], SocketMessage.class);
+        assertNotNull(socketMessage);
+        assertEquals(SocketMessage.TYPE_RECORD, socketMessage.type);
+        assertEquals(GAME_STATE_MESSAGE, socketMessage.address);
+        JsonElement body = socketMessage.body;
+        assertNotNull(body);
+        GameStateBody event = gson.fromJson(body, GameStateBody.class);
+        assertNotNull(event);
+        assertEquals(GameState.STOPPED, event.getState());
+    }
 }
