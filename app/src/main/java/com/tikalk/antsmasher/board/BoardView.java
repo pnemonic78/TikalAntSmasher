@@ -158,7 +158,7 @@ public class BoardView extends AppCompatImageView {
         if (rect == null) {
             rect = addAnt(ant);
         }
-        if (rect != null) {
+        if ((rect != null) && rect.alive) {
             float dxPercent = ant.getLocation().x;
             float dyPercent = ant.getLocation().y;
             rect.moveTo(dxPercent * getWidth(), dyPercent * getHeight());
