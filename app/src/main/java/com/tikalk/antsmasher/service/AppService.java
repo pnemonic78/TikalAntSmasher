@@ -14,14 +14,13 @@ import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.GameState;
+import com.tikalk.antsmasher.model.socket.AntHitMessage;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.model.socket.AntHitMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 import com.tikalk.antsmasher.networking.websockets.GameWebSocket;
 import com.tikalk.antsmasher.networking.websockets.NetworkManager;
-import com.tikalk.antsmasher.networking.websockets.SmashWebSocket;
 
 
 public class AppService extends Service {

@@ -2,9 +2,9 @@ package com.tikalk.antsmasher.networking;
 
 import com.google.gson.Gson;
 
-import com.tikalk.antsmasher.networking.rest.GameRestService;
-
 import javax.inject.Named;
+
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import dagger.Module;
 import dagger.Provides;
