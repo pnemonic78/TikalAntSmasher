@@ -10,17 +10,25 @@ import android.util.Log;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.DeveloperTeam;
 import com.tikalk.antsmasher.model.GameState;
-import com.tikalk.antsmasher.model.socket.AntHitMessage;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.model.socket.HitSocketMessage;
+import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
+import com.tikalk.antsmasher.networking.gson.SocketMessageSerializer;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 import com.tikalk.antsmasher.networking.websockets.GameWebSocket;
 import com.tikalk.antsmasher.networking.websockets.NetworkManager;
+import com.tikalk.antsmasher.networking.websockets.SmashWebSocket;
+
+import java.net.Socket;
 
 
 public class AppService extends Service {
@@ -73,6 +81,7 @@ public class AppService extends Service {
     @Inject
     PrefsHelper prefsHelper;
 
+
     @Inject
     @Named("SocketMessageGson")
     Gson socketMessageGson;
@@ -121,27 +130,37 @@ public class AppService extends Service {
     }
 
     private void smashAnt(AntSmash smash) {
-        AntHitMessage antSocketMessage = new AntHitMessage(smash);
+        Log.i(TAG, "smashAnt: " + smash);
+
         if (smashWebSocket != null) {
-            Log.i(TAG, "smashAnt: about to send antSmash");
-            smashWebSocket.sendMessage(socketMessageGson.toJson(antSocketMessage));
+            HitSocketMessage socketMessage = new HitSocketMessage(SocketMessage.TYPE_SEND, ApiContract.HIT_TRAIL_MESSAGE, smash);
+            String messageJson = socketMessageGson.toJson(socketMessage);  //Convert the message to json string
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jo = (JsonObject) jsonParser.parse(messageJson); //Creating JSON object from the message
+            JsonObject body = jo.get("body").getAsJsonObject();  //Extract the body object from the outer object
+            String buffer = body.toString(); //put it into a buffer
+            jo.addProperty("body", buffer); //adding a "body" property, with the body json string as value (it will replace the existing body value with the new json string of the body)
+
+//        SocketMessage socketMessage = new SocketMessage(SocketMessage.TYPE_REGISTER, "smash-message");
+            smashWebSocket.sendMessage(jo.toString());
         }
     }
+
 
     private void startWebSockets() {
 
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
         Log.i(TAG, "Real web socket");
         gameWebSocket = new GameWebSocket(ApiContract.ANT_PUBLISHER_URL, sessionId, this);
-        //smashWebSocket = new SmashWebSocket(ApiContract.SMASH_SERVICE_URL, sessionId, this, prefsHelper.getPlayerId());
+        smashWebSocket = new SmashWebSocket(ApiContract.SMASH_SERVICE_URL, sessionId, this, prefsHelper.getPlayerId());
         gameWebSocket.setMessageListener(serviceEventListener);
-        //  smashWebSocket.setMessageListener(serviceEventListener);
+        smashWebSocket.setMessageListener(serviceEventListener);
 
         gameWebSocket.startSocket();
-        //  smashWebSocket.startSocket();
+        smashWebSocket.startSocket();
 
         networkManager.add(gameWebSocket);
-        //networkManager.add(smashWebSocket);
+        networkManager.add(smashWebSocket);
     }
 
     @Override

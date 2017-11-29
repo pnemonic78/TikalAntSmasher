@@ -3,6 +3,8 @@ package com.tikalk.antsmasher.networking.websockets;
 import android.content.Context;
 import android.util.Log;
 
+import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.model.socket.HitSocketMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.service.AppService;
@@ -25,29 +27,32 @@ public class SmashWebSocket extends AppWebSocket {
 
     @Override
     protected void handleSocketOpen(WebSocket webSocket, Response response) {
-        SocketMessage smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SMASH_MESSAGE);
-        Log.i(TAG, "handleSocketOpen: registering to smash socket: " + socketMessageGson.toJson(smash_register));
+        SocketMessage smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SMASH_ADDRESS);
+        Log.i(TAG, "handleSocketOpen: registering to SMASH_MESSAGE: " + socketMessageGson.toJson(smash_register));
         sendMessage(socketMessageGson.toJson(smash_register));
 
-        SocketMessage self_smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SELF_SMASH_MESSAGE);
+        SocketMessage self_smash_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.SELF_SMASH_ADDRESS);
+        Log.i(TAG, "handleSocketOpen: registering to SELF_SMASH_MESSAGE: " + socketMessageGson.toJson(self_smash_register));
         sendMessage(socketMessageGson.toJson(self_smash_register));
 
-        SocketMessage play_score_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.PLAY_SCORE_MESSAGE);
-        sendMessage(socketMessageGson.toJson(play_score_register));
+//        SocketMessage play_score_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.PLAY_SCORE_MESSAGE);
+//        Log.i(TAG, "handleSocketOpen: registering to PLAY_SCORE_MESSAGE: " + socketMessageGson.toJson(play_score_register));
+//        sendMessage(socketMessageGson.toJson(play_score_register));
 
-        SocketMessage team_score_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.TEAM_SCORE_MESSAGE);
-        sendMessage(socketMessageGson.toJson(team_score_register));
+//        SocketMessage team_score_register = new SocketMessage(SocketMessage.TYPE_REGISTER, ApiContract.TEAM_SCORE_MESSAGE);
+//        Log.i(TAG, "handleSocketOpen: registering to TEAM_SCORE_MESSAGE: " + socketMessageGson.toJson(team_score_register));
+//        sendMessage(socketMessageGson.toJson(team_score_register));
     }
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-        Log.i(TAG, "handleNewMessage: " + message);
         SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
-        if (socketMessage.address.equals(ApiContract.SMASH_MESSAGE)) {
-//            AntHitMessage smashMessage = socketMessageGson.fromJson(message, AntHitMessage.class);
+        if (socketMessage.address.equals(ApiContract.SMASH_ADDRESS)) {
+            HitSocketMessage smashMessage = socketMessageGson.fromJson(message, HitSocketMessage.class);
 //            AntSmash smash = socketMessageGson.fromJson(smashMessage, AntSmash.class);
-//            socketMessageListener.onAntSmashed(smash);
+            Log.i(TAG, "handleNewMessage: got smash + " + smashMessage.antSmash);
+            socketMessageListener.onAntSmashed(smashMessage.antSmash);
         }
     }
 

@@ -36,6 +36,7 @@ public class TeamsActivity extends AppCompatActivity implements
         TeamViewHolder.TeamViewHolderListener,
         Observer<List<Team>> {
 
+    public static final int TEAMS_ACTIVITY = 100;
     private static final String TAG = "TAG_TeamsActivity";
     @Inject
     protected PrefsHelper prefsHelper;
@@ -83,7 +84,6 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -101,7 +101,7 @@ public class TeamsActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, BoardActivity.class);
         intent.putExtra(BoardActivity.EXTRA_TEAM, team.getId());
         intent.putExtra(BoardActivity.EXTRA_PLAYER, player.getId());
-        startActivity(intent);
+        startActivityForResult(intent, TEAMS_ACTIVITY);
     }
 
     @Override
@@ -118,6 +118,15 @@ public class TeamsActivity extends AppCompatActivity implements
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == TEAMS_ACTIVITY){
+            presenter.refreshTeams();
+        }
     }
 
     private void chooseDeveloperTeam() {
