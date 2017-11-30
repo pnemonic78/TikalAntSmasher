@@ -15,6 +15,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -22,10 +23,8 @@ import javax.inject.Inject;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Ant;
-import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.GameState;
-import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.networking.response.GameResponse;
@@ -83,7 +82,7 @@ public class BoardViewModel extends AndroidViewModel implements
          */
         void onGameFinished();
 
-        void smashAnt(@NonNull Ant ant, boolean user);
+        void smashAnt(@Nullable Ant ant, boolean user);
     }
 
     private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
@@ -151,43 +150,6 @@ public class BoardViewModel extends AndroidViewModel implements
                 });
     }
 
-    public static Game createGame() {
-        Game game = new Game();
-        populateGame(game);//TODO delete me!
-        return game;
-    }
-
-    public static void populateGame(Game game) {
-        game.setId(1);
-
-        Team team = new Team(10, "Army");
-        populateTeam(team);
-        game.getTeams().add(team);
-
-        team = new Team(20, "Fire");
-        populateTeam(team);
-        game.getTeams().add(team);
-
-        team = new Team(30, "Black");
-        populateTeam(team);
-        game.getTeams().add(team);
-    }
-
-    public static void populateTeam(Team team) {
-        AntSpecies species = team.getAntSpecies();
-        switch ((int) team.getId()) {
-            case 10:
-                species.setId(1);
-                break;
-            case 20:
-                species.setId(2);
-                break;
-            case 30:
-                species.setId(3);
-                break;
-        }
-    }
-
     /**
      * Start the game.
      */
@@ -206,7 +168,7 @@ public class BoardViewModel extends AndroidViewModel implements
         Game game = this.game.getValue();
         if (game != null) {
             AntSmash event = new AntSmash(antId == null ? AntSmash.TYPE_MISS : game.isSameTeam(teamId, antId) ? AntSmash.TYPE_SELF_HIT : AntSmash.TYPE_HIT, antId, playerId, true);
-            onAntSmashed(event);
+            //onAntSmashed(event);
             appService.smashAnt(event);
         }
     }
@@ -279,9 +241,9 @@ public class BoardViewModel extends AndroidViewModel implements
             Ant ant = game.getAnt(event.antId);
             if (ant != null) {
                 ant.setAlive(false);
-                view.smashAnt(ant, event.playerId == this.playerId);
                 removeAntDelayed(game, ant, DELAY_REMOVE);
             }
+            view.smashAnt(ant, event.playerId == this.playerId);
         }
         view.paint();
     }
