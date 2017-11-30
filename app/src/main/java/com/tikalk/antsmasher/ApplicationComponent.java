@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.login_screen.LoginActivity;
 import com.tikalk.antsmasher.login_screen.LoginModule;
+import com.tikalk.antsmasher.login_screen.LoginPresenter;
 import com.tikalk.antsmasher.networking.GameRestServiceModule;
 import com.tikalk.antsmasher.networking.NetworkModule;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
@@ -26,4 +27,5 @@ public interface ApplicationComponent {
     void inject(TeamsActivity activity);
 
     void inject(BoardActivity activity);
+    void inject(LoginPresenter loginPresenter);
 }

@@ -1,5 +1,6 @@
 package com.tikalk.antsmasher.login_screen;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +19,7 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
 
-public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, LoginContract.View {
+public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, IpDialogFragment.IpDialogEventListener, LoginContract.View {
 
     private static final String TAG = "TAG_LoginActivity";
 
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     @Override
     protected void onResume() {
         super.onResume();
-        mLoginPresenter.login();
+        mLoginPresenter.checkBaseIp();
     }
 
     private void showLoginDialog() {
@@ -73,6 +74,27 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         mLoginPresenter.saveUserName(value);
     }
 
+
+    @Override
+    public void showEnterIpDialog() {
+        IpDialogFragment dialog = new IpDialogFragment();
+        Bundle b = new Bundle();
+        b.putString("Title", "Servers Base Url");
+        b.putString("Message", "Enter Server Base Url");
+        dialog.setArguments(b);
+        dialog.show(getSupportFragmentManager(), "IpDialo");
+
+    }
+
+    @Override
+    public void showInvalidIpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Invalid IP Address");
+        builder.setMessage("Please enter a valid IP in format:\nxxx.xxx.xxx.xxx");
+        builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        builder.setPositiveButton("Try Again", (dialogInterface, i) -> mLoginPresenter.checkBaseIp());
+        builder.create().show();
+    }
 
     @Override
     public void showUserNameDialog() {
@@ -114,5 +136,9 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     }
 
 
+    @Override
+    public void onIpEntered(String input) {
+        mLoginPresenter.onIpEntered(input);
+    }
 }
 

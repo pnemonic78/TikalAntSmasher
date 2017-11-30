@@ -140,8 +140,11 @@ public class AppService extends Service {
     private void startWebSockets() {
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
         Log.i(TAG, "Real web socket");
-        gameWebSocket = new GameWebSocket(ApiContract.ANT_PUBLISHER_URL, sessionId, this);
-        smashWebSocket = new SmashWebSocket(ApiContract.SMASH_SERVICE_URL, sessionId, this, prefsHelper.getPlayerId());
+
+        String baseUrl = prefsHelper.getStringPref(PrefsHelper.BASE_IP);
+
+        gameWebSocket = new GameWebSocket(ApiContract.buildAntPublishSocketUrl(baseUrl), sessionId, this);
+        smashWebSocket = new SmashWebSocket(ApiContract.buildAntSmashocketUrl(baseUrl), sessionId, this, prefsHelper.getPlayerId());
         gameWebSocket.setMessageListener(serviceEventListener);
         smashWebSocket.setMessageListener(serviceEventListener);
 
