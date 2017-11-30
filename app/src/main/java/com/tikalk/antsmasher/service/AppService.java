@@ -1,8 +1,6 @@
 package com.tikalk.antsmasher.service;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import android.app.Service;
 import android.content.Context;
@@ -18,7 +16,6 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.model.socket.HitSocketMessage;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
@@ -125,16 +122,10 @@ public class AppService extends Service {
         Log.i(TAG, "smashAnt: " + smash);
 
         if (smashWebSocket != null) {
-            HitSocketMessage socketMessage = new HitSocketMessage(SocketMessage.TYPE_SEND, ApiContract.HIT_TRIAL_MESSAGE, smash);
-            String messageJson = socketMessageGson.toJson(socketMessage);  //Convert the message to json string
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jo = (JsonObject) jsonParser.parse(messageJson); //Creating JSON object from the message
-            JsonObject body = jo.get("body").getAsJsonObject();  //Extract the body object from the outer object
-            String buffer = body.toString(); //put it into a buffer
-            jo.addProperty("body", buffer); //adding a "body" property, with the body json string as value (it will replace the existing body value with the new json string of the body)
-
-//        SocketMessage socketMessage = new SocketMessage(SocketMessage.TYPE_REGISTER, "smash-message");
-            smashWebSocket.sendMessage(jo.toString());
+            String body = socketMessageGson.toJson(smash);
+            SocketMessage socketMessage = new SocketMessage(SocketMessage.TYPE_SEND, ApiContract.HIT_TRIAL_MESSAGE, body);
+            String message = socketMessageGson.toJson(socketMessage);
+            smashWebSocket.sendMessage(message);
         }
     }
 

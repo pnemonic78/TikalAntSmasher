@@ -149,7 +149,6 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
                         },
                         onSubscribe -> {
                         });
-
     }
 
 

@@ -2,6 +2,7 @@ package com.tikalk.antsmasher.model.socket;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,6 +21,8 @@ public class SocketMessage {
     public String address;
     @SerializedName("body")
     public JsonElement body;
+    @SerializedName("headers")
+    private JsonObject headers = new JsonObject();
 
     public SocketMessage(String type, String address) {
         this(type, address, JsonNull.INSTANCE);

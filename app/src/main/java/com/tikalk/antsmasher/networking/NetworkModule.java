@@ -1,13 +1,9 @@
 package com.tikalk.antsmasher.networking;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-
-import com.tikalk.antsmasher.model.socket.SocketMessage;
-import com.tikalk.antsmasher.networking.gson.SocketMessageSerializer;
 
 import dagger.Module;
 import dagger.Provides;
@@ -32,9 +28,7 @@ public class NetworkModule {
     @Named("SocketMessageGson")
     @Singleton
     Gson provideSocketGson() {
-        return new GsonBuilder()
-                .registerTypeHierarchyAdapter(SocketMessage.class, new SocketMessageSerializer())
-                .create();
+        return new Gson();
     }
 
     @Provides
