@@ -101,7 +101,6 @@ public class BoardView extends View {
 
         final AntSpecies species = ant.getSpecies();
         final long speciesId = species.getId();
-        final float speciesSize = species.getSize();
 
         float x = ant.getLocation().x * width;
         float y = ant.getLocation().y * height;
@@ -117,14 +116,33 @@ public class BoardView extends View {
         antsById.put(rect.id, rect);
         ants.add(rect);
 
+        getAntAlive(species);
+        getAntDead(species);
+
+        return rect;
+    }
+
+    public Bitmap getAntAlive(AntSpecies species) {
+        final long speciesId = species.getId();
         Bitmap bitmap = bitmapsAlive.get(speciesId);
         if (bitmap == null) {
             final Resources res = getResources();
+            final float speciesSize = species.getSize();
 
-            Bitmap antNormal = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
-            antNormal = Bitmap.createScaledBitmap(antNormal, (int) (antWidth * speciesSize), (int) (antHeight * speciesSize), false);
-            bitmap = tintImage(antNormal, species.getTint());
+            bitmap = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int) (antWidth * speciesSize), (int) (antHeight * speciesSize), false);
+            bitmap = tintImage(bitmap, species.getTint());
             bitmapsAlive.put(speciesId, bitmap);
+        }
+        return bitmap;
+    }
+
+    public Bitmap getAntDead(AntSpecies species) {
+        final long speciesId = species.getId();
+        Bitmap bitmap = bitmapsDead.get(speciesId);
+        if (bitmap == null) {
+            final Resources res = getResources();
+            final float speciesSize = species.getSize();
 
             Bitmap antSmashed = BitmapFactory.decodeResource(res, R.drawable.ant_squashed);
             antSmashed = Bitmap.createScaledBitmap(antSmashed, (int) (antDeadWidth * speciesSize), (int) (antDeadHeight * speciesSize), false);
@@ -135,8 +153,7 @@ public class BoardView extends View {
             canvas.drawBitmap(antSmashed, 0, 0, null);
             bitmapsDead.put(speciesId, bitmap);
         }
-
-        return rect;
+        return bitmap;
     }
 
     public void removeAnt(Ant ant) {

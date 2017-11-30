@@ -3,6 +3,10 @@ package com.tikalk.antsmasher.board;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
@@ -159,6 +163,14 @@ public class BoardActivity extends AppCompatActivity implements
             Player player = game.getPlayer(playerId);
             Team team = game.getTeam(teamId);
             teamScoreText.setTextColor(team.getAntSpecies().getTint());
+            Bitmap bitmap = boardView.getAntAlive(team.getAntSpecies());
+            Resources res = getResources();
+            int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+            int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
+            Drawable drawable = new BitmapDrawable(res, bitmap);
+            drawable.setBounds(0, 0, antWidth, antHeight);
+            drawable.setAlpha(100);
+            teamScoreText.setCompoundDrawables(null, null, drawable, null);
             setScore(player.getScore(), team.getScore());
         }
 
