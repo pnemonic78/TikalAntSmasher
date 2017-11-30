@@ -16,7 +16,9 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.model.socket.PlayerScore;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.model.socket.TeamScore;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 import com.tikalk.antsmasher.networking.websockets.GameWebSocket;
@@ -55,6 +57,20 @@ public class AppService extends Service {
          * @param smashEvent the smash event.
          */
         void onAntSmashed(AntSmash smashEvent);
+
+        /**
+         * Notification from the server that the player score has changed.
+         *
+         * @param scoreEvent the score event.
+         */
+        void onPlayerScore(PlayerScore scoreEvent);
+
+        /**
+         * Notification from the server that the team score has changed.
+         *
+         * @param scoreEvent the score event.
+         */
+        void onTeamScore(TeamScore scoreEvent);
     }
 
     public interface AppServiceProxy {

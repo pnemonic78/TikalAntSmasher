@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class Player extends User {
 
     @SerializedName("score")
-    private long score;
+    private int score;
     @SerializedName("teamName")
     private String teamName;
 
@@ -21,17 +21,17 @@ public class Player extends User {
         super(id, name);
     }
 
-    public Player(long id, String name, long score, String teamName) {
+    public Player(long id, String name, int score, String teamName) {
         super(id, name);
         setScore(score);
         setTeamName(teamName);
     }
 
-    public long getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(long score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

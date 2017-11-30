@@ -120,4 +120,24 @@ public class Game {
             getTeams().addAll(teams);
         }
     }
+
+    public Player getPlayer(long playerId) {
+        Player player;
+        for (Team team : getTeams()) {
+            player = team.getPlayer(playerId);
+            if (player != null) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public Team getTeam(long teamId) {
+        for (Team team : getTeams()) {
+            if (team.getId() == teamId) {
+                return team;
+            }
+        }
+        return null;
+    }
 }

@@ -112,4 +112,13 @@ public class Team {
                 ", score=" + score +
                 '}';
     }
+
+    public Player getPlayer(long playerId) {
+        for (Player player : getPlayers()) {
+            if (player.getId() == playerId) {
+                return player;
+            }
+        }
+        return null;
+    }
 }

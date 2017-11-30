@@ -15,7 +15,9 @@ import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.GameStateBody;
+import com.tikalk.antsmasher.model.socket.PlayerScore;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.model.socket.TeamScore;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 
 import static com.tikalk.antsmasher.model.socket.AntSmash.TYPE_HIT;
@@ -24,8 +26,10 @@ import static com.tikalk.antsmasher.model.socket.AntSmash.TYPE_SELF_HIT;
 import static com.tikalk.antsmasher.networking.ApiContract.GAME_STATE_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.HIT_TRIAL_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.LR_MESSAGE;
+import static com.tikalk.antsmasher.networking.ApiContract.PLAYER_SCORE_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.SELF_SMASH_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.SMASH_MESSAGE;
+import static com.tikalk.antsmasher.networking.ApiContract.TEAM_SCORE_MESSAGE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
@@ -233,5 +237,53 @@ public class WebSocketTests extends TestSuite {
         assertNotNull(event);
         assertEquals("b1de397f-58a8-403e-b182-d4358d26f25f", event.antId);
         assertEquals(TYPE_SELF_HIT, event.type);
+    }
+
+    @Test
+    public void parseScorePlayer() throws Exception {
+        InputStream in = getClass().getResourceAsStream("/score_player.json");
+        assertNotNull(in);
+        Reader reader = new InputStreamReader(in);
+        assertEquals(AppWebSocket.TYPE_ARRAY, reader.read());
+
+        Gson gson = new Gson();
+        String[] content = gson.fromJson(reader, String[].class);
+        reader.close();
+        assertNotNull(content);
+        assertEquals(1, content.length);
+        SocketMessage socketMessage = gson.fromJson(content[0], SocketMessage.class);
+        assertNotNull(socketMessage);
+        assertEquals(SocketMessage.TYPE_RECORD, socketMessage.type);
+        assertEquals(PLAYER_SCORE_MESSAGE, socketMessage.address);
+        JsonElement body = socketMessage.body;
+        assertNotNull(body);
+        PlayerScore event = gson.fromJson(body, PlayerScore.class);
+        assertNotNull(event);
+        assertEquals(391, event.playerId);
+        assertEquals(3, event.score);
+    }
+
+    @Test
+    public void parseScoreTeam() throws Exception {
+        InputStream in = getClass().getResourceAsStream("/score_team.json");
+        assertNotNull(in);
+        Reader reader = new InputStreamReader(in);
+        assertEquals(AppWebSocket.TYPE_ARRAY, reader.read());
+
+        Gson gson = new Gson();
+        String[] content = gson.fromJson(reader, String[].class);
+        reader.close();
+        assertNotNull(content);
+        assertEquals(1, content.length);
+        SocketMessage socketMessage = gson.fromJson(content[0], SocketMessage.class);
+        assertNotNull(socketMessage);
+        assertEquals(SocketMessage.TYPE_RECORD, socketMessage.type);
+        assertEquals(TEAM_SCORE_MESSAGE, socketMessage.address);
+        JsonElement body = socketMessage.body;
+        assertNotNull(body);
+        TeamScore event = gson.fromJson(body, TeamScore.class);
+        assertNotNull(event);
+        assertEquals(389, event.teamId);
+        assertEquals(3, event.score);
     }
 }
