@@ -39,7 +39,7 @@ public class ApiContract {
     //Websockets endpoints
     public static final String LR_MESSAGE = "lr-message";
     public static final String GAME_STATE_MESSAGE = "game-state-message";
-    public static final String PLAY_SCORE_MESSAGE = "playerScore-message";
+    public static final String PLAYER_SCORE_MESSAGE = "playerScore-message";
     public static final String TEAM_SCORE_MESSAGE = "teamScore-message";
     public static final String HIT_TRIAL_MESSAGE = "hit-trial-message";
     public static final String SELF_SMASH_MESSAGE = "self-smash-message";

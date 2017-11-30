@@ -27,6 +27,8 @@ import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.model.socket.PlayerScore;
+import com.tikalk.antsmasher.model.socket.TeamScore;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 import com.tikalk.antsmasher.service.AppService;
@@ -275,6 +277,8 @@ public class BoardViewModel extends AndroidViewModel implements
             serviceBound = false;
             appService = null;
         }
+
+        view = null;
     }
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -297,8 +301,12 @@ public class BoardViewModel extends AndroidViewModel implements
     };
 
     @Override
-    protected void onCleared() {
-        super.onCleared();
-        view = null;
+    public void onPlayerScore(PlayerScore score) {
+        //TODO update the view
+    }
+
+    @Override
+    public void onTeamScore(TeamScore score) {
+        //TODO update the view
     }
 }
