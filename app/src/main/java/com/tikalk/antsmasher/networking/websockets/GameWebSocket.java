@@ -31,16 +31,16 @@ public class GameWebSocket extends AppWebSocket {
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-        SocketMessage socketMessage = plainGson.fromJson(message, SocketMessage.class);
+        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
         switch (socketMessage.address) {
             case ApiContract.LR_MESSAGE:
-                AntLocation location = plainGson.fromJson(socketMessage.body, AntLocation.class);
+                AntLocation location = socketMessageGson.fromJson(socketMessage.body, AntLocation.class);
                 Log.i(TAG, "handleNewMessage: location message: " + location);
                 socketMessageListener.onAntMoved(location);
                 break;
             case ApiContract.GAME_STATE_MESSAGE:
-                GameStateBody state = plainGson.fromJson(socketMessage.body, GameStateBody.class);
+                GameStateBody state = socketMessageGson.fromJson(socketMessage.body, GameStateBody.class);
                 Log.i(TAG, "handleNewMessage: game state message: " + state);
                 socketMessageListener.onGameStateMessage(state.getState());
                 break;

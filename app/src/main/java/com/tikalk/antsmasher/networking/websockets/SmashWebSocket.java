@@ -43,16 +43,16 @@ public class SmashWebSocket extends AppWebSocket {
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-        SocketMessage socketMessage = plainGson.fromJson(message, SocketMessage.class);
+        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
 
         switch (socketMessage.address){
             case ApiContract.SMASH_MESSAGE:
-                AntSmash smash = plainGson.fromJson(socketMessage.body.getAsString(), AntSmash.class);
+                AntSmash smash = socketMessageGson.fromJson(socketMessage.body.getAsString(), AntSmash.class);
                 Log.i(TAG, "handleNewMessage: smashed: " + smash);
                 socketMessageListener.onAntSmashed(smash);
                 break;
             case ApiContract.SELF_SMASH_MESSAGE:
-                AntSmash smashSelf = plainGson.fromJson(socketMessage.body, AntSmash.class);
+                AntSmash smashSelf = socketMessageGson.fromJson(socketMessage.body, AntSmash.class);
                 Log.i(TAG, "handleNewMessage: self-smashed: " + smashSelf);
                 socketMessageListener.onAntSmashed(smashSelf);
                 break;

@@ -53,12 +53,8 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     private boolean connectionClosed = true;
 
     @Inject
-    @Named("SocketMessageGson")
-    protected Gson socketMessageGson;
-
-    @Inject
     @Named("PlainGson")
-    protected Gson plainGson;
+    protected Gson socketMessageGson;
 
     private boolean socketOpened = false;
 
@@ -159,11 +155,11 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     public boolean sendMessage(String message) {
         if (socketOpened && internetConnected) {
-            message = "[\"" + message.replace("\\", "\\\\").replace("\"", "\\\"") + "\"]";
-            Log.v(TAG, "Sending Message: " + message);
-            return mSocket.send(message);
+            final String text = "[" + socketMessageGson.toJson(message) + "]";
+            Log.v(TAG, "Sending Message: " + text);
+            return mSocket.send(text);
         } else {
-            Log.v(TAG, "sendMessage: there was an attempt to send message from " + socketBaseUrl + ", but the socket is: " + socketOpened + " and internet connection = " + internetConnected);
+            Log.w(TAG, "sendMessage: there was an attempt to send message from " + socketBaseUrl + ", but the socket is: " + socketOpened + " and internet connection = " + internetConnected);
         }
         return false;
     }
