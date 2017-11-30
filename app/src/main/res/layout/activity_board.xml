@@ -5,13 +5,18 @@
     android:keepScreenOn="true"
     tools:context="com.tikalk.antsmasher.board.BoardActivity">
 
-    <com.tikalk.antsmasher.board.BoardView
-        android:id="@+id/board"
+    <ImageView
+        android:id="@+id/board_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/board"
-        tools:scaleType="fitXY"
+        android:scaleType="fitXY"
         tools:src="@drawable/board"/>
+
+    <com.tikalk.antsmasher.board.BoardView
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <ProgressBar
         android:id="@+id/wait"
@@ -19,4 +24,5 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:indeterminate="true"/>
+
 </FrameLayout>

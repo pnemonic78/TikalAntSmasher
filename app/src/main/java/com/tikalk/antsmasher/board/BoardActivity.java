@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.bumptech.glide.Glide;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
@@ -83,6 +85,11 @@ public class BoardActivity extends AppCompatActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.hide();
         }
+
+        Glide.with(this)
+                .asBitmap()
+                .load(R.drawable.board)
+                .into((ImageView) findViewById(R.id.board_bg));
 
         boardView = findViewById(R.id.board);
         // Note that some of these constants are new as of API 16 (Jelly Bean)

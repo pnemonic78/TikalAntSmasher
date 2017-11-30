@@ -6,17 +6,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.bumptech.glide.Glide;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
@@ -27,7 +26,7 @@ import static com.tikalk.graphics.ImageUtils.tintImage;
  * Board view with wood background and ants walking on top.
  */
 
-public class BoardView extends AppCompatImageView {
+public class BoardView extends View {
 
     private static final String TAG = "BoardView";
 
@@ -61,12 +60,6 @@ public class BoardView extends AppCompatImageView {
     }
 
     private void init(Context context) {
-        setScaleType(ScaleType.FIT_XY);
-        Glide.with(this)
-                .asBitmap()
-                .load(R.drawable.board)
-                .into(this);
-
         final Resources res = context.getResources();
         antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
         antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
