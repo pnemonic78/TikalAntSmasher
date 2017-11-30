@@ -36,12 +36,12 @@ public class GameWebSocket extends AppWebSocket {
         switch (socketMessage.address) {
             case ApiContract.LR_MESSAGE:
                 AntLocation location = socketMessageGson.fromJson(socketMessage.body, AntLocation.class);
-                Log.i(TAG, "handleNewMessage: location message: " + location);
+                //Log.i(TAG, "handleNewMessage: location message: " + location);
                 socketMessageListener.onAntMoved(location);
                 break;
             case ApiContract.GAME_STATE_MESSAGE:
                 GameStateBody state = socketMessageGson.fromJson(socketMessage.body, GameStateBody.class);
-                Log.i(TAG, "handleNewMessage: game state message: " + state);
+                //Log.i(TAG, "handleNewMessage: game state message: " + state);
                 socketMessageListener.onGameStateMessage(state.getState());
                 break;
         }

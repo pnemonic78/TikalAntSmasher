@@ -25,6 +25,8 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.GameState;
+import com.tikalk.antsmasher.model.Player;
+import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.PlayerScore;
@@ -85,6 +87,8 @@ public class BoardViewModel extends AndroidViewModel implements
         void onGameFinished();
 
         void smashAnt(@Nullable Ant ant, boolean user);
+
+        void setScore(int player, int team);
     }
 
     private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
@@ -98,6 +102,8 @@ public class BoardViewModel extends AndroidViewModel implements
     private GameRestService gameRestService;
     private long playerId;
     private long teamId;
+    private Player player;
+    private Team team;
 
     @Inject
     public BoardViewModel(@NonNull Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
@@ -105,6 +111,8 @@ public class BoardViewModel extends AndroidViewModel implements
         this.gameRestService = gameRestService;
         this.playerId = prefsHelper.getPlayerId();
         this.teamId = prefsHelper.getTeamId();
+        this.player = null;
+        this.team = null;
     }
 
     public void setView(View view) {
@@ -113,17 +121,31 @@ public class BoardViewModel extends AndroidViewModel implements
 
     public void setPlayerId(long playerId) {
         this.playerId = playerId;
+        this.player = null;
     }
 
     public void setTeamId(long teamId) {
         this.teamId = teamId;
+        this.team = null;
     }
 
     public LiveData<Game> getGame() {
-        if (game.getValue() == null) {
+        return getGame(false);
+    }
+
+    public LiveData<Game> getGame(boolean fetch) {
+        Game value = game.getValue();
+        if (fetch || (value == null)) {
             loadGame();
+        } else {
+            this.player = null;
+            this.team = null;
         }
         return game;
+    }
+
+    private Game getGameValue() {
+        return getGame().getValue();
     }
 
     private void loadGame() {
@@ -137,6 +159,8 @@ public class BoardViewModel extends AndroidViewModel implements
                         Game data = new Game();
                         data.setId(response.id);
                         data.setState(response.state);
+                        player = null;
+                        team = null;
                         game.postValue(data);
                     }
 
@@ -167,9 +191,9 @@ public class BoardViewModel extends AndroidViewModel implements
 
     public void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
-        Game game = this.game.getValue();
+        Game game = getGameValue();
         if (game != null) {
-            AntSmash event = new AntSmash(antId == null ? AntSmash.TYPE_MISS : game.isSameTeam(teamId, antId) ? AntSmash.TYPE_SELF_HIT : AntSmash.TYPE_HIT, antId, playerId, true);
+            AntSmash event = new AntSmash(antId == null ? AntSmash.TYPE_MISS : game.isSameTeam(teamId, antId) ? AntSmash.TYPE_SELF_HIT : AntSmash.TYPE_HIT, antId, playerId);
             //onAntSmashed(event);
             appService.smashAnt(event);
         }
@@ -182,7 +206,7 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     public boolean allowStart() {
-        Game game = this.game.getValue();
+        Game game = getGameValue();
         return (game != null) && ((game.getState() == GameState.STARTED) || (game.getState() == GameState.RESUMED));
     }
 
@@ -214,7 +238,7 @@ public class BoardViewModel extends AndroidViewModel implements
 
     @Override
     public void onAntMoved(AntLocation event) {
-        Game game = getGame().getValue();
+        Game game = getGameValue();
         if (game != null) {
             Ant ant = game.getAnt(event.antId);
             if (ant == null) {
@@ -238,7 +262,7 @@ public class BoardViewModel extends AndroidViewModel implements
 
     @Override
     public void onAntSmashed(AntSmash event) {
-        Game game = getGame().getValue();
+        Game game = getGameValue();
         if (game != null) {
             Ant ant = game.getAnt(event.antId);
             if (ant != null) {
@@ -301,12 +325,32 @@ public class BoardViewModel extends AndroidViewModel implements
     };
 
     @Override
-    public void onPlayerScore(PlayerScore score) {
-        //TODO update the view
+    public void onPlayerScore(PlayerScore event) {
+        getPlayer().setScore(event.score);
+        view.setScore(getPlayer().getScore(), getTeam().getScore());
     }
 
     @Override
-    public void onTeamScore(TeamScore score) {
-        //TODO update the view
+    public void onTeamScore(TeamScore event) {
+        getTeam().setScore(event.score);
+        view.setScore(getPlayer().getScore(), getTeam().getScore());
+    }
+
+    @Nullable
+    private Player getPlayer() {
+        if (player == null) {
+            Game game = getGameValue();
+            this.player = (game != null) ? game.getPlayer(playerId) : null;
+        }
+        return player;
+    }
+
+    @Nullable
+    private Team getTeam() {
+        if (team == null) {
+            Game game = getGameValue();
+            this.team = (game != null) ? game.getTeam(teamId) : null;
+        }
+        return team;
     }
 }

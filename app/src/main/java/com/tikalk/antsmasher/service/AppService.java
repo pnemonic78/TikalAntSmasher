@@ -61,16 +61,16 @@ public class AppService extends Service {
         /**
          * Notification from the server that the player score has changed.
          *
-         * @param score the score event.
+         * @param scoreEvent the score event.
          */
-        void onPlayerScore(PlayerScore score);
+        void onPlayerScore(PlayerScore scoreEvent);
 
         /**
          * Notification from the server that the team score has changed.
          *
-         * @param score the score event.
+         * @param scoreEvent the score event.
          */
-        void onTeamScore(TeamScore score);
+        void onTeamScore(TeamScore scoreEvent);
     }
 
     public interface AppServiceProxy {

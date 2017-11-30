@@ -54,22 +54,22 @@ public class SmashWebSocket extends AppWebSocket {
         switch (socketMessage.address) {
             case SMASH_MESSAGE:
                 AntSmash smash = socketMessageGson.fromJson(socketMessage.body, AntSmash.class);
-                Log.i(TAG, "handleNewMessage: smashed: " + smash);
+                //Log.i(TAG, "handleNewMessage: smashed: " + smash);
                 socketMessageListener.onAntSmashed(smash);
                 break;
             case SELF_SMASH_MESSAGE:
                 AntSmash smashSelf = socketMessageGson.fromJson(socketMessage.body, AntSmash.class);
-                Log.i(TAG, "handleNewMessage: self-smashed: " + smashSelf);
+                //Log.i(TAG, "handleNewMessage: self-smashed: " + smashSelf);
                 socketMessageListener.onAntSmashed(smashSelf);
                 break;
             case PLAYER_SCORE_MESSAGE:
                 PlayerScore playerScore = socketMessageGson.fromJson(socketMessage.body, PlayerScore.class);
-                Log.i(TAG, "handleNewMessage: player score: " + playerScore);
+                //Log.i(TAG, "handleNewMessage: player score: " + playerScore);
                 socketMessageListener.onPlayerScore(playerScore);
                 break;
             case TEAM_SCORE_MESSAGE:
                 TeamScore teamScore = socketMessageGson.fromJson(socketMessage.body, TeamScore.class);
-                Log.i(TAG, "handleNewMessage: team score: " + teamScore);
+                //Log.i(TAG, "handleNewMessage: team score: " + teamScore);
                 socketMessageListener.onTeamScore(teamScore);
                 break;
         }
