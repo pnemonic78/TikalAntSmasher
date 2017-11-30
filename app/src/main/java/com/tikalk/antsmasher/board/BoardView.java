@@ -198,12 +198,14 @@ public class BoardView extends AppCompatImageView {
         return super.onTouchEvent(event);
     }
 
-    public void smashAnt(Ant ant) {
-        AntRect rect = antsById.get(ant.getId());
-        if (rect != null) {
-            rect.alive = false;
-            rect.offset((antWidth - antDeadWidth) / 2, (antHeight - antDeadHeight) / 2);
-            postInvalidate();
+    public void smashAnt(@Nullable Ant ant) {
+        if (ant != null) {
+            AntRect rect = antsById.get(ant.getId());
+            if (rect != null) {
+                rect.alive = false;
+                rect.offset((antWidth - antDeadWidth) / 2, (antHeight - antDeadHeight) / 2);
+                postInvalidate();
+            }
         }
     }
 }

@@ -47,7 +47,7 @@ public class SmashWebSocket extends AppWebSocket {
 
         switch (socketMessage.address){
             case ApiContract.SMASH_MESSAGE:
-                AntSmash smash = socketMessageGson.fromJson(socketMessage.body.getAsString(), AntSmash.class);
+                AntSmash smash = socketMessageGson.fromJson(socketMessage.body, AntSmash.class);
                 Log.i(TAG, "handleNewMessage: smashed: " + smash);
                 socketMessageListener.onAntSmashed(smash);
                 break;

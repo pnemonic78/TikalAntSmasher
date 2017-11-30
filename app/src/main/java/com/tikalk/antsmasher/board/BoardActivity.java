@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -44,6 +43,12 @@ public class BoardActivity extends AppCompatActivity implements
 
     public static final String EXTRA_TEAM = "team_id";
     public static final String EXTRA_PLAYER = "player_id";
+
+    private static final int SOUND_MISS = 0;
+    private static final int SOUND_MISTAKE = 1;
+    private static final int SOUND_SMASH = 2;
+    private static final int SOUND_SAME_TEAM = 3;
+    private static final int SOUND_SMASH_OTHER = 4;
 
     @Inject
     protected PrefsHelper prefsHelper;
@@ -204,34 +209,52 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void smashAnt(@NonNull Ant ant, boolean user) {
+    public void smashAnt(@Nullable Ant ant, boolean user) {
         boardView.smashAnt(ant);
-        final boolean sound = prefsHelper.isInteractiveSounds();
-        // TODO case 1: this user hits own team's ant
-        // TODO case 2: this user hits other team's ant
-        // TODO case 3: other user hits own team's ant
-        // TODO case 4: other user hits other team's ant
-        // TODO case 5: this user hits nothing
-        if (user) {
-            if (prefsHelper.isInteractiveVibrate()) {
-                Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                if ((vibrator != null) && vibrator.hasVibrator()) {
-                    vibrator.vibrate(10L);
-                }
-            }
-            if (sound) {
-                soundHelper.playSmashedSound();
-            }
-        } else if ((game != null) && game.isSameTeam(teamId, ant)) {
-            if (sound) {
-                //TODO play sound that smashed team's ant
-            }
+
+        if (ant == null) {// Case 1: this user hits nothing.
+            playSound(SOUND_MISS);
         } else {
-            if (sound) {
-                soundHelper.playOops();
+            final boolean userTeam = (game != null) && game.isSameTeam(teamId, ant);
+            if (user) {
+                if (userTeam) {// Case 2: my user hits his my own team's ant (self hit).
+                    playSound(SOUND_MISTAKE);
+                } else {// Case 3: my user hits another team's ant.
+                    playSound(SOUND_SMASH);
+                }
+            } else if (userTeam) {// Case 4: teammate hits our team's ant.
+                playSound(SOUND_SAME_TEAM);
+            } else {// Case 5: other user hits other team's ant.
+                playSound(SOUND_SMASH_OTHER);
             }
         }
-        boardView.smashAnt(ant);
+    }
+
+    private void vibrate() {
+        if (prefsHelper.isInteractiveVibrate()) {
+            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            if ((vibrator != null) && vibrator.hasVibrator()) {
+                vibrator.vibrate(10L);
+            }
+        }
+    }
+
+    private void playSound(int type) {
+        if (prefsHelper.isInteractiveSounds()) {
+            switch (type) {
+                case SOUND_MISS:
+                    soundHelper.playMissed();
+                    break;
+                case SOUND_MISTAKE:
+                case SOUND_SAME_TEAM:
+                    soundHelper.playOops();
+                    break;
+                case SOUND_SMASH:
+                case SOUND_SMASH_OTHER:
+                    soundHelper.playSmashedSound();
+                    break;
+            }
+        }
     }
 
     @Override

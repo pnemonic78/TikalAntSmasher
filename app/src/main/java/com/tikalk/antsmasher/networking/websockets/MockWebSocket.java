@@ -6,10 +6,10 @@ import android.util.Log;
 
 import java.util.Random;
 
-import com.tikalk.antsmasher.board.BoardViewModel;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.AntSpecies;
 import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.service.AppService;
@@ -86,7 +86,7 @@ public class MockWebSocket extends AppWebSocket {
                 } catch (InterruptedException e) {
                 }
                 listener.onGameStarted();
-                final Game game = BoardViewModel.createGame();
+                final Game game = createGame();
                 if (game == null) {
                     return;
                 }
@@ -168,6 +168,43 @@ public class MockWebSocket extends AppWebSocket {
                 server.join();
             } catch (InterruptedException e) {
             }
+        }
+    }
+
+    public static Game createGame() {
+        Game game = new Game();
+        populateGame(game);//TODO delete me!
+        return game;
+    }
+
+    public static void populateGame(Game game) {
+        game.setId(1);
+
+        Team team = new Team(10, "Army");
+        populateTeam(team);
+        game.getTeams().add(team);
+
+        team = new Team(20, "Fire");
+        populateTeam(team);
+        game.getTeams().add(team);
+
+        team = new Team(30, "Black");
+        populateTeam(team);
+        game.getTeams().add(team);
+    }
+
+    public static void populateTeam(Team team) {
+        AntSpecies species = team.getAntSpecies();
+        switch ((int) team.getId()) {
+            case 10:
+                species.setId(1);
+                break;
+            case 20:
+                species.setId(2);
+                break;
+            case 30:
+                species.setId(3);
+                break;
         }
     }
 }

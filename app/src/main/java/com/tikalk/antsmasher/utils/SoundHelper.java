@@ -55,14 +55,13 @@ public class SoundHelper {
                     .build();
 
             mSoundPool = new SoundPool.Builder().setAudioAttributes(attributes).build();
-
         } else {
             mSoundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
         }
 
         mSoundPool.setOnLoadCompleteListener((soundPool, sampleId, status) -> mLoaded = true);
 
-        smashedSoundId = mSoundPool.load(context, R.raw.smash, 1);
+        smashedSoundId = mSoundPool.load(context, R.raw.squash, 1);
         oopsSoundId = mSoundPool.load(context, R.raw.ooops, 1);
         gameOverSoundId = mSoundPool.load(context, R.raw.game_over, 1);
         //  missedSoundId = mSoundPool.load(mActivity, R.raw.missed_ballon, 1);
@@ -81,26 +80,25 @@ public class SoundHelper {
     }
 
     public void playSmashedSound() {
-        if (mLoaded) {
+        if (mLoaded && (smashedSoundId != 0)) {
             mSoundPool.play(smashedSoundId, mVolume, mVolume, 1, 0, 1f);
         }
     }
 
     public void playOops() {
-        if (mLoaded) {
+        if (mLoaded && (oopsSoundId != 0)) {
             mSoundPool.play(oopsSoundId, mVolume, mVolume, 1, 0, 1f);
         }
     }
 
     public void playGameOver() {
-        if (mLoaded) {
+        if (mLoaded && (gameOverSoundId != 0)) {
             mSoundPool.play(gameOverSoundId, mVolume, mVolume, 1, 0, 1f);
         }
     }
 
-
     public void playMissed() {
-        if (mLoaded) {
+        if (mLoaded && (missedSoundId != 0)) {
             mSoundPool.play(missedSoundId, mVolume, mVolume, 1, 0, 1f);
         }
     }
