@@ -11,4 +11,9 @@
         android:singleLine="true"
         android:title="@string/login_dialog_header"/>
 
+
+    <EditTextPreference
+        android:title="Server Base Ip"
+        android:key="base_ip"
+        android:inputType="number|phone"/>
 </PreferenceScreen>

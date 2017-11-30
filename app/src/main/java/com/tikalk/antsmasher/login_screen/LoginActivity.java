@@ -1,8 +1,9 @@
 package com.tikalk.antsmasher.login_screen;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -14,27 +15,26 @@ import javax.inject.Inject;
 
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.base.Presenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
 
-public class LoginActivity extends AppCompatActivity implements
-        EditDialogFragment.EditDialogEventListener,
-        LoginContract.View {
+import static com.tikalk.antsmasher.login_screen.EditDialogFragment.EXTRA_LABEL;
+import static com.tikalk.antsmasher.login_screen.EditDialogFragment.EXTRA_TITLE;
+
+public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, IpDialogFragment.IpDialogEventListener, LoginContract.View {
 
     private static final String TAG = "TAG_LoginActivity";
 
-    public static final String ACTION_ASK_NAME = "action.ASK_USER_NAME";
-
-    public static final String EXTRA_DISMISS = "dismiss_after";
-
-    @Inject
-    protected LoginPresenter mLoginPresenter;
+    public static final long SPLASH_TIMEOUT = 3000;
+    public static final long SPLASH_EDIT_TIMEOUT = 1000;
 
     @Inject
-    protected PrefsHelper mPrefsHelper;
+    LoginPresenter mLoginPresenter;
 
-    private boolean dismissAfterEdit;
+    @Inject
+    PrefsHelper mPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,93 +43,104 @@ public class LoginActivity extends AppCompatActivity implements
         Log.v(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        mLoginPresenter.setView(this);
-
-        handleIntent(getIntent());
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(@NonNull Intent intent) {
-        final String action = intent.getAction();
-        if (action == null) {
-            return;
-        }
-        dismissAfterEdit = false;
-        switch (action) {
-            case ACTION_ASK_NAME:
-                dismissAfterEdit = intent.getBooleanExtra(EXTRA_DISMISS, false);
-                showUserNameDialog();
-                break;
+        if (mLoginPresenter != null) {
+            mLoginPresenter.setView(this);
         }
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!dismissAfterEdit) {
-            mLoginPresenter.onResume();
-        }
+        mLoginPresenter.checkBaseIp();
     }
 
-    private void showLoginDialog() {
-        EditDialogFragment dialog = new EditDialogFragment();
-        Bundle b = new Bundle();
-        b.putString(EditDialogFragment.EXTRA_TITLE, getString(R.string.login_dialog_header));
-        b.putString(EditDialogFragment.EXTRA_LABEL, getString(R.string.login_dialog_body));
-        dialog.setArguments(b);
-        dialog.show(getSupportFragmentManager(), "LoginDialog");
+
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
     }
+
 
     @Override
     public void onEditDone(String value) {
         mLoginPresenter.saveUserName(value);
     }
 
+
     @Override
-    public void showUserNameDialog() {
-        showLoginDialog();
+    public void showEnterIpDialog() {
+        IpDialogFragment dialog = new IpDialogFragment();
+        Bundle b = new Bundle();
+        b.putString("Title", "Servers Base Url");
+        b.putString("Message", "Enter Server Base IP");
+        dialog.setArguments(b);
+        dialog.show(getSupportFragmentManager(), "IpDialo");
+
     }
 
     @Override
+    public void showInvalidIpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Invalid IP Address");
+        builder.setMessage("Please enter a valid IP in format:\nxxx.xxx.xxx.xxx");
+        builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        builder.setPositiveButton("Try Again", (dialogInterface, i) -> mLoginPresenter.checkBaseIp());
+        builder.create().show();
+    }
+
+    @Override
+    public void showUserNameDialog() {
+        EditDialogFragment dialog = new EditDialogFragment();
+        Bundle b = new Bundle();
+        b.putString(EXTRA_TITLE, getString(R.string.login_dialog_header));
+        b.putString(EXTRA_LABEL, getString(R.string.login_dialog_body));
+        dialog.setArguments(b);
+        dialog.show(getSupportFragmentManager(), "EditDialog");
+    }
+
+
+    @Override
     public void showLoginFailedDialog() {
-        final Context context = this;
-        new AlertDialog.Builder(context)
-                .setTitle(getString(R.string.app_name))
-                .setMessage("Login failed, please check your connection and try again.")
-                .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
-                .setCancelable(false)
-                .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
-                    Toast.makeText(context, "Goodbye...", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name));
+        builder.setMessage("Login filed, please check your connection and try again.");
+        builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", (dialogInterface, i) -> {
+            Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
+            finish();
+        });
+
+        builder.create().show();
+
     }
 
     @Override
     public void completeSplash(long timeout) {
-        if (dismissAfterEdit) {
-            finish();
-            return;
-        }
-
-        final Context context = this;
-        Intent service = new Intent(context, AppService.class);
+        Intent service = new Intent(LoginActivity.this, AppService.class);
         startService(service);
 
-        getWindow().getDecorView().postDelayed(() -> {
-            Intent intent = new Intent(context, TeamsActivity.class);
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(LoginActivity.this, TeamsActivity.class);
             startActivity(intent);
             finish();
         }, timeout);
     }
 
+
     @Override
-    public void setPresenter(LoginContract.Presenter presenter) {
+    public void onIpEntered(String input) {
+        mLoginPresenter.onIpEntered(input);
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+
     }
 }
 
