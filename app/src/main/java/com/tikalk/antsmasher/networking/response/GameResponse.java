@@ -10,24 +10,24 @@ import com.tikalk.antsmasher.model.GameState;
 
 public class GameResponse {
 
-    @SerializedName("antId")
+    @SerializedName("id")
     public int id;
     @SerializedName("createdAt")
-    public long createdAt;
+    public double createdAt;
     @SerializedName("updatedAt")
-    public long updatedAt;
+    public double updatedAt;
     @SerializedName("state")
     public GameState state;
     @SerializedName("startTime")
-    public Long startTime;
+    public Double startTime;
     @SerializedName("stopTime")
-    public Long stopTime;
+    public Double stopTime;
     @SerializedName("pauseTime")
-    public Long pauseTime;
+    public Double pauseTime;
     @SerializedName("resumeTime")
-    public Long resumeTime;
+    public Double resumeTime;
     @SerializedName("finishTime")
-    public Long finishTime;
+    public Double finishTime;
     @SerializedName("gameTime")
     public int gameTimeSeconds;
 
