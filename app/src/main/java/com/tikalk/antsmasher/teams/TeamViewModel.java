@@ -148,12 +148,6 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
         return team;
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        view = null;
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onStart() {
         Log.v(TAG, "onStart");
@@ -168,5 +162,11 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
     void onStop() {
         Log.v(TAG, "onStop");
         allowPolling = false;
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    void onDestroy() {
+        Log.v(TAG, "onDestroy");
+        view = null;
     }
 }
