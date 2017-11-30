@@ -60,6 +60,10 @@ public class PrefsHelper {
         return preferences.getBoolean(key, false);
     }
 
+    private boolean getBooleanT(String key) {
+        return preferences.getBoolean(key, true);
+    }
+
     private long getLong(String key) {
         return preferences.getLong(key, 0L);
     }
@@ -77,15 +81,15 @@ public class PrefsHelper {
     }
 
     public boolean isInteractiveMusic() {
-        return getBoolean("interactive_music");
+        return getBooleanT("interactive_music");
     }
 
     public boolean isInteractiveSounds() {
-        return getBoolean("interactive_sound");
+        return getBooleanT("interactive_sound");
     }
 
     public boolean isInteractiveVibrate() {
-        return getBoolean("interactive_vibrate");
+        return getBooleanT("interactive_vibrate");
     }
 
     public long getTeamId() {

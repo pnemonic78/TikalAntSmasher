@@ -86,6 +86,7 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
                         // Poll until we have some teams.
                         if (response.isEmpty()) {
                             if (allowPolling) {
+                                //FIXME use Rx instead of Handler.
                                 if (pollTeams == null) {
                                     pollTeams = () -> loadTeams();
                                 }
