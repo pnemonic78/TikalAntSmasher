@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import java.util.List;
 
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.login_screen.LoginActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -158,6 +159,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("user_name"));
+
+            findPreference("user_name").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final Context context = getActivity();
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.setAction(LoginActivity.ACTION_ASK_NAME);
+                    intent.putExtra(LoginActivity.EXTRA_DISMISS, true);
+                    context.startActivity(intent);
+                    return true;
+                }
+            });
         }
 
         @Override

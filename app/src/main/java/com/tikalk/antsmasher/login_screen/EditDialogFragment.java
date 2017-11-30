@@ -40,10 +40,10 @@ public class EditDialogFragment extends DialogFragment {
 
     //FIXME move code to a layout xml
     public AlertDialog buildDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
-        builder.setTitle(getArguments().getString(EXTRA_TITLE));
-        builder.setMessage(getArguments().getString(EXTRA_LABEL));
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))
+                .setTitle(getArguments().getString(EXTRA_TITLE, getString(R.string.app_name)))
+                .setMessage(getArguments().getString(EXTRA_LABEL));
 
         LinearLayout layout = new LinearLayout(context);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -57,8 +57,7 @@ public class EditDialogFragment extends DialogFragment {
         final TextView chars = new TextView(context);
 
         input.setMaxLines(1);
-        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(
-                COMMENT_MAX_LENGTH)});
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(COMMENT_MAX_LENGTH)});
 
         chars.setPadding(5, 0, 0, 2);
         String comment = getArguments().getString("Comment");
@@ -86,19 +85,12 @@ public class EditDialogFragment extends DialogFragment {
                 (dialog, whichButton) -> {
                     String value = input.getText().toString().trim();
                     eventListener.onEditDone(value);
-                    // Toast.makeText(context, value + " entered..",
-                    // Toast.LENGTH_LONG).show();
                 });
 
-        builder.setTitle(getString(R.string.app_name));
-        builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
         AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
-                posButton.setEnabled(false);
-            }
+        dialog.setOnShowListener(dialogInterface -> {
+            posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+            posButton.setEnabled(false);
         });
 
         input.addTextChangedListener(new TextWatcher() {

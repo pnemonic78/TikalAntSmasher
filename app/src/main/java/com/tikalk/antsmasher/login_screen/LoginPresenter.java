@@ -1,6 +1,5 @@
 package com.tikalk.antsmasher.login_screen;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,7 +20,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         LoginContract.Presenter<LoginContract.View>,
         LoginInterceptor.OnLoginFinishedListener {
 
-    public static final String TAG = "TAG_LoginPresenter";
+    private static final String TAG = "TAG_LoginPresenter";
+
+    private static final long SPLASH_TIMEOUT = 3000;
+    private static final long SPLASH_EDIT_TIMEOUT = 1000;
+
     private Disposable mDisposable;
 
     private LoginContract.View view;
@@ -50,7 +53,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     @Override
-    public void login() {
+    public void onResume() {
         String username = prefsHelper.getUserName();
         if (TextUtils.isEmpty(username)) {
             view.showUserNameDialog();
@@ -64,7 +67,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             Log.v(TAG, "checkUserId: about to createUser to server");
             loginManager.login(username, this);
         } else {
-            view.completeSplash(LoginActivity.SPLASH_TIMEOUT);
+            view.completeSplash(SPLASH_TIMEOUT);
         }
     }
 
@@ -77,7 +80,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     @Override
     public void onLoginSuccess(User user) {
         prefsHelper.setUserId(user.getId());
-        view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
+        view.completeSplash(SPLASH_EDIT_TIMEOUT);
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface LoginContract {
     }
 
     interface Presenter<V extends View> extends com.tikalk.antsmasher.base.Presenter<V> {
-        void login();
+        void onResume();
 
         void saveUserName(String userName);
     }

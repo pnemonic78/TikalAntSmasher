@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.login_screen;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,14 +24,17 @@ public class LoginActivity extends AppCompatActivity implements
 
     private static final String TAG = "TAG_LoginActivity";
 
-    public static final long SPLASH_TIMEOUT = 3000;
-    public static final long SPLASH_EDIT_TIMEOUT = 1000;
+    public static final String ACTION_ASK_NAME = "action.ASK_USER_NAME";
+
+    public static final String EXTRA_DISMISS = "dismiss_after";
 
     @Inject
-    LoginPresenter mLoginPresenter;
+    protected LoginPresenter mLoginPresenter;
 
     @Inject
-    PrefsHelper mPrefsHelper;
+    protected PrefsHelper mPrefsHelper;
+
+    private boolean dismissAfterEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +43,37 @@ public class LoginActivity extends AppCompatActivity implements
         Log.v(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        if (mLoginPresenter != null) {
-            mLoginPresenter.setView(this);
-        }
+        mLoginPresenter.setView(this);
+
+        handleIntent(getIntent());
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(@NonNull Intent intent) {
+        final String action = intent.getAction();
+        if (action == null) {
+            return;
+        }
+        dismissAfterEdit = false;
+        switch (action) {
+            case ACTION_ASK_NAME:
+                dismissAfterEdit = intent.getBooleanExtra(EXTRA_DISMISS, false);
+                showUserNameDialog();
+                break;
+        }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mLoginPresenter.login();
+        if (!dismissAfterEdit) {
+            mLoginPresenter.onResume();
+        }
     }
 
     private void showLoginDialog() {
@@ -72,13 +97,14 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void showLoginFailedDialog() {
-        new AlertDialog.Builder(this)
+        final Context context = this;
+        new AlertDialog.Builder(context)
                 .setTitle(getString(R.string.app_name))
                 .setMessage("Login failed, please check your connection and try again.")
                 .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                    Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
+                .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
+                    Toast.makeText(context, "Goodbye...", Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .show();
@@ -86,6 +112,11 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void completeSplash(long timeout) {
+        if (dismissAfterEdit) {
+            finish();
+            return;
+        }
+
         final Context context = this;
         Intent service = new Intent(context, AppService.class);
         startService(service);
