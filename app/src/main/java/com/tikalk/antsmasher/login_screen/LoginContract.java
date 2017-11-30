@@ -8,7 +8,10 @@ import com.tikalk.antsmasher.base.MvpView;
 
 public interface LoginContract {
 
-    interface View extends MvpView<Presenter> {
+    interface View extends MvpView {
+        void showEnterIpDialog();
+        void showInvalidIpDialog();
+
         void showUserNameDialog();
 
         void showLoginFailedDialog();
@@ -16,9 +19,9 @@ public interface LoginContract {
         void completeSplash(long timeout);
     }
 
-    interface Presenter<V extends View> extends com.tikalk.antsmasher.base.Presenter<V> {
-        void onResume();
-
+    interface Presenter {
+        void checkBaseIp();
+        void onIpEntered(String enteredIp);
         void saveUserName(String userName);
     }
 }

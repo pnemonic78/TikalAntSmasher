@@ -1,11 +1,18 @@
 package com.tikalk.antsmasher.networking;
 
+import android.support.annotation.Nullable;
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import javax.inject.Named;
 
+import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 
+import java.net.URISyntaxException;
+
+import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -21,17 +28,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class GameRestServiceModule {
 
     @Provides
-    public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson) {
-        return new Retrofit.Builder()
-                .baseUrl(ApiContract.ADMIN_SERVICE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+    public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson, PrefsHelper prefsHelper) {
+        try {
+            String URL = ApiContract.buildAdminBaseUrl(prefsHelper.getStringPref(PrefsHelper.BASE_IP));
+
+            return new Retrofit.Builder()
+                    .baseUrl(URL)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Provides
-    GameRestService provideGameRestService(Retrofit gameRestRetrofit) {
-        return gameRestRetrofit.create(GameRestService.class);
+    GameRestService provideGameRestService(Retrofit retrofit) {
+        return retrofit.create(GameRestService.class);
     }
 }
