@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.tikalk.antsmasher.networking.ApiContract;
+
 import javax.inject.Inject;
 
 /**
@@ -18,7 +20,7 @@ public class PrefsHelper {
     private static final String PLAYER_ID = "player_id";
     private static final String GAME_ID = "game_id";
     public static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
-    public static final String ADMIN_IP = "admin_ip";
+    public static final String BASE_IP = "base_ip";
     public static final String SMASH_SOCKET_URL = "smash_ip";
 
     private final SharedPreferences preferences;

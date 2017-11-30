@@ -210,12 +210,14 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void smashAnt(@Nullable Ant ant, boolean user) {
+        Log.i(TAG, "smashAnt: by user:" + user);
         boardView.smashAnt(ant);
 
         if (ant == null) {// Case 1: this user hits nothing.
             playSound(SOUND_MISS);
         } else {
             final boolean userTeam = (game != null) && game.isSameTeam(teamId, ant);
+            Log.i(TAG, "smashAnt: by userTeam:" + userTeam);
             if (user) {
                 if (userTeam) {// Case 2: my user hits his my own team's ant (self hit).
                     playSound(SOUND_MISTAKE);
@@ -246,6 +248,8 @@ public class BoardActivity extends AppCompatActivity implements
                     soundHelper.playMissed();
                     break;
                 case SOUND_MISTAKE:
+                    soundHelper.playNooo();
+                    break;
                 case SOUND_SAME_TEAM:
                     soundHelper.playOops();
                     break;

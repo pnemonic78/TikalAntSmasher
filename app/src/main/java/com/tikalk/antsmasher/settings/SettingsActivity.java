@@ -2,7 +2,9 @@ package com.tikalk.antsmasher.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,12 +14,16 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.utils.Utils;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -146,19 +152,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
+    public static class GeneralPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+        SharedPreferences preferences;
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
+            preferences = getPreferenceScreen().getSharedPreferences();
+            preferences.registerOnSharedPreferenceChangeListener(this);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("user_name"));
-            bindPreferenceSummaryToValue(findPreference("dev_team"));
+            bindPreferenceSummaryToValue(findPreference("base_ip"));
+
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            preferences.unregisterOnSharedPreferenceChangeListener(this);
         }
 
         @Override
@@ -169,6 +185,49 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if( key.equals("base_ip")){
+                String prefIp = sharedPreferences.getString(key, null);
+                if(prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Invalid IP");
+                    builder.setMessage("Please enter valid IP in format:\n\nXXX.XXX.XXX.XXX");
+                    builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.create().show();
+
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("New IP");
+                    builder.setMessage("IP Changed, Restart App to apply changes");
+                    builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
+                    builder.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            restartApplication();
+
+                        }
+                    });
+                    builder.create().show();
+                }
+            }
+        }
+
+        void restartApplication(){
+            Intent i = getActivity().getPackageManager().
+                    getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            getActivity().finish();
         }
     }
 
@@ -195,4 +254,5 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
 }
