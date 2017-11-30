@@ -158,6 +158,7 @@ public class BoardActivity extends AppCompatActivity implements
             }
             Player player = game.getPlayer(playerId);
             Team team = game.getTeam(teamId);
+            teamScoreText.setTextColor(team.getAntSpecies().getTint());
             setScore(player.getScore(), team.getScore());
         }
 
