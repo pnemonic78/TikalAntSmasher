@@ -18,12 +18,17 @@ import com.tikalk.antsmasher.model.socket.GameStateBody;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 
+import static com.tikalk.antsmasher.model.socket.AntSmash.TYPE_HIT;
+import static com.tikalk.antsmasher.model.socket.AntSmash.TYPE_MISS;
+import static com.tikalk.antsmasher.model.socket.AntSmash.TYPE_SELF_HIT;
 import static com.tikalk.antsmasher.networking.ApiContract.GAME_STATE_MESSAGE;
+import static com.tikalk.antsmasher.networking.ApiContract.HIT_TRIAL_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.LR_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.SELF_SMASH_MESSAGE;
 import static com.tikalk.antsmasher.networking.ApiContract.SMASH_MESSAGE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 
 /**
  * @author moshe on 2017/11/26.
@@ -171,5 +176,62 @@ public class WebSocketTests extends TestSuite {
         GameStateBody event = gson.fromJson(body, GameStateBody.class);
         assertNotNull(event);
         assertEquals(GameState.PAUSED, event.getState());
+    }
+
+    @Test
+    public void parseHit1() throws Exception {
+        InputStream in = getClass().getResourceAsStream("/ant_hit_1.json");
+        assertNotNull(in);
+        Reader reader = new InputStreamReader(in);
+
+        Gson gson = new Gson();
+        SocketMessage socketMessage = gson.fromJson(reader, SocketMessage.class);
+        assertNotNull(socketMessage);
+        assertEquals(SocketMessage.TYPE_SEND, socketMessage.type);
+        assertEquals(HIT_TRIAL_MESSAGE, socketMessage.address);
+        JsonElement body = socketMessage.body;
+        assertNotNull(body);
+        AntSmash event = gson.fromJson(body.getAsString(), AntSmash.class);
+        assertNotNull(event);
+        assertNull(event.antId);
+        assertEquals(TYPE_MISS, event.type);
+    }
+
+    @Test
+    public void parseHit2() throws Exception {
+        InputStream in = getClass().getResourceAsStream("/ant_hit_2.json");
+        assertNotNull(in);
+        Reader reader = new InputStreamReader(in);
+
+        Gson gson = new Gson();
+        SocketMessage socketMessage = gson.fromJson(reader, SocketMessage.class);
+        assertNotNull(socketMessage);
+        assertEquals(SocketMessage.TYPE_SEND, socketMessage.type);
+        assertEquals(HIT_TRIAL_MESSAGE, socketMessage.address);
+        JsonElement body = socketMessage.body;
+        assertNotNull(body);
+        AntSmash event = gson.fromJson(body.getAsString(), AntSmash.class);
+        assertNotNull(event);
+        assertEquals("8599be43-ac97-443b-860d-e86b5e2b8595", event.antId);
+        assertEquals(TYPE_HIT, event.type);
+    }
+
+    @Test
+    public void parseHit3() throws Exception {
+        InputStream in = getClass().getResourceAsStream("/ant_hit_3.json");
+        assertNotNull(in);
+        Reader reader = new InputStreamReader(in);
+
+        Gson gson = new Gson();
+        SocketMessage socketMessage = gson.fromJson(reader, SocketMessage.class);
+        assertNotNull(socketMessage);
+        assertEquals(SocketMessage.TYPE_SEND, socketMessage.type);
+        assertEquals(HIT_TRIAL_MESSAGE, socketMessage.address);
+        JsonElement body = socketMessage.body;
+        assertNotNull(body);
+        AntSmash event = gson.fromJson(body.getAsString(), AntSmash.class);
+        assertNotNull(event);
+        assertEquals("b1de397f-58a8-403e-b182-d4358d26f25f", event.antId);
+        assertEquals(TYPE_SELF_HIT, event.type);
     }
 }
