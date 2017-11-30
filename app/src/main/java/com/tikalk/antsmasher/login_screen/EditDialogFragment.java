@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -22,22 +18,18 @@ import android.widget.TextView;
 
 import com.tikalk.antsmasher.R;
 
-
 /**
  * Created by motibartov on 15/11/2017.
  */
 
 public class EditDialogFragment extends DialogFragment {
 
-    private static final int COMMENT_MAX_LENGTH = 25;
-    EditDialogEventListener eventListener;
-    Button posButton;
+    public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_LABEL = "label";
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
+    private static final int COMMENT_MAX_LENGTH = 25;
+    private EditDialogEventListener eventListener;
+    private Button posButton;
 
     @NonNull
     @Override
@@ -46,19 +38,19 @@ public class EditDialogFragment extends DialogFragment {
         return buildDialog(getActivity());
     }
 
-
+    //FIXME move code to a layout xml
     public AlertDialog buildDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
-        builder.setTitle(getArguments().getString("Title"));
-        builder.setMessage(getArguments().getString("Message"));
+        builder.setTitle(getArguments().getString(EXTRA_TITLE));
+        builder.setMessage(getArguments().getString(EXTRA_LABEL));
 
         LinearLayout layout = new LinearLayout(context);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(parms);
+        layout.setLayoutParams(lp);
 
         // Set an EditText view to get user input
         final EditText input = new EditText(context);
@@ -98,7 +90,6 @@ public class EditDialogFragment extends DialogFragment {
                     // Toast.LENGTH_LONG).show();
                 });
 
-
         builder.setTitle(getString(R.string.app_name));
         builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
         AlertDialog dialog = builder.create();
@@ -109,7 +100,6 @@ public class EditDialogFragment extends DialogFragment {
                 posButton.setEnabled(false);
             }
         });
-
 
         input.addTextChangedListener(new TextWatcher() {
             // StringBuilder builder = new StringBuilder();
@@ -127,14 +117,11 @@ public class EditDialogFragment extends DialogFragment {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 

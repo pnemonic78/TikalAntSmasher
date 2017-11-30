@@ -1,9 +1,8 @@
 package com.tikalk.antsmasher.login_screen;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,9 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
 
-public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, LoginContract.View {
+public class LoginActivity extends AppCompatActivity implements
+        EditDialogFragment.EditDialogEventListener,
+        LoginContract.View {
 
     private static final String TAG = "TAG_LoginActivity";
 
@@ -53,66 +54,51 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     private void showLoginDialog() {
         EditDialogFragment dialog = new EditDialogFragment();
         Bundle b = new Bundle();
-        b.putString("Title", getString(R.string.login_dialog_header));
-        b.putString("Message", getString(R.string.login_dialog_body));
+        b.putString(EditDialogFragment.EXTRA_TITLE, getString(R.string.login_dialog_header));
+        b.putString(EditDialogFragment.EXTRA_LABEL, getString(R.string.login_dialog_body));
         dialog.setArguments(b);
-        dialog.show(getSupportFragmentManager(), "EditDialog");
+        dialog.show(getSupportFragmentManager(), "LoginDialog");
     }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-    }
-
 
     @Override
     public void onEditDone(String value) {
         mLoginPresenter.saveUserName(value);
     }
 
-
     @Override
     public void showUserNameDialog() {
         showLoginDialog();
     }
 
-
     @Override
     public void showLoginFailedDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name));
-        builder.setMessage("Login filed, please check your connection and try again.");
-        builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
-        builder.setCancelable(false);
-        builder.setPositiveButton("OK", (dialogInterface, i) -> {
-            Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
-            finish();
-        });
-
-        builder.create().show();
-
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.app_name))
+                .setMessage("Login failed, please check your connection and try again.")
+                .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .show();
     }
 
     @Override
     public void completeSplash(long timeout) {
-        Intent service = new Intent(LoginActivity.this, AppService.class);
+        final Context context = this;
+        Intent service = new Intent(context, AppService.class);
         startService(service);
 
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(LoginActivity.this, TeamsActivity.class);
+        getWindow().getDecorView().postDelayed(() -> {
+            Intent intent = new Intent(context, TeamsActivity.class);
             startActivity(intent);
             finish();
         }, timeout);
     }
 
     @Override
-    public void setPresenter(Object presenter) {
-
+    public void setPresenter(LoginContract.Presenter presenter) {
     }
-
-
 }
 

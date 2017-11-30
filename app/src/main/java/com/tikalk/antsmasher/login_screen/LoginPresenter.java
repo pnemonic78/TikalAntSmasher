@@ -18,7 +18,7 @@ import io.reactivex.disposables.Disposable;
  */
 
 public class LoginPresenter extends BasePresenter<LoginContract.View> implements
-        LoginContract.Presenter,
+        LoginContract.Presenter<LoginContract.View>,
         LoginInterceptor.OnLoginFinishedListener {
 
     public static final String TAG = "TAG_LoginPresenter";
@@ -26,16 +26,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     private LoginContract.View view;
     private PrefsHelper prefsHelper;
-    private Context context;
 
     LoginManager loginManager;
 
-
     @Inject
-    public LoginPresenter(Context context, PrefsHelper prefsHelper, GameRestService gameRestService) {
+    public LoginPresenter(PrefsHelper prefsHelper, GameRestService gameRestService) {
         this.prefsHelper = prefsHelper;
-        loginManager = new LoginManager(gameRestService);
-        this.context = context;
+        this.loginManager = new LoginManager(gameRestService);
     }
 
     public void setView(LoginContract.View view) {
