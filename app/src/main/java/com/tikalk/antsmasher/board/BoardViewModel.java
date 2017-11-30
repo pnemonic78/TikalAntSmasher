@@ -279,7 +279,7 @@ public class BoardViewModel extends AndroidViewModel implements
             Ant ant = game.getAnt(event.antId);
             if (ant != null) {
                 ant.setAlive(false);
-                view.smashAnt(ant, event.smashedByUser);
+                view.smashAnt(ant, event.playerId == this.playerId);
                 removeAntDelayed(game, ant, DELAY_REMOVE);
             }
         }

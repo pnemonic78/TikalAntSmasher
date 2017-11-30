@@ -207,7 +207,12 @@ public class BoardActivity extends AppCompatActivity implements
     public void smashAnt(@NonNull Ant ant, boolean user) {
         boardView.smashAnt(ant);
         final boolean sound = prefsHelper.isInteractiveSounds();
-        if (playerId == this.playerId) {
+        // TODO case 1: this user hits own team's ant
+        // TODO case 2: this user hits other team's ant
+        // TODO case 3: other user hits own team's ant
+        // TODO case 4: other user hits other team's ant
+        // TODO case 5: this user hits nothing
+        if (user) {
             if (prefsHelper.isInteractiveVibrate()) {
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 if ((vibrator != null) && vibrator.hasVibrator()) {

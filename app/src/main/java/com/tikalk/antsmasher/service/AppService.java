@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.util.Log;
@@ -73,11 +74,11 @@ public class AppService extends Service {
     private String userName;
 
     @Inject
-    PrefsHelper prefsHelper;
+    protected PrefsHelper prefsHelper;
 
     @Inject
     @Named("SocketMessageGson")
-    Gson socketMessageGson;
+    protected Gson socketMessageGson;
 
     @Override
     public void onCreate() {
@@ -139,13 +140,15 @@ public class AppService extends Service {
 
     private void startWebSockets() {
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
-        Log.i(TAG, "Real web socket");
-        gameWebSocket = new GameWebSocket(ApiContract.ANT_PUBLISHER_URL, sessionId, this);
-        smashWebSocket = new SmashWebSocket(ApiContract.SMASH_SERVICE_URL, sessionId, this, prefsHelper.getPlayerId());
-        gameWebSocket.setMessageListener(serviceEventListener);
-        smashWebSocket.setMessageListener(serviceEventListener);
+        Log.i(TAG, "Start real web sockets");
+        final Context context = this;
 
+        gameWebSocket = new GameWebSocket(ApiContract.ANT_PUBLISHER_URL, sessionId, context);
+        gameWebSocket.setMessageListener(serviceEventListener);
         gameWebSocket.startSocket();
+
+        smashWebSocket = new SmashWebSocket(ApiContract.SMASH_SERVICE_URL, sessionId, context);
+        smashWebSocket.setMessageListener(serviceEventListener);
         smashWebSocket.startSocket();
 
         networkManager.add(gameWebSocket);

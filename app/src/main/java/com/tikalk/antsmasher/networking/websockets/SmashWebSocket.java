@@ -3,7 +3,7 @@ package com.tikalk.antsmasher.networking.websockets;
 import android.content.Context;
 import android.util.Log;
 
-import com.tikalk.antsmasher.model.socket.HitSocketMessage;
+import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.service.AppService;
@@ -13,11 +13,9 @@ import okhttp3.WebSocket;
 
 public class SmashWebSocket extends AppWebSocket {
     private static final String TAG = "TAG_SmashWebSocket";
-    long playerId;
 
-    public SmashWebSocket(String baseUrl, String sessionId, Context context, long playerId) {
+    public SmashWebSocket(String baseUrl, String sessionId, Context context) {
         super(baseUrl, sessionId, context);
-        this.playerId = playerId;
     }
 
     public void setMessageListener(AppService.AppServiceEventListener eventListener) {
@@ -45,13 +43,19 @@ public class SmashWebSocket extends AppWebSocket {
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
+        SocketMessage socketMessage = plainGson.fromJson(message, SocketMessage.class);
 
-        if (socketMessage.address.equals(ApiContract.SMASH_MESSAGE)) {
-            HitSocketMessage smashMessage = socketMessageGson.fromJson(message, HitSocketMessage.class);
-//            AntSmash smash = socketMessageGson.fromJson(smashMessage, AntSmash.class);
-            Log.i(TAG, "handleNewMessage: got smash + " + smashMessage.antSmash);
-            socketMessageListener.onAntSmashed(smashMessage.antSmash);
+        switch (socketMessage.address){
+            case ApiContract.SMASH_MESSAGE:
+                AntSmash smash = plainGson.fromJson(socketMessage.body.getAsString(), AntSmash.class);
+                Log.i(TAG, "handleNewMessage: smashed: " + smash);
+                socketMessageListener.onAntSmashed(smash);
+                break;
+            case ApiContract.SELF_SMASH_MESSAGE:
+                AntSmash smashSelf = plainGson.fromJson(socketMessage.body, AntSmash.class);
+                Log.i(TAG, "handleNewMessage: self-smashed: " + smashSelf);
+                socketMessageListener.onAntSmashed(smashSelf);
+                break;
         }
     }
 
