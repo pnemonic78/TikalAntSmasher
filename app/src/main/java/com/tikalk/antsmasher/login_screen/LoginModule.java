@@ -1,7 +1,5 @@
 package com.tikalk.antsmasher.login_screen;
 
-import android.app.Application;
-
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
@@ -19,7 +17,7 @@ public class LoginModule {
 
     @Provides
     @Singleton
-    LoginPresenter provideLoginPresenter(Application context, PrefsHelper prefsHelper, GameRestService restApiService) {
-        return new LoginPresenter(context, prefsHelper, restApiService);
+    LoginPresenter provideLoginPresenter(PrefsHelper prefsHelper, GameRestService restApiService) {
+        return new LoginPresenter(prefsHelper, restApiService);
     }
 }
