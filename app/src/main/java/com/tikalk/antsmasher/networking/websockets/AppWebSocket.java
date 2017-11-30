@@ -58,7 +58,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     @Inject
     @Named("PlainGson")
-    Gson plainGson;
+    protected Gson plainGson;
 
     private boolean socketOpened = false;
 
@@ -111,7 +111,6 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     }
 
     public void closeConnection() {
-
         Log.v(TAG, "about to closeConnection: " + socketBaseUrl);
 
         if (mSocket != null || socketOpened) {
@@ -169,7 +168,6 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
         return false;
     }
 
-
     public void updateInternetConnection(boolean isConnected) {
         Log.v(TAG, "updateInternetConnection: ");
         if (isConnected && !internetConnected) {
@@ -205,7 +203,6 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
     public int compareTo(@NonNull AppWebSocket webSocket) {
         return this.equals(webSocket) ? 0 : -1;
     }
-
 
     @Override
     public boolean equals(Object o) {

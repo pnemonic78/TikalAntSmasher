@@ -32,9 +32,9 @@ public class NetworkModule {
     @Named("SocketMessageGson")
     @Singleton
     Gson provideSocketGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeHierarchyAdapter(SocketMessage.class, new SocketMessageSerializer());
-        return gsonBuilder.create();
+        return new GsonBuilder()
+                .registerTypeHierarchyAdapter(SocketMessage.class, new SocketMessageSerializer())
+                .create();
     }
 
     @Provides

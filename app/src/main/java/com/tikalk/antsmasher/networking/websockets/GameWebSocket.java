@@ -1,31 +1,21 @@
 package com.tikalk.antsmasher.networking.websockets;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import android.content.Context;
 import android.util.Log;
 
-import com.tikalk.antsmasher.model.socket.AntLocationMessage;
+import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.GameStateBody;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
 import com.tikalk.antsmasher.networking.ApiContract;
-import com.tikalk.antsmasher.networking.gson.AntPublishDeserializer;
 
 import okhttp3.Response;
 import okhttp3.WebSocket;
 
 public class GameWebSocket extends AppWebSocket {
     private static final String TAG = "TAG_GameWebSocket";
-    GsonBuilder stateGsonBuilder = new GsonBuilder();
-    GsonBuilder gameGsonBuilder = new GsonBuilder();
-    Gson gameMessageGson;
 
     public GameWebSocket(String baseUrl, String deviceId, Context context) {
         super(baseUrl, deviceId, context);
-
-        gameGsonBuilder.registerTypeAdapter(AntLocationMessage.class, new AntPublishDeserializer());
-        gameMessageGson = gameGsonBuilder.create();
     }
 
     @Override
@@ -41,16 +31,19 @@ public class GameWebSocket extends AppWebSocket {
 
     @Override
     protected void handleNewMessage(WebSocket socket, String message) {
-        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
+        SocketMessage socketMessage = plainGson.fromJson(message, SocketMessage.class);
 
-        if (socketMessage.address.equals(ApiContract.LR_MESSAGE)) {
-            AntLocationMessage antLocationMessage = gameMessageGson.fromJson(message, AntLocationMessage.class);
-            Log.i(TAG, "handleNewMessage: lr message" + antLocationMessage);
-            socketMessageListener.onAntMoved(antLocationMessage.getAntLocation());
-        } else if (socketMessage.address.equals(ApiContract.GAME_STATE_MESSAGE)) {
-            GameStateBody event = gameMessageGson.fromJson(socketMessage.body, GameStateBody.class);
-            Log.i(TAG, "handleNewMessage: game state message: " + event);
-            socketMessageListener.onGameStateMessage(event.getState());
+        switch (socketMessage.address) {
+            case ApiContract.LR_MESSAGE:
+                AntLocation location = plainGson.fromJson(socketMessage.body, AntLocation.class);
+                Log.i(TAG, "handleNewMessage: location message: " + location);
+                socketMessageListener.onAntMoved(location);
+                break;
+            case ApiContract.GAME_STATE_MESSAGE:
+                GameStateBody state = plainGson.fromJson(socketMessage.body, GameStateBody.class);
+                Log.i(TAG, "handleNewMessage: game state message: " + state);
+                socketMessageListener.onGameStateMessage(state.getState());
+                break;
         }
     }
 
