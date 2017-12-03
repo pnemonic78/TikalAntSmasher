@@ -41,6 +41,8 @@
     <string name="title_activity_board">Ant Smasher</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="game_over">Game Over</string>
+    <string name="score_summary">Score Summary</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>

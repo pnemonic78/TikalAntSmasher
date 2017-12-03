@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.login_screen.IpDialogFragment;
 import com.tikalk.antsmasher.media.SoundHelper;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
@@ -223,7 +224,9 @@ public class BoardActivity extends AppCompatActivity implements
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {
-                showGameOverDialog();
+                Bundle b = teamsToBundle(teams);
+
+                showGameOverDialog(b);
                 if (prefsHelper.isInteractiveSounds()) {
                     soundHelper.playGameOver();
                 }
@@ -231,13 +234,40 @@ public class BoardActivity extends AppCompatActivity implements
         }
     }
 
-    private void showGameOverDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.app_name)).setMessage("Game Over")
-                .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
-                .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> finish())
-                .setCancelable(false)
-                .show();
+    private Bundle teamsToBundle(List<Team> teams) {
+        Bundle bA = new Bundle();
+        Team teamA = teams.get(0);
+        bA.putString(GameOverDialogFragment.EXTRA_NAME, teamA.getName());
+        bA.putInt(GameOverDialogFragment.EXTRA_SCORE, teamA.getScore());
+
+        Team teamB = teams.get(1);
+        Bundle bB = new Bundle();
+        bB.putString(GameOverDialogFragment.EXTRA_NAME, teamB.getName());
+        bB.putInt(GameOverDialogFragment.EXTRA_SCORE, teamB.getScore());
+
+        Team teamC = teams.get(2);
+        Bundle bC = new Bundle();
+        bC.putString(GameOverDialogFragment.EXTRA_NAME, teamC.getName());
+        bC.putInt(GameOverDialogFragment.EXTRA_SCORE, teamC.getScore());
+
+        Bundle b = new Bundle();
+        b.putBundle(GameOverDialogFragment.EXTRA_TEAM1, bA);
+        b.putBundle(GameOverDialogFragment.EXTRA_TEAM2, bB);
+        b.putBundle(GameOverDialogFragment.EXTRA_TEAM3, bC);
+
+        return b;
+
+    }
+
+    private void showGameOverDialog(Bundle b) {
+        GameOverDialogFragment dialog = new GameOverDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(GameOverDialogFragment.EXTRA_TITLE, getString(R.string.game_over));
+        args.putString(GameOverDialogFragment.EXTRA_LABEL, getString(R.string.score_summary));
+        args.putBundle(GameOverDialogFragment.EXTRA_TEAMS, b);
+        Log.i(TAG, "showGameOverDialog: " + b.toString());
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), "GameOver");
     }
 
     @Override
