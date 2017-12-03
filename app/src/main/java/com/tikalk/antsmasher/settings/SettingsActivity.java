@@ -204,19 +204,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     builder.setTitle("New IP");
                     builder.setMessage("IP Changed.\nRestart app to apply changes...");
                     builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
-                    builder.setPositiveButton("Restart", (dialogInterface, i) -> restartApplication());
+                    builder.setPositiveButton("Restart", (dialogInterface, i) -> Utils.restartApp(getActivity()));
                     builder.show();
                 }
             }
-        }
-
-        private void restartApplication() {
-            Intent i = getActivity().getPackageManager().
-                    getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            getActivity().finish();
         }
     }
 
