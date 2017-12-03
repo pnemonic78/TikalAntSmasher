@@ -3,9 +3,7 @@ package com.tikalk.antsmasher.login_screen;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,15 +18,12 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
 
-import static com.tikalk.antsmasher.login_screen.EditDialogFragment.EXTRA_LABEL;
-import static com.tikalk.antsmasher.login_screen.EditDialogFragment.EXTRA_TITLE;
-
-public class LoginActivity extends AppCompatActivity implements EditDialogFragment.EditDialogEventListener, IpDialogFragment.IpDialogEventListener, LoginContract.View {
+public class LoginActivity extends AppCompatActivity implements
+        EditDialogFragment.EditDialogEventListener,
+        IpDialogFragment.IpDialogEventListener,
+        LoginContract.View {
 
     private static final String TAG = "TAG_LoginActivity";
-
-    public static final long SPLASH_TIMEOUT = 3000;
-    public static final long SPLASH_EDIT_TIMEOUT = 1000;
 
     @Inject
     protected LoginPresenter mLoginPresenter;
@@ -43,9 +38,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         Log.v(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
-        if (mLoginPresenter != null) {
-            mLoginPresenter.setView(this);
-        }
+        mLoginPresenter.setView(this);
     }
 
     @Override
@@ -54,16 +47,8 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         mLoginPresenter.checkBaseIp();
     }
 
-    /**
-     * Callback received when a permissions request has been completed.
-     */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-    }
-
-    @Override
-    public void onEditDone(String value) {
+    public void onUserNameEntered(String value) {
         mLoginPresenter.saveUserName(value);
     }
 
@@ -74,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         b.putString(IpDialogFragment.EXTRA_TITLE, "Servers Base URL");
         b.putString(IpDialogFragment.EXTRA_LABEL, "Enter Server Base IP");
         dialog.setArguments(b);
-        dialog.show(getSupportFragmentManager(), "IpDialog");
+        dialog.show(getSupportFragmentManager(), "EditAuthority");
     }
 
     @Override
@@ -82,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         new AlertDialog.Builder(this)
                 .setTitle("Invalid IP Address")
                 .setMessage("Please enter a valid IP in format:\nxxx.xxx.xxx.xxx")
-                .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
+                .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
                 .setPositiveButton("Try Again", (dialogInterface, i) -> mLoginPresenter.checkBaseIp())
                 .show();
     }
@@ -91,10 +76,10 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     public void showUserNameDialog() {
         EditDialogFragment dialog = new EditDialogFragment();
         Bundle b = new Bundle();
-        b.putString(EXTRA_TITLE, getString(R.string.login_dialog_header));
-        b.putString(EXTRA_LABEL, getString(R.string.login_dialog_body));
+        b.putString(EditDialogFragment.EXTRA_TITLE, getString(R.string.login_dialog_header));
+        b.putString(EditDialogFragment.EXTRA_LABEL, getString(R.string.login_dialog_body));
         dialog.setArguments(b);
-        dialog.show(getSupportFragmentManager(), "EditDialog");
+        dialog.show(getSupportFragmentManager(), "EditUserName");
     }
 
     @Override

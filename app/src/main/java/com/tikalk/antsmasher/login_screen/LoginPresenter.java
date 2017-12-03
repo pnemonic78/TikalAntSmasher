@@ -23,7 +23,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         LoginContract.Presenter,
         LoginInterceptor.OnLoginFinishedListener {
 
-    public static final String TAG = "TAG_LoginPresenter";
+    private static final String TAG = "TAG_LoginPresenter";
+
+    private static final long SPLASH_TIMEOUT = 3000;
+    private static final long SPLASH_EDIT_TIMEOUT = 1000;
+
     private Disposable mDisposable;
 
     private LoginContract.View view;
@@ -95,7 +99,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             loginManager = new LoginManager(gameRestService);
             loginManager.login(username, this);
         } else {
-            view.completeSplash(LoginActivity.SPLASH_TIMEOUT);
+            view.completeSplash(SPLASH_TIMEOUT);
         }
     }
 
@@ -108,7 +112,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     @Override
     public void onLoginSuccess(User user) {
         prefsHelper.setUserId(user.getId());
-        view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
+        view.completeSplash(SPLASH_EDIT_TIMEOUT);
     }
 
     @Override

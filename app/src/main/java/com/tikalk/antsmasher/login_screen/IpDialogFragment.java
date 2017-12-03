@@ -32,7 +32,8 @@ public class IpDialogFragment extends DialogFragment {
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_LABEL = "label";
 
-    private static final int COMMENT_MAX_LENGTH = 16;
+    private static final int EDIT_MAX_LENGTH = 16;
+
     private IpDialogEventListener eventListener;
     private Button posButton;
 
@@ -72,16 +73,16 @@ public class IpDialogFragment extends DialogFragment {
         final TextView chars = new TextView(context);
 
         input.setMaxLines(1);
-        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(COMMENT_MAX_LENGTH)});
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(EDIT_MAX_LENGTH)});
 
         chars.setPadding(5, 0, 0, 2);
         String comment = getArguments().getString("Comment");
         // FIXME move this to strings.xml %1$d/%2$d
         if (comment != null) {  //This means that recording had a comment already..
-            chars.setText(comment.length() + "/" + COMMENT_MAX_LENGTH);
+            chars.setText(comment.length() + "/" + EDIT_MAX_LENGTH);
             input.setText(comment);
         } else {
-            chars.setText("0/" + COMMENT_MAX_LENGTH);
+            chars.setText("0/" + EDIT_MAX_LENGTH);
             input.setText("");
         }
 
@@ -119,7 +120,7 @@ public class IpDialogFragment extends DialogFragment {
                 }
                 String text = input.getText().toString().trim();
                 // FIXME move this to strings.xml %1$d/%2$d
-                chars.setText(text.length() + "/" + COMMENT_MAX_LENGTH);
+                chars.setText(text.length() + "/" + EDIT_MAX_LENGTH);
                 if (text.length() > 0) {
                     posButton.setEnabled(true);
                 } else {
