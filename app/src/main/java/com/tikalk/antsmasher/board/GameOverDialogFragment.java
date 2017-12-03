@@ -46,16 +46,12 @@ public class GameOverDialogFragment extends DialogFragment {
         View view = LayoutInflater.from(context).inflate(R.layout.game_over_dialog, null);
 
         Bundle b = getArguments();
+
         Bundle teamsBundle = b.getBundle(EXTRA_TEAMS);
 
-        Team teamA = new Team(0, teamsBundle.getBundle(EXTRA_TEAM1).getString(EXTRA_NAME));
-        teamA.setScore(teamsBundle.getBundle(EXTRA_TEAM1).getInt(EXTRA_SCORE));
-
-        Team teamB = new Team(0, teamsBundle.getBundle(EXTRA_TEAM2).getString(EXTRA_NAME));
-        teamB.setScore(teamsBundle.getBundle(EXTRA_TEAM2).getInt(EXTRA_SCORE));
-
-        Team teamC = new Team(0, teamsBundle.getBundle(EXTRA_TEAM3).getString(EXTRA_NAME));
-        teamB.setScore(teamsBundle.getBundle(EXTRA_TEAM3).getInt(EXTRA_SCORE));
+        Team teamA =  teamsBundle.getParcelable(EXTRA_TEAM1);
+        Team teamB =  teamsBundle.getParcelable(EXTRA_TEAM2);
+        Team teamC =  teamsBundle.getParcelable(EXTRA_TEAM3);
 
         final TextView tvTeamA = view.findViewById(R.id.teamA);
         final TextView tvTeamB = view.findViewById(R.id.teamB);

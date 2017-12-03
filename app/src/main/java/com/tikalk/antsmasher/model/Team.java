@@ -2,6 +2,8 @@ package com.tikalk.antsmasher.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -13,7 +15,7 @@ import java.util.Map;
  * Team with players.
  */
 
-public class Team {
+public class Team implements Parcelable {
 
     @SerializedName("id")
     private long id;
@@ -121,4 +123,34 @@ public class Team {
         }
         return null;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.name);
+        dest.writeInt(this.score);
+    }
+
+    protected Team(Parcel in) {
+        this.id = in.readLong();
+        this.name = in.readString();
+        this.score = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Team> CREATOR = new Parcelable.Creator<Team>() {
+        @Override
+        public Team createFromParcel(Parcel source) {
+            return new Team(source);
+        }
+
+        @Override
+        public Team[] newArray(int size) {
+            return new Team[size];
+        }
+    };
 }

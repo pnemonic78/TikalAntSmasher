@@ -224,8 +224,10 @@ public class BoardActivity extends AppCompatActivity implements
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
             runOnUiThread(() -> {
-                Bundle b = teamsToBundle(teams);
-
+                Bundle b = new Bundle();
+                b.putParcelable(GameOverDialogFragment.EXTRA_TEAM1, teams.get(0));
+                b.putParcelable(GameOverDialogFragment.EXTRA_TEAM2, teams.get(1));
+                b.putParcelable(GameOverDialogFragment.EXTRA_TEAM3, teams.get(2));
                 showGameOverDialog(b);
                 if (prefsHelper.isInteractiveSounds()) {
                     soundHelper.playGameOver();
@@ -234,31 +236,7 @@ public class BoardActivity extends AppCompatActivity implements
         }
     }
 
-    private Bundle teamsToBundle(List<Team> teams) {
-        Bundle bA = new Bundle();
-        Team teamA = teams.get(0);
-        bA.putString(GameOverDialogFragment.EXTRA_NAME, teamA.getName());
-        bA.putInt(GameOverDialogFragment.EXTRA_SCORE, teamA.getScore());
-
-        Team teamB = teams.get(1);
-        Bundle bB = new Bundle();
-        bB.putString(GameOverDialogFragment.EXTRA_NAME, teamB.getName());
-        bB.putInt(GameOverDialogFragment.EXTRA_SCORE, teamB.getScore());
-
-        Team teamC = teams.get(2);
-        Bundle bC = new Bundle();
-        bC.putString(GameOverDialogFragment.EXTRA_NAME, teamC.getName());
-        bC.putInt(GameOverDialogFragment.EXTRA_SCORE, teamC.getScore());
-
-        Bundle b = new Bundle();
-        b.putBundle(GameOverDialogFragment.EXTRA_TEAM1, bA);
-        b.putBundle(GameOverDialogFragment.EXTRA_TEAM2, bB);
-        b.putBundle(GameOverDialogFragment.EXTRA_TEAM3, bC);
-
-        return b;
-
-    }
-
+    
     private void showGameOverDialog(Bundle b) {
         GameOverDialogFragment dialog = new GameOverDialogFragment();
         Bundle args = new Bundle();
