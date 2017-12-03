@@ -31,16 +31,14 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     private Disposable mDisposable;
 
     private LoginContract.View view;
-    private Context context;
+    private final Context context;
 
-    LoginManager loginManager;
+    private LoginManager loginManager;
 
-    PrefsHelper prefsHelper;
-
+    private final PrefsHelper prefsHelper;
 
     @Inject
-    GameRestService gameRestService;
-
+    protected GameRestService gameRestService;
 
     @Inject
     public LoginPresenter(Context context, PrefsHelper prefsHelper) {
@@ -56,10 +54,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     public void detachView() {
         super.detachView();
         if (mDisposable != null) mDisposable.dispose();
-    }
-
-    public void loadGameGroups() {
-        checkViewAttached();
     }
 
     @Override
@@ -127,5 +121,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     public String getUserName() {
         return prefsHelper.getUserName();
+    }
+
+    public void onResume() {
+        checkBaseIp();
     }
 }

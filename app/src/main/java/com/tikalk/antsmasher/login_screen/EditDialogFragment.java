@@ -8,11 +8,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tikalk.antsmasher.R;
@@ -27,8 +27,6 @@ public class EditDialogFragment extends DialogFragment {
     public static final String EXTRA_LABEL = "label";
     public static final String EXTRA_VALUE = "value";
 
-    private static final int EDIT_MAX_LENGTH = 25;
-
     private EditDialogEventListener eventListener;
     private Button posButton;
 
@@ -39,52 +37,13 @@ public class EditDialogFragment extends DialogFragment {
         return buildDialog(getActivity());
     }
 
-    //FIXME move code to a layout xml
-    private AlertDialog buildDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))
-                .setTitle(getArguments().getString(EXTRA_TITLE, getString(R.string.app_name)))
-                .setMessage(getArguments().getString(EXTRA_LABEL));
+    private Dialog buildDialog(Context context) {
+        View view = LayoutInflater.from(context).inflate(R.layout.edit_username, null);
 
-        LinearLayout layout = new LinearLayout(context);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(lp);
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(context);
-        final TextView chars = new TextView(context);
-
-        input.setMaxLines(1);
-        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(EDIT_MAX_LENGTH)});
-
-        chars.setPadding(5, 0, 0, 2);
-
-        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1Params.bottomMargin = 5;
-        layout.addView(input, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        layout.addView(chars, tv1Params);
-
-        builder.setView(layout);
-
-        builder.setPositiveButton(R.string.ok_button,
-                (dialog, whichButton) -> {
-                    String value = input.getText().toString().trim();
-                    eventListener.onUserNameEntered(value);
-                });
-
-        AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(dialogInterface -> {
-            String text = input.getText().toString().trim();
-            posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
-            posButton.setEnabled(text.length() > 0);
-        });
+        posButton = null;
+        final EditText input = view.findViewById(android.R.id.edit);
+        final TextView count = view.findViewById(android.R.id.text1);
+        final int maxLength = getResources().getInteger(R.integer.max_username_length);
 
         input.addTextChangedListener(new TextWatcher() {
             @Override
@@ -98,17 +57,32 @@ public class EditDialogFragment extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String text = s.toString().trim();
-                chars.setText(getString(R.string.edit_chars, text.length(), EDIT_MAX_LENGTH));
+                count.setText(getString(R.string.edit_count, text.length(), maxLength));
                 if (posButton != null) {
-                    if (text.length() > 0) {
-                        posButton.setEnabled(true);
-                    } else {
-                        posButton.setEnabled(false);
-                    }
+                    posButton.setEnabled(text.length() > 0);
                 }
             }
         });
         input.setText(getArguments().getString(EXTRA_VALUE));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))
+                .setTitle(getArguments().getString(EXTRA_TITLE, getString(R.string.app_name)))
+                .setMessage(getArguments().getString(EXTRA_LABEL))
+                .setView(view)
+                .setPositiveButton(R.string.ok_button,
+                        (dialog, whichButton) -> {
+                            String value = input.getText().toString().trim();
+                            eventListener.onUserNameEntered(value);
+                        });
+
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(dialogInterface -> {
+            String text = input.getText().toString().trim();
+            posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+            posButton.setEnabled(text.length() > 0);
+        });
 
         return dialog;
     }
@@ -116,5 +90,4 @@ public class EditDialogFragment extends DialogFragment {
     public interface EditDialogEventListener {
         void onUserNameEntered(String comment);
     }
-
 }

@@ -3,11 +3,11 @@ package com.tikalk.antsmasher.login_screen;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -25,11 +25,18 @@ public class LoginActivity extends AppCompatActivity implements
 
     private static final String TAG = "TAG_LoginActivity";
 
+    public static final String ACTION_ASK_IP = "com.tikalk.antsmasher.action.ASK_IP";
+    public static final String ACTION_ASK_NAME = "com.tikalk.antsmasher.action.ASK_USER_NAME";
+
+    public static final String EXTRA_DISMISS = "dismiss_after";
+
     @Inject
     protected LoginPresenter mLoginPresenter;
 
     @Inject
     protected PrefsHelper mPrefsHelper;
+
+    private boolean dismissAfterEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +46,39 @@ public class LoginActivity extends AppCompatActivity implements
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
         mLoginPresenter.setView(this);
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(@NonNull Intent intent) {
+        final String action = intent.getAction();
+        if (action == null) {
+            return;
+        }
+        dismissAfterEdit = false;
+        switch (action) {
+            case ACTION_ASK_IP:
+                dismissAfterEdit = intent.getBooleanExtra(EXTRA_DISMISS, false);
+                showEnterIpDialog();
+                break;
+            case ACTION_ASK_NAME:
+                dismissAfterEdit = intent.getBooleanExtra(EXTRA_DISMISS, false);
+                showUserNameDialog();
+                break;
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mLoginPresenter.checkBaseIp();
+        if (!dismissAfterEdit) {
+            mLoginPresenter.onResume();
+        }
     }
 
     @Override
@@ -55,44 +89,42 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void showEnterIpDialog() {
         IpDialogFragment dialog = new IpDialogFragment();
-        Bundle b = new Bundle();
-        b.putString(IpDialogFragment.EXTRA_TITLE, "Servers Base URL");
-        b.putString(IpDialogFragment.EXTRA_LABEL, "Enter Server Base IP");
-        b.putString(IpDialogFragment.EXTRA_VALUE, mLoginPresenter.getServerAuthority());
-        dialog.setArguments(b);
+        Bundle args = new Bundle();
+        args.putString(IpDialogFragment.EXTRA_TITLE, getString(R.string.ip_dialog_title));
+        args.putString(IpDialogFragment.EXTRA_LABEL, getString(R.string.ip_dialog_body));
+        args.putString(IpDialogFragment.EXTRA_VALUE, mLoginPresenter.getServerAuthority());
+        dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "EditAuthority");
     }
 
     @Override
     public void showInvalidIpDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Invalid IP Address")
-                .setMessage("Please enter a valid IP in format:\nxxx.xxx.xxx.xxx")
+                .setTitle(R.string.invalid_ip_header)
+                .setMessage(R.string.invalid_ip_body)
                 .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
-                .setPositiveButton("Try Again", (dialogInterface, i) -> mLoginPresenter.checkBaseIp())
+                .setPositiveButton(R.string.retry_button, (dialogInterface, i) -> mLoginPresenter.checkBaseIp())
                 .show();
     }
 
     @Override
     public void showUserNameDialog() {
         EditDialogFragment dialog = new EditDialogFragment();
-        Bundle b = new Bundle();
-        b.putString(EditDialogFragment.EXTRA_TITLE, getString(R.string.login_dialog_header));
-        b.putString(EditDialogFragment.EXTRA_LABEL, getString(R.string.login_dialog_body));
-        b.putString(IpDialogFragment.EXTRA_VALUE, mLoginPresenter.getUserName());
-        dialog.setArguments(b);
+        Bundle args = new Bundle();
+        args.putString(EditDialogFragment.EXTRA_TITLE, getString(R.string.login_dialog_header));
+        args.putString(EditDialogFragment.EXTRA_LABEL, getString(R.string.login_dialog_body));
+        args.putString(EditDialogFragment.EXTRA_VALUE, mLoginPresenter.getUserName());
+        dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "EditUserName");
     }
 
     @Override
     public void showLoginFailedDialog() {
         new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.app_name))
-                .setMessage("Login failed, please check your connection and try again.")
+                .setTitle(getString(R.string.login_dialog_header))
+                .setMessage(R.string.login_dialog_failed)
                 .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
-                .setCancelable(false)
                 .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
-                    Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .show();
@@ -100,11 +132,16 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void completeSplash(long timeout) {
-        Intent service = new Intent(LoginActivity.this, AppService.class);
+        if (dismissAfterEdit) {
+            finish();
+            return;
+        }
+
+        Intent service = new Intent(this, AppService.class);
         startService(service);
 
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(LoginActivity.this, TeamsActivity.class);
+            Intent intent = new Intent(this, TeamsActivity.class);
             startActivity(intent);
             finish();
         }, timeout);
@@ -117,6 +154,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void setPresenter(Presenter presenter) {
+        mLoginPresenter = (LoginPresenter) presenter;
     }
 }
 

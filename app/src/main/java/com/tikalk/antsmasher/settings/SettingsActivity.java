@@ -3,7 +3,6 @@ package com.tikalk.antsmasher.settings;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,16 +12,14 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import java.util.List;
 
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.utils.Utils;
+import com.tikalk.antsmasher.login_screen.LoginActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -151,30 +148,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-        SharedPreferences preferences;
+    public static class GeneralPreferenceFragment extends PreferenceFragment {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
-            preferences = getPreferenceScreen().getSharedPreferences();
-            preferences.registerOnSharedPreferenceChangeListener(this);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference(PrefsHelper.USER_NAME));
             bindPreferenceSummaryToValue(findPreference(PrefsHelper.BASE_IP));
+            bindPreferenceSummaryToValue(findPreference(PrefsHelper.USER_NAME));
 
-        }
-
-        @Override
-        public void onDestroy() {
-            super.onDestroy();
-            preferences.unregisterOnSharedPreferenceChangeListener(this);
+            findPreference(PrefsHelper.BASE_IP).setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setAction(LoginActivity.ACTION_ASK_IP);
+                intent.putExtra(LoginActivity.EXTRA_DISMISS, true);
+                startActivity(intent);
+                return true;
+            });
+            findPreference(PrefsHelper.USER_NAME).setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setAction(LoginActivity.ACTION_ASK_NAME);
+                intent.putExtra(LoginActivity.EXTRA_DISMISS, true);
+                startActivity(intent);
+                return true;
+            });
         }
 
         @Override
@@ -187,28 +189,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
 
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(PrefsHelper.BASE_IP)) {
-                String prefIp = sharedPreferences.getString(key, "");
-                if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Invalid IP")
-                            .setMessage("Please enter valid IP in format:\nxxx.xxx.xxx.xxx")
-                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
-                            .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
-                            })
-                            .show();
-                } else {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("New IP")
-                            .setMessage("IP Changed.\nRestart app to apply changes...")
-                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
-                            .setPositiveButton("Restart", (dialogInterface, i) -> Utils.restartApp(getActivity()))
-                            .show();
-                }
-            }
-        }
+//        @Override
+//        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+//            if (key.equals(PrefsHelper.BASE_IP)) {
+//                String prefIp = sharedPreferences.getString(key, "");
+//                if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
+//                    new AlertDialog.Builder(getActivity())
+//                            .setTitle("Invalid IP")
+//                            .setMessage("Please enter valid IP in format:\nxxx.xxx.xxx.xxx")
+//                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
+//                            .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
+//                            })
+//                            .show();
+//                } else {
+//                    new AlertDialog.Builder(getActivity())
+//                            .setTitle("New IP")
+//                            .setMessage("IP Changed.\nRestart app to apply changes...")
+//                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
+//                            .setPositiveButton("Restart", (dialogInterface, i) -> Utils.restartApp(getActivity()))
+//                            .show();
+//                }
+//            }
+//        }
     }
 
     /**
@@ -234,5 +236,4 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
 }

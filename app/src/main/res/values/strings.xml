@@ -11,8 +11,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."
     </string>
     <string name="login_name">Please add your name :</string>
     <string name="login_name_hint">Your nickname</string>
@@ -20,7 +19,14 @@
     <string name="ok_button" translatable="false">@android:string/ok</string>
     <string name="login_dialog_header">Login</string>
     <string name="login_dialog_body">Enter Your Nickname</string>
-    <string name="edit_chars">%1$d/%2$d</string>
+    <string name="edit_count">%1$d/%2$d</string>
+    <string name="retry_button">Try again</string>
+    <string name="login_dialog_failed">Login failed, please check your connection and try again.</string>
+    <string name="ip_dialog_title">IP Address</string>
+    <string name="ip_dialog_body">Enter IP Address</string>
+    <string name="ip_hint">xxx.xxx.xxx.xxx</string>
+    <string name="invalid_ip_header">Invalid IP</string>
+    <string name="invalid_ip_body">Enter a valid IP</string>
 
     <!-- Teams -->
     <string name="teams">Teams</string>
@@ -28,15 +34,6 @@
         <item quantity="one">%d player</item>
         <item quantity="other">%d players</item>
     </plurals>
-    <string name="dev_team_choose">Choose developer team</string>
-    <string name="dev_ip_dialog_header">IP Addresses</string>
-    <string name="dev_ip_dialog_body">Enter Sockets Ip Addresses</string>
-    <string name="invalid_ip_header">Invalid IP</string>
-    <string name="invalid_ip_body">Enter a valid IP</string>
-    <string name="antIpHint">Ants IP Address here</string>
-    <string name="adminIpHint">Admin IP Address here</string>
-    <string name="smashIpHint">Smash IP Address here</string>
-
 
     <!-- Board -->
     <string name="title_activity_board">Ant Smasher</string>
