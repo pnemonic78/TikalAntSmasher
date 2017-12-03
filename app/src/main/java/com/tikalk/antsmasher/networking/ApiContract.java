@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 public class ApiContract {
 
     //URL's
-    public static final String AUTHORITY = "35.167.230.149";
+    public static final String AUTHORITY = "localhost";
 
     public static final int ANT_PUBLISH_PORT = 6080;
     public static final int SMASH_SERVICE_PORT = 5080;

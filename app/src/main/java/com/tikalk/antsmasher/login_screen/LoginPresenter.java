@@ -63,8 +63,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Override
     public void checkBaseIp() {
-        String baseIp = prefsHelper.getStringPref(BASE_IP);
-        if (baseIp == null || baseIp.isEmpty()) {
+        String baseIp = prefsHelper.getServerAuthority();
+        Log.i(TAG, "checkBaseIp: " + baseIp);
+
         if (prefsHelper.isServerAuthorityEmpty()) {
             view.showEnterIpDialog();
         } else {
@@ -78,18 +79,17 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         if (!ipIsValid) {
             view.showInvalidIpDialog();
         } else {
-            prefsHelper.saveStringPref(BASE_IP, enteredIp);
+            prefsHelper.setServerAuthority(enteredIp);
             try {
                 retrofitContainer.updateBaseUrl(ApiContract.buildAdminBaseUrl(enteredIp));
+                Log.i(TAG, "onIpEntered: " + enteredIp);
+                login();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-        } else {
-            prefsHelper.setServerAuthority(enteredIp);
-            Log.i(TAG, "onIpEntered: " + enteredIp);
-            login();
         }
     }
+
 
     public void login() {
         String username = prefsHelper.getUserName();

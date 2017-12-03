@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.board;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -305,8 +307,12 @@ public class BoardActivity extends AppCompatActivity implements
 
     @Override
     public void setScore(int player, int team) {
-        playerScoreText.setText(String.valueOf(player));
-        teamScoreText.setText(String.valueOf(team));
+
+        runOnUiThread(() -> {
+            playerScoreText.setText(String.valueOf(player));
+            teamScoreText.setText(String.valueOf(team));
+        });
+
     }
 
     @Override

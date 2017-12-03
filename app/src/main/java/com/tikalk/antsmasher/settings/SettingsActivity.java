@@ -189,34 +189,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(PrefsHelper.BASE_IP)) {
-                String prefIp = sharedPreferences.getString(key, "");
-                if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Invalid IP");
-                    builder.setMessage("Please enter valid IP in format:\n\nXXX.XXX.XXX.XXX");
-                    builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
-                    builder.setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
-                    });
-                    builder.show();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("New IP");
-                    builder.setMessage("IP Changed.\nRestart app to apply changes...");
-                    builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
-                    builder.setPositiveButton("Restart", (dialogInterface, i) -> restartApplication());
-                    builder.show();
-                }
-            }
-        }
 
-        private void restartApplication() {
-            Intent i = getActivity().getPackageManager().
-                    getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            getActivity().finish();
         }
     }
 
