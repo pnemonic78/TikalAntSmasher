@@ -173,7 +173,7 @@ public class MockWebSocket extends AppWebSocket {
 
     public static Game createGame() {
         Game game = new Game();
-        populateGame(game);//TODO delete me!
+        populateGame(game);
         return game;
     }
 

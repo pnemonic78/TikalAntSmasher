@@ -152,8 +152,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+    public static class GeneralPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         SharedPreferences preferences;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -189,9 +190,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if( key.equals("base_ip")){
+            if (key.equals("base_ip")) {
                 String prefIp = sharedPreferences.getString(key, null);
-                if(prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)){
+                if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Invalid IP");
                     builder.setMessage("Please enter valid IP in format:\n\nXXX.XXX.XXX.XXX");
@@ -204,7 +205,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     });
                     builder.create().show();
 
-                }else {
+                } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("New IP");
                     builder.setMessage("IP Changed, Restart App to apply changes");
@@ -221,7 +222,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
         }
 
-        void restartApplication(){
+        void restartApplication() {
             Intent i = getActivity().getPackageManager().
                     getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -1,7 +1,6 @@
 package com.tikalk.antsmasher.networking;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,7 +12,7 @@ import java.net.URISyntaxException;
 public class ApiContract {
 
     //URL's
-    public static final String BASE_URL = "35.167.230.149";
+    public static final String AUTHORITY = "35.167.230.149";
 
     public static final int ANT_PUBLISH_PORT = 6080;
     public static final int SMASH_SERVICE_PORT = 5080;
@@ -21,10 +20,9 @@ public class ApiContract {
 
     public static final String REGISTRY_URL_PATH = "client.register";
 
-    public static final String ANT_PUBLISHER_URL = BASE_URL + ":" + ANT_PUBLISH_PORT + "/" + REGISTRY_URL_PATH;
-    public static final String SMASH_SERVICE_URL = BASE_URL + ":" + SMASH_SERVICE_PORT + "/" + REGISTRY_URL_PATH;
-    public static final String ADMIN_SERVICE_URL = "http://" + BASE_URL + ":" + ADMIN_REST_PORT + "/";
-
+    public static final String ANT_PUBLISHER_URL = AUTHORITY + ":" + ANT_PUBLISH_PORT + "/" + REGISTRY_URL_PATH;
+    public static final String SMASH_SERVICE_URL = AUTHORITY + ":" + SMASH_SERVICE_PORT + "/" + REGISTRY_URL_PATH;
+    public static final String ADMIN_SERVICE_URL = "http://" + AUTHORITY + ":" + ADMIN_REST_PORT + "/";
 
     //Requests Endpoints
     public static final String LOGIN_ENDPOINT = "/users";
@@ -51,23 +49,21 @@ public class ApiContract {
     public static final String SELF_SMASH_MESSAGE = "self-smash-message";
     public static final String SMASH_MESSAGE = "smash-message";
 
-    public static String buildAntPublishSocketUrl(String baseUrl){
+    public static String buildAntPublishSocketUrl(String baseUrl) {
         return new Uri.Builder().scheme(null)
                 .encodedAuthority(baseUrl + ":" + ANT_PUBLISH_PORT)
                 .appendPath(REGISTRY_URL_PATH).build().toString();
     }
 
-    public static String buildAntSmashSocketUrl(String baseUrl){
-
+    public static String buildAntSmashSocketUrl(String baseUrl) {
         return new Uri.Builder().scheme(null)
                 .encodedAuthority(baseUrl + ":" + SMASH_SERVICE_PORT)
                 .appendPath(REGISTRY_URL_PATH).build().toString();
     }
 
     public static String buildAdminBaseUrl(String baseUrl) throws URISyntaxException {
-        URI uri = null;
-        uri = new URI("http", null, baseUrl, ADMIN_REST_PORT, null, null, null);
-
+        //FIXME use Uri.Builder
+        URI uri = new URI("http", null, baseUrl, ADMIN_REST_PORT, null, null, null);
         return uri.toString();
     }
 

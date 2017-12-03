@@ -30,10 +30,10 @@ public class GameRestServiceModule {
     @Provides
     public Retrofit provideRetrofit(OkHttpClient client, @Named("PlainGson") Gson gson, PrefsHelper prefsHelper) {
         try {
-            String URL = ApiContract.buildAdminBaseUrl(prefsHelper.getStringPref(PrefsHelper.BASE_IP));
+            String url = ApiContract.buildAdminBaseUrl(prefsHelper.getServerAuthority());
 
             return new Retrofit.Builder()
-                    .baseUrl(URL)
+                    .baseUrl(url)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

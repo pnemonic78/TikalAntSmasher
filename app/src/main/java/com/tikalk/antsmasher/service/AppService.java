@@ -3,7 +3,6 @@ package com.tikalk.antsmasher.service;
 import com.google.gson.Gson;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.util.Log;
@@ -149,17 +148,16 @@ public class AppService extends Service {
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
         Log.i(TAG, "Start real web sockets");
 
-        String baseUrl = prefsHelper.getStringPref(PrefsHelper.BASE_IP);
+        String baseUrl = prefsHelper.getServerAuthority();
 
         gameWebSocket = new GameWebSocket(ApiContract.buildAntPublishSocketUrl(baseUrl), sessionId, this);
-        smashWebSocket = new SmashWebSocket(ApiContract.buildAntSmashSocketUrl(baseUrl), sessionId, this);
         gameWebSocket.setMessageListener(serviceEventListener);
-        smashWebSocket.setMessageListener(serviceEventListener);
-
         gameWebSocket.startSocket();
-        smashWebSocket.startSocket();
-
         networkManager.add(gameWebSocket);
+
+        smashWebSocket = new SmashWebSocket(ApiContract.buildAntSmashSocketUrl(baseUrl), sessionId, this);
+        smashWebSocket.setMessageListener(serviceEventListener);
+        smashWebSocket.startSocket();
         networkManager.add(smashWebSocket);
     }
 

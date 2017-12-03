@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.tikalk.antsmasher.networking.ApiContract;
 
@@ -19,9 +20,9 @@ public class PrefsHelper {
     private static final String TEAM_ID = "team_id";
     private static final String PLAYER_ID = "player_id";
     private static final String GAME_ID = "game_id";
-    public static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
-    public static final String BASE_IP = "base_ip";
-    public static final String SMASH_SOCKET_URL = "smash_ip";
+    private static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
+    private static final String BASE_IP = "base_ip";
+    private static final String SMASH_SOCKET_URL = "smash_ip";
 
     private final SharedPreferences preferences;
 
@@ -46,12 +47,8 @@ public class PrefsHelper {
         preferences.edit().putString(key, value).apply();
     }
 
-    public String getStringPref(String key) {
+    private String getStringPref(String key) {
         return preferences.getString(key, null);
-    }
-
-    public void saveStringPref(String key, String value) {
-        preferences.edit().putString(key, value).apply();
     }
 
     public void saveLongToPrefs(String key, long value) {
@@ -116,5 +113,17 @@ public class PrefsHelper {
 
     public void setPlayerId(long playerId) {
         saveLongToPrefs(PLAYER_ID, playerId);
+    }
+
+    public String getServerAuthority() {
+        return preferences.getString(BASE_IP, ApiContract.AUTHORITY);
+    }
+
+    public void setServerAuthority(String authority) {
+        saveStringToPrefs(BASE_IP, authority);
+    }
+
+    public boolean isServerAuthorityEmpty() {
+        return !preferences.contains(BASE_IP) || TextUtils.isEmpty(getServerAuthority());
     }
 }

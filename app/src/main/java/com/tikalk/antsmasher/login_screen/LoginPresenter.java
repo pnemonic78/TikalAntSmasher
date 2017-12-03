@@ -15,8 +15,6 @@ import com.tikalk.antsmasher.utils.Utils;
 
 import io.reactivex.disposables.Disposable;
 
-import static com.tikalk.antsmasher.data.PrefsHelper.BASE_IP;
-
 /**
  * Created by tamirnoach on 23/10/2017.
  */
@@ -62,10 +60,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Override
     public void checkBaseIp() {
-        String baseIp = prefsHelper.getStringPref(BASE_IP);
-        if(baseIp == null || baseIp.isEmpty()){
+        if (prefsHelper.isServerAuthorityEmpty()) {
             view.showEnterIpDialog();
-        }else{
+        } else {
             login();
         }
     }
@@ -75,8 +72,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         boolean ipIsValid = Utils.validateIpAddress(enteredIp);
         if (!ipIsValid) {
             view.showInvalidIpDialog();
-        }else {
-            prefsHelper.saveStringPref(BASE_IP, enteredIp);
+        } else {
+            prefsHelper.setServerAuthority(enteredIp);
             Log.i(TAG, "onIpEntered: " + enteredIp);
             login();
         }
@@ -94,7 +91,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     private void checkUserId(String username) {
         if (prefsHelper.getUserId() == 0) {
             Log.v(TAG, "checkUserId: about to createUser to server");
-            ((AntApplication)(context.getApplicationContext())).getApplicationComponent().inject(this);
+            ((AntApplication) (context.getApplicationContext())).getApplicationComponent().inject(this);
             loginManager = new LoginManager(gameRestService);
             loginManager.login(username, this);
         } else {

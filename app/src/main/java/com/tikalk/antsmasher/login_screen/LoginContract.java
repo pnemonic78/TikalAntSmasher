@@ -10,6 +10,7 @@ public interface LoginContract {
 
     interface View extends MvpView {
         void showEnterIpDialog();
+
         void showInvalidIpDialog();
 
         void showUserNameDialog();
@@ -21,7 +22,9 @@ public interface LoginContract {
 
     interface Presenter {
         void checkBaseIp();
+
         void onIpEntered(String enteredIp);
+
         void saveUserName(String userName);
     }
 }

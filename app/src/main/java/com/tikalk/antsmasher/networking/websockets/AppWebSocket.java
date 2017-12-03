@@ -244,7 +244,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
             String strippedString = text.replaceAll("\\\\", "").replace("}\"", "}").replace("\"{", "{").substring(text.indexOf("[") + 1);
             strippedString = strippedString.substring(0, strippedString.lastIndexOf("]"));
 
-            SocketMessage message = new Gson().fromJson(strippedString, SocketMessage.class);
+            SocketMessage message = socketMessageGson.fromJson(strippedString, SocketMessage.class);
 //                Log.v(TAG, "checking message type:  " + message.type);
 
             if (message.type.equals(SocketMessage.TYPE_ERROR)) {
