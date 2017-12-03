@@ -2,9 +2,12 @@ package com.tikalk.antsmasher.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.tikalk.antsmasher.networking.ApiContract;
+import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.networking.ApiContract;
 
 import javax.inject.Inject;
@@ -25,10 +28,12 @@ public class PrefsHelper {
     private static final String SMASH_SOCKET_URL = "smash_ip";
 
     private final SharedPreferences preferences;
+    private final Resources resources;
 
     @Inject
     public PrefsHelper(Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        resources = context.getResources();
     }
 
     public void clear() {

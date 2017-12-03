@@ -10,8 +10,12 @@ import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.User;
+import com.tikalk.antsmasher.networking.ApiContract;
+import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 import com.tikalk.antsmasher.utils.Utils;
+
+import java.net.URISyntaxException;
 
 import io.reactivex.disposables.Disposable;
 
@@ -73,6 +77,12 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         if (Utils.validateIpAddress(enteredIp)) {
             String oldValue = prefsHelper.getServerAuthority();
             prefsHelper.setServerAuthority(enteredIp);
+            try {
+                retrofitContainer.updateBaseUrl(ApiContract.buildAdminBaseUrl(enteredIp));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
             if (enteredIp.equals(oldValue)) {
                 login();
             } else {
@@ -83,6 +93,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             view.showInvalidIpDialog();
         }
     }
+
 
     public void login() {
         String username = prefsHelper.getUserName();

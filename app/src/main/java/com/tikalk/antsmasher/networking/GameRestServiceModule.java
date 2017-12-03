@@ -29,7 +29,7 @@ public class GameRestServiceModule {
     RetrofitContainer provideRetrofitContainer(OkHttpClient client, @Named("PlainGson") Gson gson, PrefsHelper prefsHelper, Application application) {
         String baseUrl = null;
         try {
-            baseUrl = ApiContract.buildAdminBaseUrl(prefsHelper.getBaseUrl(application.getApplicationContext()));
+            baseUrl = ApiContract.buildAdminBaseUrl(prefsHelper.getServerAuthority());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

@@ -4,12 +4,17 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,6 +31,7 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.settings.SettingsActivity;
+import com.tikalk.antsmasher.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +39,7 @@ import butterknife.ButterKnife;
 public class TeamsActivity extends AppCompatActivity implements
         TeamViewModel.View,
         TeamViewHolder.TeamViewHolderListener,
-        Observer<List<Team>> {
+        Observer<List<Team>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final int TEAMS_ACTIVITY = 100;
     private static final String TAG = "TAG_TeamsActivity";
@@ -52,12 +58,15 @@ public class TeamsActivity extends AppCompatActivity implements
     @Inject
     @Named("Teams")
     ViewModelProvider.Factory mViewModelFactory;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
         setContentView(R.layout.activity_teams);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         ButterKnife.bind(this);
 
         adapter = new TeamAdapter(this);
@@ -79,6 +88,13 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -134,5 +150,41 @@ public class TeamsActivity extends AppCompatActivity implements
     public void showJoinTeamError(Throwable e) {
         //FIXME show error dialog.
         Toast.makeText(this, "Failed to join team: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        if (key.equals(PrefsHelper.BASE_IP)) {
+            String prefIp = sharedPreferences.getString(key, "");
+            Log.i(TAG, "prefsIp: " + prefIp);
+            if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
+                Log.i(TAG, "onSharedPreferenceChanged: invalid ip");
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Invalid IP");
+                builder.setMessage("Please enter valid IP in format:\n\nXXX.XXX.XXX.XXX");
+                builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+                builder.setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {});
+                builder.show();
+            } else {
+                Log.i(TAG, "onSharedPreferenceChanged: restart app dialog");
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("New IP");
+                builder.setMessage("IP Changed.\nRestart app to apply changes...");
+                builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+                builder.setPositiveButton("Restart", (dialogInterface, i) -> restartApplication());
+                builder.show();
+            }
+        }
+    }
+
+    private void restartApplication() {
+        Intent i = getPackageManager().
+                getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+        finish();
     }
 }
