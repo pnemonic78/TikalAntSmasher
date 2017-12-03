@@ -74,6 +74,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             if (enteredIp.equals(oldValue)) {
                 login();
             } else {
+                prefsHelper.setUserId(0L);
                 view.restartApp();
             }
         } else {
