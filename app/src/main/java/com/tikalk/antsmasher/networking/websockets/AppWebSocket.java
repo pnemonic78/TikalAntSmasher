@@ -184,7 +184,7 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
 
     protected abstract void handleSocketOpen(WebSocket webSocket, Response response);
 
-    protected abstract void handleNewMessage(WebSocket socket, String message);
+    protected abstract void handleNewMessage(WebSocket socket, SocketMessage message);
 
     protected abstract void handleSocketFailure(WebSocket webSocket, Throwable t, Response response);
 
@@ -232,27 +232,27 @@ public abstract class AppWebSocket implements Comparable<AppWebSocket> {
             Log.v(TAG, "onMessage socket: + " + socketBaseUrl + ", open=" + socketOpened + " text=~" + text + "~");
 
             final char type = text.charAt(0);
-            // first check for messages that don't need a payload
             switch (type) {
+                // first check for messages that don't need a payload
                 case TYPE_OPEN:
                 case TYPE_HEARTBEAT:
                 case TYPE_CLOSE:
                     return;
+                case TYPE_ARRAY:
+                    text = text.substring(1);
+                    String[] content = socketMessageGson.fromJson(text, String[].class);
+                    final int length = content.length;
+                    for (int i = 0; i < length; i++) {
+                        SocketMessage message = socketMessageGson.fromJson(content[i], SocketMessage.class);
+
+                        if (message.type.equals(SocketMessage.TYPE_ERROR)) {
+                            Log.e(TAG, "message error: " + socketBaseUrl + ": " + message);
+                        } else {
+                            handleNewMessage(webSocket, message);
+                        }
+                    }
+                    break;
             }
-
-            //FIXME only use gson
-            String strippedString = text.replaceAll("\\\\", "").replace("}\"", "}").replace("\"{", "{").substring(text.indexOf("[") + 1);
-            strippedString = strippedString.substring(0, strippedString.lastIndexOf("]"));
-
-            SocketMessage message = socketMessageGson.fromJson(strippedString, SocketMessage.class);
-//                Log.v(TAG, "checking message type:  " + message.type);
-
-            if (message.type.equals(SocketMessage.TYPE_ERROR)) {
-                Log.e(TAG, "message type error: " + socketBaseUrl + ": " + message);
-            } else {
-                handleNewMessage(webSocket, strippedString);
-            }
-//            webSocketEventListener.onNewMessage(strippedString);
         }
 
         @Override

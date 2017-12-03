@@ -48,27 +48,25 @@ public class SmashWebSocket extends AppWebSocket {
     }
 
     @Override
-    protected void handleNewMessage(WebSocket socket, String message) {
-        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
-
-        switch (socketMessage.address) {
+    protected void handleNewMessage(WebSocket socket, SocketMessage message) {
+        switch (message.address) {
             case SMASH_MESSAGE:
-                AntSmash smash = socketMessageGson.fromJson(socketMessage.body, AntSmash.class);
+                AntSmash smash = socketMessageGson.fromJson(message.body, AntSmash.class);
                 //Log.i(TAG, "handleNewMessage: smashed: " + smash);
                 socketMessageListener.onAntSmashed(smash);
                 break;
             case SELF_SMASH_MESSAGE:
-                AntSmash smashSelf = socketMessageGson.fromJson(socketMessage.body, AntSmash.class);
+                AntSmash smashSelf = socketMessageGson.fromJson(message.body, AntSmash.class);
                 //Log.i(TAG, "handleNewMessage: self-smashed: " + smashSelf);
                 socketMessageListener.onAntSmashed(smashSelf);
                 break;
             case PLAYER_SCORE_MESSAGE:
-                PlayerScore playerScore = socketMessageGson.fromJson(socketMessage.body, PlayerScore.class);
+                PlayerScore playerScore = socketMessageGson.fromJson(message.body, PlayerScore.class);
                 //Log.i(TAG, "handleNewMessage: player score: " + playerScore);
                 socketMessageListener.onPlayerScore(playerScore);
                 break;
             case TEAM_SCORE_MESSAGE:
-                TeamScore teamScore = socketMessageGson.fromJson(socketMessage.body, TeamScore.class);
+                TeamScore teamScore = socketMessageGson.fromJson(message.body, TeamScore.class);
                 //Log.i(TAG, "handleNewMessage: team score: " + teamScore);
                 socketMessageListener.onTeamScore(teamScore);
                 break;
