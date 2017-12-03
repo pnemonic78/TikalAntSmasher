@@ -146,9 +146,9 @@ public class AppService extends Service {
 
     private void startWebSockets() {
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
-        Log.i(TAG, "Start real web sockets");
 
         String baseUrl = prefsHelper.getServerAuthority();
+        Log.i(TAG, "Start real web sockets: " + baseUrl);
 
         gameWebSocket = new GameWebSocket(ApiContract.buildAntPublishSocketUrl(baseUrl), sessionId, this);
         gameWebSocket.setMessageListener(serviceEventListener);

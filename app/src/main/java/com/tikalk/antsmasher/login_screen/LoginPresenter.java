@@ -69,6 +69,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         if (prefsHelper.isServerAuthorityEmpty()) {
             view.showEnterIpDialog();
         } else {
+            Log.i(TAG, "checkBaseIp: proceed to login");
             login();
         }
     }

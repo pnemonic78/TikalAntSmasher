@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceScreen
+        android:key="general_screen"
+        android:title="General Settings">
+
+        <Preference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_default_display_name"
+            android:hint="@string/login_name_hint"
+            android:inputType="textCapWords"
+            android:key="user_name"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/login_dialog_header"/>
+
+
+        <EditTextPreference
+            android:title="Server Base Ip"
+            android:key="base_ip"
+            android:inputType="number|phone"
+            android:defaultValue="@string/defaultBaseUrl"/>
+
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:key="sound_screen"
+        android:title="Notifications and Sound">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="interactive_music"
+            android:title="@string/pref_title_music"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="interactive_sound"
+            android:title="@string/pref_title_sound"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="interactive_vibrate"
+            android:title="@string/pref_title_vibrate"/>
+    </PreferenceScreen>
+
+
+</PreferenceScreen>

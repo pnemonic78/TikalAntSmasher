@@ -55,7 +55,8 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".settings.GeneralSettings"></activity>
+        <activity android:name=".settings.GeneralSettings" />
+        <activity android:name=".settings.PreferencesActivity"></activity>
     </application>
 
 </manifest>

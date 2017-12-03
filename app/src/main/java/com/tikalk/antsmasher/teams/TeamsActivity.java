@@ -30,6 +30,7 @@ import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
+import com.tikalk.antsmasher.settings.PreferencesActivity;
 import com.tikalk.antsmasher.settings.SettingsActivity;
 import com.tikalk.antsmasher.utils.Utils;
 
@@ -125,7 +126,7 @@ public class TeamsActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, PreferencesActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -168,6 +169,9 @@ public class TeamsActivity extends AppCompatActivity implements
                 builder.setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {});
                 builder.show();
             } else {
+//                sharedPreferences.edit().remove(PrefsHelper.USER_NAME).apply();
+                sharedPreferences.edit().remove(PrefsHelper.USER_ID).apply();
+
                 Log.i(TAG, "onSharedPreferenceChanged: restart app dialog");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("New IP");
@@ -185,6 +189,7 @@ public class TeamsActivity extends AppCompatActivity implements
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
+        System.exit(0);
         finish();
     }
 }
