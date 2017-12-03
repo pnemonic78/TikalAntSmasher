@@ -39,7 +39,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     PrefsHelper prefsHelper;
 
 
-   // GameRestService gameRestService;
     RetrofitContainer retrofitContainer;
 
 
@@ -47,7 +46,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     public LoginPresenter(Context context, PrefsHelper prefsHelper, RetrofitContainer retrofitContainer) {
         this.context = context;
         this.prefsHelper = prefsHelper;
-       // this.gameRestService = gameRestService;
         this.retrofitContainer = retrofitContainer;
     }
 
@@ -105,7 +103,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         if (prefsHelper.getUserId() == 0) {
             Log.v(TAG, "checkUserId: about to createUser to server");
             //((AntApplication) (context.getApplicationContext())).getApplicationComponent().inject(this);
-            loginManager = new LoginManager(retrofitContainer.getRetrofit().create(GameRestService.class));
+            loginManager = new LoginManager(retrofitContainer.getRestService());
             loginManager.login(username, this);
         } else {
             view.completeSplash(LoginActivity.SPLASH_TIMEOUT);

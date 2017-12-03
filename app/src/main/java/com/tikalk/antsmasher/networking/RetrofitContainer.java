@@ -1,6 +1,9 @@
 package com.tikalk.antsmasher.networking;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import javax.inject.Inject;
 
@@ -11,34 +14,47 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitContainer {
 
+    private static final String TAG = "TAG_RetrofitContainer";
+
     private Retrofit retrofit;
     private Gson gson;
     private OkHttpClient client;
     private String baseUrl;
+    private GameRestService restService;
 
 
     @Inject
-    public RetrofitContainer(Gson gson, OkHttpClient client, String baseUrl){
+    public RetrofitContainer(Gson gson, OkHttpClient client, String baseUrl) {
         this.gson = gson;
         this.client = client;
         this.baseUrl = baseUrl;
+        initRetrofit();
     }
 
 
+    public void initRetrofit() {
+        if (retrofit == null || !retrofit.baseUrl().equals(baseUrl)) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+        }
+        Log.i(TAG, "getRetrofit: base url: " + retrofit.baseUrl());
 
-    public Retrofit getRetrofit() {
-       retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-
-       return retrofit;
     }
 
-    public void updateBaseUrl(String baseUrl){
+    public void updateBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
-        getRetrofit();
+        initRetrofit();
+    }
+
+    public GameRestService getRestService() {
+        if (this.restService == null) {
+            this.restService = retrofit.create(GameRestService.class);
+        }
+        return this.restService;
+
     }
 }
