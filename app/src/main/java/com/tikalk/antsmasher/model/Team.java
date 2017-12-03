@@ -124,6 +124,7 @@ public class Team implements Parcelable {
         return null;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -133,12 +134,17 @@ public class Team implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
         dest.writeString(this.name);
+        dest.writeList(this.players);
+        dest.writeParcelable(this.antSpecies, flags);
         dest.writeInt(this.score);
     }
 
     protected Team(Parcel in) {
         this.id = in.readLong();
         this.name = in.readString();
+        this.players = new ArrayList<Player>();
+        in.readList(this.players, Player.class.getClassLoader());
+        this.antSpecies = in.readParcelable(AntSpecies.class.getClassLoader());
         this.score = in.readInt();
     }
 

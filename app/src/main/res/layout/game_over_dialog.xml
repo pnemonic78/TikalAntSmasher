@@ -7,10 +7,22 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/tvWinner"
+        style="?android:textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:drawableLeft="@drawable/winner"
+        android:layout_margin="@dimen/tiny_padding"
+        android:padding="@dimen/tiny_padding"/>
+
+    <TextView
         android:id="@+id/teamA"
         style="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_margin="@dimen/tiny_padding"
         android:padding="@dimen/tiny_padding"/>
 
@@ -19,6 +31,7 @@
         style="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_margin="@dimen/tiny_padding"
         android:padding="@dimen/tiny_padding"/>
 
@@ -27,6 +40,7 @@
         style="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_margin="@dimen/tiny_padding"
         android:padding="@dimen/tiny_padding"/>
 

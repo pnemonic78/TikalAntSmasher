@@ -1,5 +1,7 @@
 package com.tikalk.antsmasher.model;
 
+import android.os.Bundle;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -41,5 +43,13 @@ public class Player extends User {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public Bundle toBundle(){
+        Bundle b = new Bundle();
+        b.putString("name", getName());
+        b.putString("teamName", getTeamName());
+        b.putInt("score", score);
+        return b;
     }
 }

@@ -3,6 +3,8 @@ package com.tikalk.antsmasher.model;
 import com.google.gson.annotations.SerializedName;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +19,7 @@ import java.util.Map;
  * Ant species with ants.
  */
 
-public class AntSpecies {
+public class AntSpecies implements Parcelable {
 
     @SerializedName("id")
     private long id;
@@ -136,4 +138,34 @@ public class AntSpecies {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeInt(this.tint);
+        dest.writeFloat(this.size);
+    }
+
+    protected AntSpecies(Parcel in) {
+        this.name = in.readString();
+        this.tint = in.readInt();
+        this.size = in.readFloat();
+    }
+
+    public static final Parcelable.Creator<AntSpecies> CREATOR = new Parcelable.Creator<AntSpecies>() {
+        @Override
+        public AntSpecies createFromParcel(Parcel source) {
+            return new AntSpecies(source);
+        }
+
+        @Override
+        public AntSpecies[] newArray(int size) {
+            return new AntSpecies[size];
+        }
+    };
 }

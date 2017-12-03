@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 public class BoardActivity extends AppCompatActivity implements
         BoardViewModel.View,
         Observer<Game>,
-        BoardView.AntListener {
+        BoardView.AntListener, GameOverDialogFragment.GameOverDialogListener {
 
     private static final String TAG = "BoardActivity";
 
@@ -228,6 +228,7 @@ public class BoardActivity extends AppCompatActivity implements
                 b.putParcelable(GameOverDialogFragment.EXTRA_TEAM1, teams.get(0));
                 b.putParcelable(GameOverDialogFragment.EXTRA_TEAM2, teams.get(1));
                 b.putParcelable(GameOverDialogFragment.EXTRA_TEAM3, teams.get(2));
+                b.putBundle(GameOverDialogFragment.EXTRA_WINNER, winner.toBundle());
                 showGameOverDialog(b);
                 if (prefsHelper.isInteractiveSounds()) {
                     soundHelper.playGameOver();
@@ -236,7 +237,7 @@ public class BoardActivity extends AppCompatActivity implements
         }
     }
 
-    
+
     private void showGameOverDialog(Bundle b) {
         GameOverDialogFragment dialog = new GameOverDialogFragment();
         Bundle args = new Bundle();
@@ -328,5 +329,10 @@ public class BoardActivity extends AppCompatActivity implements
     public void showFetchGameError(Throwable e) {
         //FIXME show error dialog.
         Toast.makeText(this, "Failed to fetch game: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDialogClosed() {
+        finish();
     }
 }
