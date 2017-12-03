@@ -33,10 +33,16 @@ import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.model.socket.PlayerScore;
 import com.tikalk.antsmasher.model.socket.TeamScore;
 import com.tikalk.antsmasher.networking.response.GameResponse;
+import com.tikalk.antsmasher.networking.response.TeamResponse;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 import com.tikalk.antsmasher.service.AppService;
 
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -85,7 +91,7 @@ public class BoardViewModel extends AndroidViewModel implements
         /**
          * Notification that the game has finished.
          */
-        void onGameFinished();
+        void onGameFinished(List<Team> teams, Player winner);
 
         void smashAnt(@Nullable Ant ant, boolean user);
 
@@ -107,6 +113,7 @@ public class BoardViewModel extends AndroidViewModel implements
     private long teamId;
     private Player player;
     private Team team;
+    private List<Team> latestTeams;
 
     @Inject
     public BoardViewModel(@NonNull Application application, RetrofitContainer retrofitContainer, PrefsHelper prefsHelper) {
@@ -221,9 +228,9 @@ public class BoardViewModel extends AndroidViewModel implements
         view.onGameStarted();
     }
 
+
     @Override
     public void onGameFinished() {
-        view.onGameFinished();
     }
 
     @Override
@@ -236,9 +243,62 @@ public class BoardViewModel extends AndroidViewModel implements
                 break;
             case STOPPED:
             case FINISH:
-                view.onGameFinished();
+                Observable<List<Team>> latestTeamsCall = gameRestService.getLatestTeams();
+                latestTeamsCall.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Team>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Team> teams) {
+                        Log.i(TAG, "onNext: got " + teams.size() + " teams");
+                        latestTeams = teams;
+                        getLeaderPlayer();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: ", e );
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
                 break;
         }
+    }
+
+    private void getLeaderPlayer() {
+        Observable<List<Player>> latestTeamsCall = gameRestService.getLeaderPlayer();
+        latestTeamsCall.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Player>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<Player> players) {
+                Log.i(TAG, "onNext: winner " + players.get(0).getName() + ", score: " + players.get(0).getScore());
+                view.onGameFinished(latestTeams, players.get(0));
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onError: ", e );
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
     }
 
     @Override

@@ -47,10 +47,10 @@ public interface GameRestService {
     Observable<List<Team>> getCurrentTeams();
 
     @GET(LEADERS)
-    Observable<Player> getLeaderPlayer();
+    Observable<List<Player>> getLeaderPlayer();
 
     @GET(LATEST_TEAMS)
-    Observable<TeamResponse> getLatestTeams();
+    Observable<List<Team>> getLatestTeams();
 
     @GET(ANT_SPECIES)
     Observable<List<AntSpecies>> getAntSpecies();

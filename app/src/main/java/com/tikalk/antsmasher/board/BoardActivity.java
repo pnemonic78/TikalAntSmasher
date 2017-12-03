@@ -218,7 +218,7 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onGameFinished() {
+    public void onGameFinished(List<Team> teams, Player winner) {
         Log.v(TAG, "onGameFinished: ");
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
