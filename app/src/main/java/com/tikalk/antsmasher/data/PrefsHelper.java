@@ -15,13 +15,13 @@ import javax.inject.Inject;
 
 public class PrefsHelper {
 
-    private static final String USER_NAME = "user_name";
+    public static final String USER_NAME = "user_name";
     private static final String USER_ID = "user_id";
     private static final String TEAM_ID = "team_id";
     private static final String PLAYER_ID = "player_id";
     private static final String GAME_ID = "game_id";
     private static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
-    private static final String BASE_IP = "base_ip";
+    public static final String BASE_IP = "base_ip";
     private static final String SMASH_SOCKET_URL = "smash_ip";
 
     private final SharedPreferences preferences;
