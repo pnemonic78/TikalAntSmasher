@@ -33,12 +33,12 @@ import com.bumptech.glide.Glide;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.media.SoundHelper;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.teams.TeamViewModel;
-import com.tikalk.antsmasher.utils.SoundHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

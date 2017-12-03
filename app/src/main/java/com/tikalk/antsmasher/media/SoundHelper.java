@@ -1,4 +1,4 @@
-package com.tikalk.antsmasher.utils;
+package com.tikalk.antsmasher.media;
 
 import android.content.Context;
 import android.media.AudioAttributes;
