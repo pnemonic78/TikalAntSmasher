@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements
         Bundle b = new Bundle();
         b.putString(IpDialogFragment.EXTRA_TITLE, "Servers Base URL");
         b.putString(IpDialogFragment.EXTRA_LABEL, "Enter Server Base IP");
+        b.putString(IpDialogFragment.EXTRA_VALUE, mLoginPresenter.getServerAuthority());
         dialog.setArguments(b);
         dialog.show(getSupportFragmentManager(), "EditAuthority");
     }
@@ -78,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements
         Bundle b = new Bundle();
         b.putString(EditDialogFragment.EXTRA_TITLE, getString(R.string.login_dialog_header));
         b.putString(EditDialogFragment.EXTRA_LABEL, getString(R.string.login_dialog_body));
+        b.putString(IpDialogFragment.EXTRA_VALUE, mLoginPresenter.getUserName());
         dialog.setArguments(b);
         dialog.show(getSupportFragmentManager(), "EditUserName");
     }

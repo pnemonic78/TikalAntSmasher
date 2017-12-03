@@ -25,6 +25,7 @@ public class EditDialogFragment extends DialogFragment {
 
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_LABEL = "label";
+    public static final String EXTRA_VALUE = "value";
 
     private static final int EDIT_MAX_LENGTH = 25;
 
@@ -60,15 +61,6 @@ public class EditDialogFragment extends DialogFragment {
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(EDIT_MAX_LENGTH)});
 
         chars.setPadding(5, 0, 0, 2);
-        String comment = getArguments().getString("Comment");
-        // FIXME move this to strings.xml %1$d/%2$d
-        if (comment != null) {  //This means that recording had a comment already..
-            chars.setText(comment.length() + "/" + EDIT_MAX_LENGTH);
-            input.setText(comment);
-        } else {
-            chars.setText("0/" + EDIT_MAX_LENGTH);
-            input.setText("");
-        }
 
         LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -95,21 +87,8 @@ public class EditDialogFragment extends DialogFragment {
         });
 
         input.addTextChangedListener(new TextWatcher() {
-            // StringBuilder builder = new StringBuilder();
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                if (posButton == null) {
-                    return;
-                }
-                String text = input.getText().toString().trim();
-                // FIXME move this to strings.xml %1$d/%2$d
-                chars.setText(text.length() + "/" + EDIT_MAX_LENGTH);
-                if (text.length() > 0) {
-                    posButton.setEnabled(true);
-                } else {
-                    posButton.setEnabled(false);
-                }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
@@ -118,8 +97,18 @@ public class EditDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                String text = s.toString().trim();
+                chars.setText(getString(R.string.edit_chars, text.length(), EDIT_MAX_LENGTH));
+                if (posButton != null) {
+                    if (text.length() > 0) {
+                        posButton.setEnabled(true);
+                    } else {
+                        posButton.setEnabled(false);
+                    }
+                }
             }
         });
+        input.setText(getArguments().getString(EXTRA_VALUE));
 
         return dialog;
     }

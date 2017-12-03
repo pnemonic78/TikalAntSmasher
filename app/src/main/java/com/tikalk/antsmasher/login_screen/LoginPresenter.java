@@ -120,4 +120,12 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         view.showLoginFailedDialog();
         //  view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
     }
+
+    public String getServerAuthority() {
+        return prefsHelper.getServerAuthority();
+    }
+
+    public String getUserName() {
+        return prefsHelper.getUserName();
+    }
 }

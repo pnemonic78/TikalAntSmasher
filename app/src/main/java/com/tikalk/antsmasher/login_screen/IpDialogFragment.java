@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -17,11 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import javax.inject.Inject;
-
-import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
-import com.tikalk.antsmasher.data.PrefsHelper;
 
 /**
  * Created by motibartov on 15/11/2017.
@@ -31,20 +26,12 @@ public class IpDialogFragment extends DialogFragment {
 
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_LABEL = "label";
+    public static final String EXTRA_VALUE = "value";
 
-    private static final int EDIT_MAX_LENGTH = 16;
+    private static final int EDIT_MAX_LENGTH = 15;
 
     private IpDialogEventListener eventListener;
     private Button posButton;
-
-    @Inject
-    protected PrefsHelper prefsHelper;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((AntApplication) getActivity().getApplication()).getApplicationComponent().inject(this);
-    }
 
     @NonNull
     @Override
@@ -76,15 +63,6 @@ public class IpDialogFragment extends DialogFragment {
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(EDIT_MAX_LENGTH)});
 
         chars.setPadding(5, 0, 0, 2);
-        String comment = getArguments().getString("Comment");
-        // FIXME move this to strings.xml %1$d/%2$d
-        if (comment != null) {  //This means that recording had a comment already..
-            chars.setText(comment.length() + "/" + EDIT_MAX_LENGTH);
-            input.setText(comment);
-        } else {
-            chars.setText("0/" + EDIT_MAX_LENGTH);
-            input.setText("");
-        }
 
         LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -111,21 +89,8 @@ public class IpDialogFragment extends DialogFragment {
         });
 
         input.addTextChangedListener(new TextWatcher() {
-            // StringBuilder builder = new StringBuilder();
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                if (posButton == null) {
-                    return;
-                }
-                String text = input.getText().toString().trim();
-                // FIXME move this to strings.xml %1$d/%2$d
-                chars.setText(text.length() + "/" + EDIT_MAX_LENGTH);
-                if (text.length() > 0) {
-                    posButton.setEnabled(true);
-                } else {
-                    posButton.setEnabled(false);
-                }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
@@ -134,9 +99,18 @@ public class IpDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                String text = s.toString().trim();
+                chars.setText(getString(R.string.edit_chars, text.length(), EDIT_MAX_LENGTH));
+                if (posButton != null) {
+                    if (text.length() > 0) {
+                        posButton.setEnabled(true);
+                    } else {
+                        posButton.setEnabled(false);
+                    }
+                }
             }
         });
-        input.setText(prefsHelper.getServerAuthority());
+        input.setText(getArguments().getString(EXTRA_VALUE));
 
         return dialog;
     }

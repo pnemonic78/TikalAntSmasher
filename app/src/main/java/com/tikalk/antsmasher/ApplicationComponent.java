@@ -3,7 +3,6 @@ package com.tikalk.antsmasher;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.board.BoardActivity;
-import com.tikalk.antsmasher.login_screen.IpDialogFragment;
 import com.tikalk.antsmasher.login_screen.LoginActivity;
 import com.tikalk.antsmasher.login_screen.LoginModule;
 import com.tikalk.antsmasher.login_screen.LoginPresenter;
@@ -30,6 +29,4 @@ public interface ApplicationComponent {
     void inject(BoardActivity activity);
 
     void inject(LoginPresenter presenter);
-
-    void inject(IpDialogFragment fragment);
 }
