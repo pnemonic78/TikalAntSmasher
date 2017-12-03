@@ -15,5 +15,6 @@
     <EditTextPreference
         android:title="Server Base Ip"
         android:key="base_ip"
-        android:inputType="number|phone"/>
+        android:inputType="number|phone"
+        android:defaultValue="@string/defaultBaseUrl"/>
 </PreferenceScreen>

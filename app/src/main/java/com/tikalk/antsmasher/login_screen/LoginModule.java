@@ -5,21 +5,18 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
-import com.tikalk.antsmasher.networking.rest.GameRestService;
+import com.tikalk.antsmasher.networking.RetrofitContainer;
 
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * Created by motibartov on 23/11/2017.
- */
 
 @Module
 public class LoginModule {
 
     @Provides
     @Singleton
-    LoginPresenter provideLoginPresenter(Application context, PrefsHelper prefsHelper) {
-        return new LoginPresenter(context, prefsHelper);
+    LoginPresenter provideLoginPresenter(Application context, PrefsHelper prefsHelper, RetrofitContainer retrofitContainer) {
+        return new LoginPresenter(context, prefsHelper, retrofitContainer);
     }
 }

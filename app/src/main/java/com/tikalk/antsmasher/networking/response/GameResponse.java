@@ -4,30 +4,28 @@ import com.google.gson.annotations.SerializedName;
 
 import com.tikalk.antsmasher.model.GameState;
 
-/**
- * Created by motibartov on 26/11/2017.
- */
+
 
 public class GameResponse {
 
     @SerializedName("antId")
     public int id;
     @SerializedName("createdAt")
-    public long createdAt;
+    public double createdAt;
     @SerializedName("updatedAt")
-    public long updatedAt;
+    public double updatedAt;
     @SerializedName("state")
     public GameState state;
     @SerializedName("startTime")
-    public Long startTime;
+    public double startTime;
     @SerializedName("stopTime")
-    public Long stopTime;
+    public double stopTime;
     @SerializedName("pauseTime")
-    public Long pauseTime;
+    public double pauseTime;
     @SerializedName("resumeTime")
-    public Long resumeTime;
+    public double resumeTime;
     @SerializedName("finishTime")
-    public Long finishTime;
+    public double finishTime;
     @SerializedName("gameTime")
     public int gameTimeSeconds;
 

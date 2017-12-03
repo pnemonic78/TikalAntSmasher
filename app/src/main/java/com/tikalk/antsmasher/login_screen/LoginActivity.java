@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
         builder.setMessage("Login filed, please check your connection and try again.");
         builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
         builder.setCancelable(false);
-        builder.setPositiveButton("OK", (dialogInterface, i) -> {
+        builder.setPositiveButton(getString(R.string.ok_button), (dialogInterface, i) -> {
             Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
             finish();
         });

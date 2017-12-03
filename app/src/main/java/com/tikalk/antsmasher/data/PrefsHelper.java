@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.tikalk.antsmasher.networking.ApiContract;
+import com.tikalk.antsmasher.R;
 
 import javax.inject.Inject;
 
-/**
- * Created by tamirnoach on 24/10/2017.
- */
 
 public class PrefsHelper {
 
@@ -50,6 +47,9 @@ public class PrefsHelper {
         return preferences.getString(key, null);
     }
 
+    public String getBaseUrl(Context context) {
+        return preferences.getString(BASE_IP, context.getString(R.string.defaultBaseUrl));
+    }
     public void saveStringPref(String key, String value) {
         preferences.edit().putString(key, value).apply();
     }
