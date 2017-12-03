@@ -192,20 +192,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             if (key.equals(PrefsHelper.BASE_IP)) {
                 String prefIp = sharedPreferences.getString(key, "");
                 if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Invalid IP");
-                    builder.setMessage("Please enter valid IP in format:\n\nXXX.XXX.XXX.XXX");
-                    builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
-                    builder.setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
-                    });
-                    builder.show();
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Invalid IP")
+                            .setMessage("Please enter valid IP in format:\nxxx.xxx.xxx.xxx")
+                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
+                            .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
+                            })
+                            .show();
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("New IP");
-                    builder.setMessage("IP Changed.\nRestart app to apply changes...");
-                    builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
-                    builder.setPositiveButton("Restart", (dialogInterface, i) -> Utils.restartApp(getActivity()));
-                    builder.show();
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("New IP")
+                            .setMessage("IP Changed.\nRestart app to apply changes...")
+                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
+                            .setPositiveButton("Restart", (dialogInterface, i) -> Utils.restartApp(getActivity()))
+                            .show();
                 }
             }
         }

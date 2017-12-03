@@ -231,8 +231,9 @@ public class BoardActivity extends AppCompatActivity implements
 
     private void showGameOverDialog() {
         new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.app_name)).setMessage("Game Over").setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
-                .setPositiveButton(getText(android.R.string.ok), (dialogInterface, i) -> finish())
+                .setTitle(getString(R.string.app_name)).setMessage("Game Over")
+                .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
+                .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> finish())
                 .setCancelable(false)
                 .show();
     }

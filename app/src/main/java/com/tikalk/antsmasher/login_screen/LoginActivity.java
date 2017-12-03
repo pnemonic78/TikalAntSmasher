@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -70,20 +71,20 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
     public void showEnterIpDialog() {
         IpDialogFragment dialog = new IpDialogFragment();
         Bundle b = new Bundle();
-        b.putString("Title", "Servers Base Url");
-        b.putString("Message", "Enter Server Base IP");
+        b.putString(IpDialogFragment.EXTRA_TITLE, "Servers Base URL");
+        b.putString(IpDialogFragment.EXTRA_LABEL, "Enter Server Base IP");
         dialog.setArguments(b);
         dialog.show(getSupportFragmentManager(), "IpDialog");
     }
 
     @Override
     public void showInvalidIpDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Invalid IP Address");
-        builder.setMessage("Please enter a valid IP in format:\nxxx.xxx.xxx.xxx");
-        builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
-        builder.setPositiveButton("Try Again", (dialogInterface, i) -> mLoginPresenter.checkBaseIp());
-        builder.create().show();
+        new AlertDialog.Builder(this)
+                .setTitle("Invalid IP Address")
+                .setMessage("Please enter a valid IP in format:\nxxx.xxx.xxx.xxx")
+                .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
+                .setPositiveButton("Try Again", (dialogInterface, i) -> mLoginPresenter.checkBaseIp())
+                .show();
     }
 
     @Override
@@ -98,17 +99,16 @@ public class LoginActivity extends AppCompatActivity implements EditDialogFragme
 
     @Override
     public void showLoginFailedDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name));
-        builder.setMessage("Login filed, please check your connection and try again.");
-        builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
-        builder.setCancelable(false);
-        builder.setPositiveButton("OK", (dialogInterface, i) -> {
-            Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
-            finish();
-        });
-
-        builder.show();
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.app_name))
+                .setMessage("Login failed, please check your connection and try again.")
+                .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
+                    Toast.makeText(LoginActivity.this, "Goodbye...", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .show();
     }
 
     @Override

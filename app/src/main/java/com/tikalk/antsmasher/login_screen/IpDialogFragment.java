@@ -2,7 +2,6 @@ package com.tikalk.antsmasher.login_screen;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +12,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -27,12 +23,14 @@ import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
 
-
 /**
  * Created by motibartov on 15/11/2017.
  */
 
 public class IpDialogFragment extends DialogFragment {
+
+    public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_LABEL = "label";
 
     private static final int COMMENT_MAX_LENGTH = 16;
     private IpDialogEventListener eventListener;
@@ -54,20 +52,19 @@ public class IpDialogFragment extends DialogFragment {
         return buildDialog(getActivity());
     }
 
-    public AlertDialog buildDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
-        builder.setTitle(getArguments().getString("Title"));
-        builder.setTitle(getString(R.string.app_name));
-        builder.setMessage(getArguments().getString("Message"));
+    //FIXME move code to a layout xml
+    private AlertDialog buildDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))
+                .setTitle(getArguments().getString(EXTRA_TITLE, getString(R.string.app_name)))
+                .setMessage(getArguments().getString(EXTRA_LABEL));
 
-        //FIXME use a layout xml.
         LinearLayout layout = new LinearLayout(context);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(parms);
+        layout.setLayoutParams(lp);
 
         // Set an EditText view to get user input
         final EditText input = new EditText(context);
@@ -75,8 +72,7 @@ public class IpDialogFragment extends DialogFragment {
         final TextView chars = new TextView(context);
 
         input.setMaxLines(1);
-        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(
-                COMMENT_MAX_LENGTH)});
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(COMMENT_MAX_LENGTH)});
 
         chars.setPadding(5, 0, 0, 2);
         String comment = getArguments().getString("Comment");
@@ -132,8 +128,7 @@ public class IpDialogFragment extends DialogFragment {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override

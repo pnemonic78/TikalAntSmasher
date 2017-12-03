@@ -2,7 +2,6 @@ package com.tikalk.antsmasher.login_screen;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -39,7 +38,7 @@ public class EditDialogFragment extends DialogFragment {
     }
 
     //FIXME move code to a layout xml
-    public AlertDialog buildDialog(Context context) {
+    private AlertDialog buildDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))
                 .setTitle(getArguments().getString(EXTRA_TITLE, getString(R.string.app_name)))
@@ -89,8 +88,9 @@ public class EditDialogFragment extends DialogFragment {
 
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
+            String text = input.getText().toString().trim();
             posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
-            posButton.setEnabled(false);
+            posButton.setEnabled(text.length() > 0);
         });
 
         input.addTextChangedListener(new TextWatcher() {
@@ -98,6 +98,9 @@ public class EditDialogFragment extends DialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
+                if (posButton == null) {
+                    return;
+                }
                 String text = input.getText().toString().trim();
                 // FIXME move this to strings.xml %1$d/%2$d
                 chars.setText(text.length() + "/" + COMMENT_MAX_LENGTH);
