@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -306,5 +307,11 @@ public class BoardActivity extends AppCompatActivity implements
     public void setScore(int player, int team) {
         playerScoreText.setText(String.valueOf(player));
         teamScoreText.setText(String.valueOf(team));
+    }
+
+    @Override
+    public void showFetchGameError(Throwable e) {
+        //FIXME show error dialog.
+        Toast.makeText(this, "Failed to fetch game: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
     }
 }

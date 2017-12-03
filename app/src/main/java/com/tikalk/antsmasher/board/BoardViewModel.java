@@ -89,6 +89,8 @@ public class BoardViewModel extends AndroidViewModel implements
         void smashAnt(@Nullable Ant ant, boolean user);
 
         void setScore(int player, int team);
+
+        void showFetchGameError(Throwable e);
     }
 
     private static final long DELAY_REMOVE = 2 * DateUtils.SECOND_IN_MILLIS;
@@ -167,7 +169,9 @@ public class BoardViewModel extends AndroidViewModel implements
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: Failed to fetch game: " + e.getLocalizedMessage(), e);
-                        //TODO view.showFetchGameError();
+                        if (view != null) {
+                            view.showFetchGameError(e);
+                        }
                     }
 
                     @Override
