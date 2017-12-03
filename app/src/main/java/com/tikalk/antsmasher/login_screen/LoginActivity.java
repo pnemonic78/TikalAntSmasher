@@ -17,6 +17,7 @@ import com.tikalk.antsmasher.base.Presenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.service.AppService;
 import com.tikalk.antsmasher.teams.TeamsActivity;
+import com.tikalk.antsmasher.utils.Utils;
 
 public class LoginActivity extends AppCompatActivity implements
         EditDialogFragment.EditDialogEventListener,
@@ -155,6 +156,16 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void setPresenter(Presenter presenter) {
         mLoginPresenter = (LoginPresenter) presenter;
+    }
+
+    @Override
+    public void restartApp() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.ip_dialog_title)
+                .setMessage(R.string.ip_restart_reason)
+                .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
+                .setPositiveButton(R.string.restart_button, (dialogInterface, i) -> Utils.restartApp(this))
+                .show();
     }
 }
 

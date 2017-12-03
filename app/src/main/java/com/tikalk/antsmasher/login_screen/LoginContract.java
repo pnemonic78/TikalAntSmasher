@@ -18,6 +18,8 @@ public interface LoginContract {
         void showLoginFailedDialog();
 
         void completeSplash(long timeout);
+
+        void restartApp();
     }
 
     interface Presenter {

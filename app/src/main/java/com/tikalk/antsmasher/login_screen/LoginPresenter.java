@@ -67,13 +67,17 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Override
     public void onIpEntered(String enteredIp) {
-        boolean ipIsValid = Utils.validateIpAddress(enteredIp);
-        if (!ipIsValid) {
-            view.showInvalidIpDialog();
-        } else {
+        Log.i(TAG, "onIpEntered: " + enteredIp);
+        if (Utils.validateIpAddress(enteredIp)) {
+            String oldValue = prefsHelper.getServerAuthority();
             prefsHelper.setServerAuthority(enteredIp);
-            Log.i(TAG, "onIpEntered: " + enteredIp);
-            login();
+            if (enteredIp.equals(oldValue)) {
+                login();
+            } else {
+                view.restartApp();
+            }
+        } else {
+            view.showInvalidIpDialog();
         }
     }
 

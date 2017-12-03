@@ -188,29 +188,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
-
-//        @Override
-//        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//            if (key.equals(PrefsHelper.BASE_IP)) {
-//                String prefIp = sharedPreferences.getString(key, "");
-//                if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
-//                    new AlertDialog.Builder(getActivity())
-//                            .setTitle("Invalid IP")
-//                            .setMessage("Please enter valid IP in format:\nxxx.xxx.xxx.xxx")
-//                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
-//                            .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
-//                            })
-//                            .show();
-//                } else {
-//                    new AlertDialog.Builder(getActivity())
-//                            .setTitle("New IP")
-//                            .setMessage("IP Changed.\nRestart app to apply changes...")
-//                            .setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher))
-//                            .setPositiveButton("Restart", (dialogInterface, i) -> Utils.restartApp(getActivity()))
-//                            .show();
-//                }
-//            }
-//        }
     }
 
     /**

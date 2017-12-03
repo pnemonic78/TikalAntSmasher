@@ -27,6 +27,8 @@
     <string name="ip_hint">xxx.xxx.xxx.xxx</string>
     <string name="invalid_ip_header">Invalid IP</string>
     <string name="invalid_ip_body">Enter a valid IP</string>
+    <string name="ip_restart_reason">IP changed.\nRestart app to apply changes…</string>
+    <string name="restart_button">Restart</string>
 
     <!-- Teams -->
     <string name="teams">Teams</string>
