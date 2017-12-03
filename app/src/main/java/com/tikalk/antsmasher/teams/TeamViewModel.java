@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
+import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -49,10 +50,10 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
     private Runnable pollTeams;
 
     @Inject
-    public TeamViewModel(Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
+    public TeamViewModel(Application application, RetrofitContainer retrofitContainer, PrefsHelper prefsHelper) {
         super(application);
         Log.v(TAG, "TeamViewModel: ");
-        this.gameRestService = gameRestService;
+        this.gameRestService = retrofitContainer.getRestService();
         this.prefsHelper = prefsHelper;
         this.userId = prefsHelper.getUserId();
     }

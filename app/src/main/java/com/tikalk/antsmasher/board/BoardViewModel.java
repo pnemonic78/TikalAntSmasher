@@ -29,6 +29,7 @@ import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.model.socket.PlayerScore;
 import com.tikalk.antsmasher.model.socket.TeamScore;
 import com.tikalk.antsmasher.networking.response.GameResponse;
@@ -108,9 +109,9 @@ public class BoardViewModel extends AndroidViewModel implements
     private Team team;
 
     @Inject
-    public BoardViewModel(@NonNull Application application, GameRestService gameRestService, PrefsHelper prefsHelper) {
+    public BoardViewModel(@NonNull Application application, RetrofitContainer retrofitContainer, PrefsHelper prefsHelper) {
         super(application);
-        this.gameRestService = gameRestService;
+        this.gameRestService = retrofitContainer.getRestService();
         this.playerId = prefsHelper.getPlayerId();
         this.teamId = prefsHelper.getTeamId();
         this.player = null;
