@@ -18,8 +18,6 @@ import java.net.URISyntaxException;
 
 import io.reactivex.disposables.Disposable;
 
-import static com.tikalk.antsmasher.data.PrefsHelper.BASE_IP;
-
 /**
  * Created by tamirnoach on 23/10/2017.
  */
@@ -67,6 +65,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     public void checkBaseIp() {
         String baseIp = prefsHelper.getStringPref(BASE_IP);
         if (baseIp == null || baseIp.isEmpty()) {
+        if (prefsHelper.isServerAuthorityEmpty()) {
             view.showEnterIpDialog();
         } else {
             login();
@@ -85,6 +84,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
+        } else {
+            prefsHelper.setServerAuthority(enteredIp);
             Log.i(TAG, "onIpEntered: " + enteredIp);
             login();
         }

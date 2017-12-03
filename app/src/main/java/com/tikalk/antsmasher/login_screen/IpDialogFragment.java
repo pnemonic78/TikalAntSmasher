@@ -21,7 +21,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
+import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.data.PrefsHelper;
 
 
 /**
@@ -31,13 +35,16 @@ import com.tikalk.antsmasher.R;
 public class IpDialogFragment extends DialogFragment {
 
     private static final int COMMENT_MAX_LENGTH = 16;
-    IpDialogEventListener eventListener;
-    Button posButton;
+    private IpDialogEventListener eventListener;
+    private Button posButton;
 
-    @Nullable
+    @Inject
+    protected PrefsHelper prefsHelper;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((AntApplication) getActivity().getApplication()).getApplicationComponent().inject(this);
     }
 
     @NonNull
@@ -47,13 +54,14 @@ public class IpDialogFragment extends DialogFragment {
         return buildDialog(getActivity());
     }
 
-
     public AlertDialog buildDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
         builder.setTitle(getArguments().getString("Title"));
+        builder.setTitle(getString(R.string.app_name));
         builder.setMessage(getArguments().getString("Message"));
 
+        //FIXME use a layout xml.
         LinearLayout layout = new LinearLayout(context);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -96,28 +104,23 @@ public class IpDialogFragment extends DialogFragment {
                 (dialog, whichButton) -> {
                     String value = input.getText().toString().trim();
                     eventListener.onIpEntered(value);
-                    // Toast.makeText(context, value + " entered..",
-                    // Toast.LENGTH_LONG).show();
                 });
 
-
-        builder.setTitle(getString(R.string.app_name));
-        builder.setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher));
         AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
-                posButton.setEnabled(false);
-            }
+        dialog.setOnShowListener(dialogInterface -> {
+            String text = input.getText().toString().trim();
+            posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+            posButton.setEnabled(text.length() > 0);
         });
-
 
         input.addTextChangedListener(new TextWatcher() {
             // StringBuilder builder = new StringBuilder();
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
+                if (posButton == null) {
+                    return;
+                }
                 String text = input.getText().toString().trim();
                 // FIXME move this to strings.xml %1$d/%2$d
                 chars.setText(text.length() + "/" + COMMENT_MAX_LENGTH);
@@ -131,14 +134,13 @@ public class IpDialogFragment extends DialogFragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
+        input.setText(prefsHelper.getServerAuthority());
 
         return dialog;
     }

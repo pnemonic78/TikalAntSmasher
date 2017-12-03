@@ -3,7 +3,6 @@ package com.tikalk.antsmasher.service;
 import com.google.gson.Gson;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.util.Log;
@@ -16,7 +15,9 @@ import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
+import com.tikalk.antsmasher.model.socket.PlayerScore;
 import com.tikalk.antsmasher.model.socket.SocketMessage;
+import com.tikalk.antsmasher.model.socket.TeamScore;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.websockets.AppWebSocket;
 import com.tikalk.antsmasher.networking.websockets.GameWebSocket;
@@ -55,6 +56,20 @@ public class AppService extends Service {
          * @param smashEvent the smash event.
          */
         void onAntSmashed(AntSmash smashEvent);
+
+        /**
+         * Notification from the server that the player score has changed.
+         *
+         * @param scoreEvent the score event.
+         */
+        void onPlayerScore(PlayerScore scoreEvent);
+
+        /**
+         * Notification from the server that the team score has changed.
+         *
+         * @param scoreEvent the score event.
+         */
+        void onTeamScore(TeamScore scoreEvent);
     }
 
     public interface AppServiceProxy {
@@ -133,17 +148,16 @@ public class AppService extends Service {
         String sessionId = prefsHelper.getGameId() + "_" + prefsHelper.getPlayerId();
         Log.i(TAG, "Start real web sockets");
 
-        String baseUrl = prefsHelper.getStringPref(PrefsHelper.BASE_IP);
+        String baseUrl = prefsHelper.getServerAuthority();
 
         gameWebSocket = new GameWebSocket(ApiContract.buildAntPublishSocketUrl(baseUrl), sessionId, this);
-        smashWebSocket = new SmashWebSocket(ApiContract.buildAntSmashSocketUrl(baseUrl), sessionId, this);
         gameWebSocket.setMessageListener(serviceEventListener);
-        smashWebSocket.setMessageListener(serviceEventListener);
-
         gameWebSocket.startSocket();
-        smashWebSocket.startSocket();
-
         networkManager.add(gameWebSocket);
+
+        smashWebSocket = new SmashWebSocket(ApiContract.buildAntSmashSocketUrl(baseUrl), sessionId, this);
+        smashWebSocket.setMessageListener(serviceEventListener);
+        smashWebSocket.startSocket();
         networkManager.add(smashWebSocket);
     }
 

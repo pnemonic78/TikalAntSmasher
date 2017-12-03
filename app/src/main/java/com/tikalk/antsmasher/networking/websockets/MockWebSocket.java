@@ -39,11 +39,10 @@ public class MockWebSocket extends AppWebSocket {
     }
 
     @Override
-    protected void handleNewMessage(WebSocket socket, String message) {
-        SocketMessage socketMessage = socketMessageGson.fromJson(message, SocketMessage.class);
-//        if (HitSocketMessage.TYPE_SMASH.equals(socketMessage.type)) {
+    protected void handleNewMessage(WebSocket socket, SocketMessage message) {
+//        if (HitSocketMessage.TYPE_SMASH.equals(message.type)) {
 //            HitSocketMessage smashMessage = socketMessageGson.fromJson(message, HitSocketMessage.class);
-//            AntSmash smash = socketMessageGson.toJson(smashMessage.body, AntSmash.class);
+//            AntSmash smash = socketMessageGson.toJson(message.body, AntSmash.class);
 //            if ((game != null) && (smash.antId != null)) {
 //                Ant ant = game.getAnt(smash.antId);
 //                if (ant != null) {
@@ -67,7 +66,7 @@ public class MockWebSocket extends AppWebSocket {
     @Override
     public boolean sendMessage(String message) {
         Log.v(TAG, "sendMessage: " + message);
-        handleNewMessage(null, message);
+        //handleNewMessage(null, message);
         return true;
     }
 
@@ -173,7 +172,7 @@ public class MockWebSocket extends AppWebSocket {
 
     public static Game createGame() {
         Game game = new Game();
-        populateGame(game);//TODO delete me!
+        populateGame(game);
         return game;
     }
 

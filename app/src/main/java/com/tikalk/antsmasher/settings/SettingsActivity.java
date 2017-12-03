@@ -2,7 +2,6 @@ package com.tikalk.antsmasher.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -20,9 +19,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import java.util.List;
-import java.util.prefs.Preferences;
 
 import com.tikalk.antsmasher.R;
+import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.utils.Utils;
 
 /**
@@ -152,8 +151,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+    public static class GeneralPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         SharedPreferences preferences;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -166,8 +166,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("user_name"));
-            bindPreferenceSummaryToValue(findPreference("base_ip"));
+            bindPreferenceSummaryToValue(findPreference(PrefsHelper.USER_NAME));
+            bindPreferenceSummaryToValue(findPreference(PrefsHelper.BASE_IP));
 
         }
 
@@ -189,39 +189,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if( key.equals("base_ip")){
-                String prefIp = sharedPreferences.getString(key, null);
-                if(prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)){
+            if (key.equals(PrefsHelper.BASE_IP)) {
+                String prefIp = sharedPreferences.getString(key, "");
+                if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Invalid IP");
                     builder.setMessage("Please enter valid IP in format:\n\nXXX.XXX.XXX.XXX");
                     builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
+                    builder.setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
                     });
-                    builder.create().show();
-
-                }else {
+                    builder.show();
+                } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("New IP");
-                    builder.setMessage("IP Changed, Restart App to apply changes");
+                    builder.setMessage("IP Changed.\nRestart app to apply changes...");
                     builder.setIcon(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher));
-                    builder.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            restartApplication();
-
-                        }
-                    });
-                    builder.create().show();
+                    builder.setPositiveButton("Restart", (dialogInterface, i) -> restartApplication());
+                    builder.show();
                 }
             }
         }
 
-        void restartApplication(){
+        private void restartApplication() {
             Intent i = getActivity().getPackageManager().
                     getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

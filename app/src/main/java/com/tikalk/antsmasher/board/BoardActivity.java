@@ -3,6 +3,10 @@ package com.tikalk.antsmasher.board;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
@@ -15,21 +19,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.bumptech.glide.Glide;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.media.SoundHelper;
 import com.tikalk.antsmasher.model.Ant;
 import com.tikalk.antsmasher.model.Game;
+import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.teams.TeamViewModel;
-import com.tikalk.antsmasher.utils.SoundHelper;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Game board activity.
@@ -60,12 +72,19 @@ public class BoardActivity extends AppCompatActivity implements
     @Named("Teams")
     ViewModelProvider.Factory teamsViewModelFactory;
 
-    private BoardView boardView;
+    @BindView(R.id.board)
+    protected BoardView boardView;
+    @BindView(R.id.wait)
+    protected ProgressBar progressBar;
+    @BindView(R.id.score_player)
+    protected TextView playerScoreText;
+    @BindView(R.id.score_team)
+    protected TextView teamScoreText;
+
     private BoardViewModel presenter;
     private TeamViewModel presenterTeams;
     private Game game;
     private SoundHelper soundHelper;
-    private ProgressBar progressBar;
     private long teamId;
     private long playerId;
 
@@ -73,18 +92,23 @@ public class BoardActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
+        setContentView(R.layout.activity_board);
+        ButterKnife.bind(this);
 
         teamId = getIntent().getLongExtra(EXTRA_TEAM, 0);
         playerId = getIntent().getLongExtra(EXTRA_PLAYER, 0);
 
-        setContentView(R.layout.activity_board);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.hide();
         }
 
-        boardView = findViewById(R.id.board);
+        Glide.with(this)
+                .asBitmap()
+                .load(R.drawable.board)
+                .into((ImageView) findViewById(R.id.board_bg));
+
         // Note that some of these constants are new as of API 16 (Jelly Bean)
         // and API 19 (KitKat). It is safe to use them, as they are inlined
         // at compile-time and do nothing on earlier devices.
@@ -96,14 +120,12 @@ public class BoardActivity extends AppCompatActivity implements
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         boardView.setAntListener(this);
 
-        progressBar = findViewById(R.id.wait);
-
         presenter = ViewModelProviders.of(this, boardViewModelFactory).get(BoardViewModel.class);
         presenter.setView(this);
         presenter.setPlayerId(playerId);
         presenter.setTeamId(teamId);
         getLifecycle().addObserver(presenter);
-        presenter.getGame().observe(this, this);
+        presenter.getGame(true).observe(this, this);
 
         presenterTeams = ViewModelProviders.of(this, teamsViewModelFactory).get(TeamViewModel.class);
 
@@ -139,6 +161,18 @@ public class BoardActivity extends AppCompatActivity implements
             if (teams != null) {
                 game.setTeams(teams);
             }
+            Player player = game.getPlayer(playerId);
+            Team team = game.getTeam(teamId);
+            teamScoreText.setTextColor(team.getAntSpecies().getTint());
+            Bitmap bitmap = boardView.getAntAlive(team.getAntSpecies());
+            Resources res = getResources();
+            int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+            int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
+            Drawable drawable = new BitmapDrawable(res, bitmap);
+            drawable.setBounds(0, 0, antWidth, antHeight);
+            drawable.setAlpha(100);
+            teamScoreText.setCompoundDrawables(null, null, drawable, null);
+            setScore(player.getScore(), team.getScore());
         }
 
         boardView.clear();
@@ -267,5 +301,17 @@ public class BoardActivity extends AppCompatActivity implements
         super.onDestroy();
         presenter.stop();
         soundHelper.dispose();
+    }
+
+    @Override
+    public void setScore(int player, int team) {
+        playerScoreText.setText(String.valueOf(player));
+        teamScoreText.setText(String.valueOf(team));
+    }
+
+    @Override
+    public void showFetchGameError(Throwable e) {
+        //FIXME show error dialog.
+        Toast.makeText(this, "Failed to fetch game: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
     }
 }

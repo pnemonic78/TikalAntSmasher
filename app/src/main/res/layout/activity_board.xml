@@ -5,13 +5,52 @@
     android:keepScreenOn="true"
     tools:context="com.tikalk.antsmasher.board.BoardActivity">
 
-    <com.tikalk.antsmasher.board.BoardView
-        android:id="@+id/board"
+    <ImageView
+        android:id="@+id/board_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/board"
-        tools:scaleType="fitXY"
+        android:scaleType="fitXY"
         tools:src="@drawable/board"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/score_player"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/score_bg"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            tools:text="player"/>
+
+        <TextView
+            android:id="@+id/score_team"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/score_bg"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/colorAccent"
+            tools:text="team"/>
+    </LinearLayout>
+
+    <com.tikalk.antsmasher.board.BoardView
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <ProgressBar
         android:id="@+id/wait"
@@ -19,4 +58,5 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:indeterminate="true"/>
+
 </FrameLayout>

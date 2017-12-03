@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -121,5 +122,17 @@ public class TeamsActivity extends AppCompatActivity implements
         if (requestCode == TEAMS_ACTIVITY) {
             presenter.refreshTeams();
         }
+    }
+
+    @Override
+    public void showFetchTeamsError(Throwable e) {
+        //FIXME show error dialog.
+        Toast.makeText(this, "Failed to fetch teams: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showJoinTeamError(Throwable e) {
+        //FIXME show error dialog.
+        Toast.makeText(this, "Failed to join team: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
     }
 }

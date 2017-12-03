@@ -33,6 +33,10 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
 
     public interface View {
         void onTeamJoined(Team team, Player player);
+
+        void showFetchTeamsError(Throwable e);
+
+        void showJoinTeamError(Throwable e);
     }
 
     private View view;
@@ -101,7 +105,9 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: Failed to fetch teams: " + e.getLocalizedMessage(), e);
-                        //TODO view.showLoadTeamsError();
+                        if (view != null) {
+                            view.showFetchTeamsError(e);
+                        }
                     }
 
                     @Override
@@ -127,7 +133,9 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: Failed to join team: " + e.getLocalizedMessage(), e);
-                        //TODO view.showFailedJoinTeam();
+                        if (view != null) {
+                            view.showJoinTeamError(e);
+                        }
                     }
 
                     @Override
