@@ -49,6 +49,7 @@ public class GameOverDialogFragment extends DialogFragment {
         final Resources res = getResources();
         int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
         int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
+        int iconPadding = res.getDimensionPixelSize(R.dimen.team_score_padding);
 
         View view = LayoutInflater.from(context).inflate(R.layout.game_over_dialog, null);
 
@@ -69,9 +70,9 @@ public class GameOverDialogFragment extends DialogFragment {
             Drawable drawableA = new BitmapDrawable(res, bitmapA);
             drawableA.setBounds(0, 0, antWidth, antHeight);
 
-            tvTeamA.setText(teamA.getName() + " -  " + teamA.getAntSpecies().getName() + ": " + teamA.getScore());
+            tvTeamA.setText(getString(R.string.team_score_final, teamA.getName(), teamA.getAntSpecies().getName(), teamA.getScore()));
             tvTeamA.setCompoundDrawablesRelative(drawableA, null, null, null);
-            tvTeamA.setCompoundDrawablePadding(res.getDimensionPixelSize(R.dimen.tiny_padding));
+            tvTeamA.setCompoundDrawablePadding(iconPadding);
         }
 
         Team teamB = scoreBoard.getParcelable(EXTRA_TEAM2);
@@ -80,9 +81,9 @@ public class GameOverDialogFragment extends DialogFragment {
             Drawable drawableB = new BitmapDrawable(res, bitmapB);
             drawableB.setBounds(0, 0, antWidth, antHeight);
 
-            tvTeamB.setText(teamB.getName() + " - " + teamB.getAntSpecies().getName() + ": " + teamB.getScore());
+            tvTeamB.setText(getString(R.string.team_score_final, teamB.getName(), teamB.getAntSpecies().getName(), teamB.getScore()));
             tvTeamB.setCompoundDrawablesRelative(drawableB, null, null, null);
-            tvTeamB.setCompoundDrawablePadding(res.getDimensionPixelSize(R.dimen.tiny_padding));
+            tvTeamB.setCompoundDrawablePadding(iconPadding);
         }
 
         Team teamC = scoreBoard.getParcelable(EXTRA_TEAM3);
@@ -91,13 +92,13 @@ public class GameOverDialogFragment extends DialogFragment {
             Drawable drawableC = new BitmapDrawable(res, bitmapC);
             drawableC.setBounds(0, 0, antWidth, antHeight);
 
-            tvTeamC.setText(teamC.getName() + " - " + teamC.getAntSpecies().getName() + ": " + teamC.getScore());
+            tvTeamC.setText(getString(R.string.team_score_final, teamC.getName(), teamC.getAntSpecies().getName(), teamC.getScore()));
             tvTeamC.setCompoundDrawablesRelative(drawableC, null, null, null);
-            tvTeamC.setCompoundDrawablePadding(res.getDimensionPixelSize(R.dimen.tiny_padding));
+            tvTeamC.setCompoundDrawablePadding(iconPadding);
         }
 
         Player winner = scoreBoard.getParcelable(EXTRA_WINNER);
-        tvWinner.setText(winner.getName() + ":" + winner.getTeamName() + " - " + winner.getScore());
+        tvWinner.setText(getString(R.string.team_score_final, winner.getName(), winner.getTeamName(), winner.getScore()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))
