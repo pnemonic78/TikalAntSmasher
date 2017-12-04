@@ -5,4 +5,10 @@ package com.tikalk.antsmasher.model.socket;
  */
 
 public class StartBody {
+
+    public String name;
+
+    public StartBody(String name){
+        this.name = name;
+    }
 }

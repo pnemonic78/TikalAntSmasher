@@ -32,6 +32,7 @@ import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
 import com.tikalk.antsmasher.model.socket.PlayerScore;
+import com.tikalk.antsmasher.model.socket.StartBody;
 import com.tikalk.antsmasher.model.socket.TeamScore;
 import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.networking.response.GameResponse;
@@ -110,6 +111,7 @@ public class BoardViewModel extends AndroidViewModel implements
     private Player player;
     private Team team;
     private List<Team> latestTeams;
+    private PrefsHelper prefsHelper;
 
     @Inject
     public BoardViewModel(@NonNull Application application, RetrofitContainer retrofitContainer, PrefsHelper prefsHelper) {
@@ -119,6 +121,7 @@ public class BoardViewModel extends AndroidViewModel implements
         this.teamId = prefsHelper.getTeamId();
         this.player = null;
         this.team = null;
+        this.prefsHelper = prefsHelper;
     }
 
     public void setView(View view) {
@@ -285,7 +288,8 @@ public class BoardViewModel extends AndroidViewModel implements
     }
 
     public void startGame() {
-        gameRestService.startGame(1, 3)
+        Log.i(TAG, "startGame: ");
+        gameRestService.startGame(1, 3, new StartBody(prefsHelper.getUserName()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<GameResponse>() {

@@ -7,6 +7,7 @@ import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.User;
 import com.tikalk.antsmasher.model.socket.PlayingTeam;
+import com.tikalk.antsmasher.model.socket.StartBody;
 import com.tikalk.antsmasher.networking.requests.CreateUserRequest;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 
@@ -55,8 +56,9 @@ public interface GameRestService {
     @POST(CREATE_GAME)
     Observable<GameResponse> createGame(@Query(GAME_TIME) int time, @Body() List<PlayingTeam> body);
 
+    @Headers("Content-Type: application/json")
     @PUT(START_GAME)
-    Observable<GameResponse> startGame(@Query(POPULATION) int population, @Query(STEP_PER_SECOND) int stepsPerSecond);
+    Observable<GameResponse> startGame(@Query(POPULATION) int population, @Query(STEP_PER_SECOND) int stepsPerSecond, @Body StartBody body);
 
     @GET(TEAMS_CURRENT)
     Observable<List<Team>> getCurrentTeams();

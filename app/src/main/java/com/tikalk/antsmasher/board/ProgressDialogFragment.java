@@ -48,11 +48,6 @@ public class ProgressDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        dialogClosedListener.onProgressDialogClosed();
-    }
 
     interface ProgressDialogEventListener {
         void onProgressDialogClosed();
