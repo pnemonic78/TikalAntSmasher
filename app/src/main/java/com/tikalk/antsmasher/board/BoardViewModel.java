@@ -387,8 +387,8 @@ public class BoardViewModel extends AndroidViewModel implements
 
     @Override
     public void onTeamScore(TeamScore event) {
-        Team team = getTeam();
-        if ((team != null) && (team.getId() == event.teamId)) {
+        Team team = getGameValue().getTeam(event.teamId);
+        if (team != null) {
             team.setScore(event.score);
             if (view != null) {
                 view.showScore(getPlayer(), getGameValue().getTeams());

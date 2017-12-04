@@ -171,7 +171,12 @@ public class BoardActivity extends AppCompatActivity implements
             Player player = game.getPlayer(playerId);
             Team team;
             TextView teamScoreText;
+            Bitmap bitmap;
+            Drawable drawable;
             final int size = teams.size();
+            final Resources res = getResources();
+            final int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+            final int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
 
             for (int i = 0; i < size; i++) {
                 switch (i) {
@@ -189,16 +194,17 @@ public class BoardActivity extends AppCompatActivity implements
                 }
 
                 team = teams.get(i);
-                Bitmap bitmap = boardView.getAntAlive(team.getAntSpecies());
-                Resources res = getResources();
-                int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
-                int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
-                Drawable drawable = new BitmapDrawable(res, bitmap);
+                bitmap = boardView.getAntAlive(team.getAntSpecies());
+                drawable = new BitmapDrawable(res, bitmap);
                 drawable.setBounds(0, 0, antWidth, antHeight);
                 drawable.setAlpha(150);
 
                 teamScoreText.setTextColor(team.getAntSpecies().getTint());
                 teamScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
+
+                if (team.contains(player)) {
+                    playerScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
+                }
             }
             showScore(player, teams);
         }
