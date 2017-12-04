@@ -91,7 +91,7 @@ public class BoardViewModel extends AndroidViewModel implements
 
         void smashAnt(@Nullable Ant ant, boolean user);
 
-        void setScore(int player, int team);
+        void showScore(Player player, List<Team> teams);
 
         void showFetchGameError(Throwable e);
     }
@@ -377,7 +377,7 @@ public class BoardViewModel extends AndroidViewModel implements
         Player player = getPlayer();
         if ((player != null) && (player.getId() == event.playerId)) {
             player.setScore(event.score);
-            view.setScore(player.getScore(), getTeam().getScore());
+            view.showScore(player, getGameValue().getTeams());
         }
     }
 
@@ -386,7 +386,7 @@ public class BoardViewModel extends AndroidViewModel implements
         Team team = getTeam();
         if ((team != null) && (team.getId() == event.teamId)) {
             team.setScore(event.score);
-            view.setScore(getPlayer().getScore(), team.getScore());
+            view.showScore(getPlayer(), getGameValue().getTeams());
         }
     }
 
