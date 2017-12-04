@@ -89,6 +89,7 @@ public class BoardActivity extends AppCompatActivity implements
     private SoundHelper soundHelper;
     private long teamId;
     private long playerId;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,10 @@ public class BoardActivity extends AppCompatActivity implements
         presenterTeams = ViewModelProviders.of(this, teamsViewModelFactory).get(TeamViewModel.class);
 
         soundHelper = new SoundHelper(this);
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        if ((vibrator != null) && vibrator.hasVibrator()) {
+            this.vibrator = vibrator;
+        }
     }
 
     @Override
@@ -285,6 +290,7 @@ public class BoardActivity extends AppCompatActivity implements
             final boolean userTeam = (game != null) && game.isSameTeam(teamId, ant);
             Log.i(TAG, "smashAnt: by userTeam:" + userTeam);
             if (user) {
+                vibrate();
                 if (userTeam) {// Case 2: my user hits his my own team's ant (self hit).
                     playSound(SOUND_MISTAKE);
                 } else {// Case 3: my user hits another team's ant.
@@ -299,11 +305,8 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     private void vibrate() {
-        if (prefsHelper.isInteractiveVibrate()) {
-            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-            if ((vibrator != null) && vibrator.hasVibrator()) {
-                vibrator.vibrate(10L);
-            }
+        if (prefsHelper.isInteractiveVibrate() && (vibrator != null)) {
+            vibrator.vibrate(20L);
         }
     }
 
