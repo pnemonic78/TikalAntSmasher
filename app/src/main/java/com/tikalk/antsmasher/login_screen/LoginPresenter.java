@@ -77,6 +77,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         if (Utils.validateIpAddress(enteredIp)) {
             String oldValue = prefsHelper.getServerAuthority();
             prefsHelper.setServerAuthority(enteredIp);
+            prefsHelper.clearPreference(PrefsHelper.USER_ID);
             try {
                 retrofitContainer.updateBaseUrl(ApiContract.buildAdminBaseUrl(enteredIp));
             } catch (URISyntaxException e) {
@@ -86,7 +87,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             if (enteredIp.equals(oldValue)) {
                 login();
             } else {
-                prefsHelper.setUserId(0L);
                 view.restartApp();
             }
         } else {
