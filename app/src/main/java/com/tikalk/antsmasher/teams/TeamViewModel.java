@@ -15,9 +15,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
+import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
+import com.tikalk.antsmasher.model.socket.PlayingTeam;
 import com.tikalk.antsmasher.networking.RetrofitContainer;
+import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,6 +40,7 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
         void showFetchTeamsError(Throwable e);
 
         void showJoinTeamError(Throwable e);
+        void dismissSwipeToRefresh(String message);
     }
 
     private View view;
@@ -72,8 +76,62 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
         return teams;
     }
 
-    public void refreshTeams() {
+    public void refreshTeams(){
         loadTeams();
+    }
+
+    public void createGame(List<PlayingTeam> body){
+        Log.i(TAG, "createGame: ");
+        gameRestService.createGame(1, body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<GameResponse>() {
+                    @Override
+                    public void onNext(GameResponse gameResponse) {
+                        if(gameResponse.state == GameState.NOT_STARTED){
+                            view.dismissSwipeToRefresh("Game Created, select team to join");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if(e.getLocalizedMessage().contains("HTTP 400")){
+                            checkGameState();
+                        }else{
+                            view.dismissSwipeToRefresh("Unable to create game");
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void checkGameState(){
+        Log.i(TAG, "checkGameState: ");
+        gameRestService.getLatestGame()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<GameResponse>() {
+                    @Override
+                    public void onNext(GameResponse gameResponse) {
+                        if(gameResponse.state == GameState.NOT_STARTED){
+                            view.dismissSwipeToRefresh("Game already created, select team to join");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.dismissSwipeToRefresh("Unable to get game state");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     private void loadTeams() {

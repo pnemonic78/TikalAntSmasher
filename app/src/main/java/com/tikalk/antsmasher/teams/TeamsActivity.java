@@ -24,12 +24,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.board.BoardActivity;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
+import com.tikalk.antsmasher.model.socket.PlayingTeam;
 import com.tikalk.antsmasher.settings.SettingsActivity;
 import com.tikalk.antsmasher.utils.Utils;
 
@@ -41,7 +44,7 @@ public class TeamsActivity extends AppCompatActivity implements
         TeamViewHolder.TeamViewHolderListener,
         Observer<List<Team>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static final int TEAMS_ACTIVITY = 100;
+    public static final int BOARD_ACTIVITY = 100;
     private static final String TAG = "TAG_TeamsActivity";
     @Inject
     protected PrefsHelper prefsHelper;
@@ -78,7 +81,12 @@ public class TeamsActivity extends AppCompatActivity implements
         getLifecycle().addObserver(presenter);
         presenter.getTeams().observe(this, this);
 
-        swipeContainer.setOnRefreshListener(() -> presenter.refreshTeams());
+        String str = Utils.loadJSONFromAsset(getAssets(),"teams.json");
+
+        List<PlayingTeam> playingTeams = new Gson().fromJson(str, new TypeToken<List<PlayingTeam>>(){}.getType());
+        swipeContainer.setOnRefreshListener(() -> presenter.createGame(playingTeams));
+
+
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -112,7 +120,7 @@ public class TeamsActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, BoardActivity.class);
         intent.putExtra(BoardActivity.EXTRA_TEAM, team.getId());
         intent.putExtra(BoardActivity.EXTRA_PLAYER, player.getId());
-        startActivityForResult(intent, TEAMS_ACTIVITY);
+        startActivityForResult(intent, BOARD_ACTIVITY);
     }
 
     @Override
@@ -135,7 +143,7 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TEAMS_ACTIVITY) {
+        if (requestCode == BOARD_ACTIVITY) {
             presenter.refreshTeams();
         }
     }
@@ -150,6 +158,13 @@ public class TeamsActivity extends AppCompatActivity implements
     public void showJoinTeamError(Throwable e) {
         //FIXME show error dialog.
         Toast.makeText(this, "Failed to join team: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void dismissSwipeToRefresh(String message) {
+        swipeContainer.setRefreshing(false);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
     }
 
 
