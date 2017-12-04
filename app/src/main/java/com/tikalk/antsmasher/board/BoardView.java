@@ -190,9 +190,14 @@ public class BoardView extends View {
                 if (listener != null) {
                     final float x = event.getX();
                     final float y = event.getY();
+                    final float radius = event.getTouchMajor();
+                    final float left = x - radius;
+                    final float top = y - radius;
+                    final float right = x + radius;
+                    final float bottom = y + radius;
                     boolean hit = false;
                     for (AntRect ant : ants) {
-                        if (ant.isHit(x, y)) {
+                        if (ant.isHit(left, top, right, bottom)) {
                             hit = true;
                             listener.onAntTouch(ant.id);
                         }

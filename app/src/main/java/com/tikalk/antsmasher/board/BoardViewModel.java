@@ -325,8 +325,10 @@ public class BoardViewModel extends AndroidViewModel implements
     private void removeAntDelayed(Game game, Ant ant, long delay) {
         handler.postDelayed(() -> {
             game.removeAnt(ant);
-            view.removeAnt(ant);
-            view.paint();
+            if (view != null) {
+                view.removeAnt(ant);
+                view.paint();
+            }
         }, delay);
     }
 
@@ -377,7 +379,9 @@ public class BoardViewModel extends AndroidViewModel implements
         Player player = getPlayer();
         if ((player != null) && (player.getId() == event.playerId)) {
             player.setScore(event.score);
-            view.showScore(player, getGameValue().getTeams());
+            if (view != null) {
+                view.showScore(player, getGameValue().getTeams());
+            }
         }
     }
 
@@ -386,7 +390,9 @@ public class BoardViewModel extends AndroidViewModel implements
         Team team = getTeam();
         if ((team != null) && (team.getId() == event.teamId)) {
             team.setScore(event.score);
-            view.showScore(getPlayer(), getGameValue().getTeams());
+            if (view != null) {
+                view.showScore(getPlayer(), getGameValue().getTeams());
+            }
         }
     }
 
