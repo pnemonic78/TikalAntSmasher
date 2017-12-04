@@ -3,12 +3,14 @@ package com.tikalk.antsmasher.model;
 import com.google.gson.annotations.SerializedName;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Player.
  */
 
-public class Player extends User {
+public class Player extends User implements Parcelable {
 
     @SerializedName("score")
     private int score;
@@ -29,6 +31,12 @@ public class Player extends User {
         setTeamName(teamName);
     }
 
+    protected Player(Parcel in) {
+        super(in);
+        score = in.readInt();
+        teamName = in.readString();
+    }
+
     public int getScore() {
         return score;
     }
@@ -45,11 +53,22 @@ public class Player extends User {
         this.teamName = teamName;
     }
 
-    public Bundle toBundle() {
-        Bundle b = new Bundle();
-        b.putString("name", getName());
-        b.putString("teamName", getTeamName());
-        b.putInt("score", score);
-        return b;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(score);
+        dest.writeString(teamName);
     }
+
+    public static final Creator<Player> CREATOR = new Creator<Player>() {
+        @Override
+        public Player createFromParcel(Parcel in) {
+            return new Player(in);
+        }
+
+        @Override
+        public Player[] newArray(int size) {
+            return new Player[size];
+        }
+    };
 }

@@ -77,10 +77,10 @@ public class EditDialogFragment extends DialogFragment {
                             eventListener.onUserNameEntered(value);
                         });
 
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
             String text = input.getText().toString().trim();
-            posButton = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+            posButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             posButton.setEnabled(text.length() > 0);
         });
 
