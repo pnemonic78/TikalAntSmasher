@@ -1,8 +1,8 @@
 package com.tikalk.antsmasher.networking.response;
 
-import com.tikalk.antsmasher.model.Team;
-
 import java.util.List;
+
+import com.tikalk.antsmasher.model.Team;
 
 /**
  * Created by motibartov on 26/11/2017.

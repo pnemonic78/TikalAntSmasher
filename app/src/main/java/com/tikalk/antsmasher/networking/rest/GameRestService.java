@@ -8,7 +8,6 @@ import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.User;
 import com.tikalk.antsmasher.networking.requests.CreateUserRequest;
 import com.tikalk.antsmasher.networking.response.GameResponse;
-import com.tikalk.antsmasher.networking.response.TeamResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;

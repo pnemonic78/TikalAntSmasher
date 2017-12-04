@@ -1,12 +1,12 @@
 package com.tikalk.antsmasher.networking;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 
-import com.tikalk.antsmasher.networking.rest.GameRestService;
+import android.util.Log;
 
 import javax.inject.Inject;
+
+import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

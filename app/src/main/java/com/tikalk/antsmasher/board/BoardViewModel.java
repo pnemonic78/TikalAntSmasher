@@ -19,6 +19,8 @@ import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
@@ -29,17 +31,13 @@ import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.model.socket.PlayerScore;
 import com.tikalk.antsmasher.model.socket.TeamScore;
+import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 import com.tikalk.antsmasher.service.AppService;
 
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;

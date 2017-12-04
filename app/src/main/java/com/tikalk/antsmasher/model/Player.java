@@ -1,8 +1,8 @@
 package com.tikalk.antsmasher.model;
 
-import android.os.Bundle;
-
 import com.google.gson.annotations.SerializedName;
+
+import android.os.Bundle;
 
 /**
  * Player.
