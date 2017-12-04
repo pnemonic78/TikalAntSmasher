@@ -26,7 +26,7 @@
         android:layout_margin="@dimen/tiny_padding"
         android:gravity="center_vertical"
         android:padding="@dimen/tiny_padding"
-        tools:text="Team A"/>
+        tools:text="@string/team_score_final"/>
 
     <TextView
         android:id="@+id/teamB"
@@ -36,7 +36,7 @@
         android:layout_margin="@dimen/tiny_padding"
         android:gravity="center_vertical"
         android:padding="@dimen/tiny_padding"
-        tools:text="Team B"/>
+        tools:text="@string/team_score_final"/>
 
     <TextView
         android:id="@+id/teamC"
@@ -46,6 +46,6 @@
         android:layout_margin="@dimen/tiny_padding"
         android:gravity="center_vertical"
         android:padding="@dimen/tiny_padding"
-        tools:text="Team C"/>
+        tools:text="@string/team_score_final"/>
 
 </LinearLayout>
