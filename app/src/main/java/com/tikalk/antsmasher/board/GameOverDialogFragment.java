@@ -2,6 +2,7 @@ package com.tikalk.antsmasher.board;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -35,64 +36,69 @@ public class GameOverDialogFragment extends DialogFragment {
     public static final String EXTRA_TEAM3 = "team3";
     public static final String EXTRA_WINNER = "winner";
 
-    private int antWidth;
-    private int antHeight;
     private GameOverDialogListener gameOverDialogListener;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        antWidth = getActivity().getResources().getDimensionPixelSize(R.dimen.ant_width);
-        antHeight = getActivity().getResources().getDimensionPixelSize(R.dimen.ant_height);
-
         gameOverDialogListener = (GameOverDialogListener) getActivity();
         return buildDialog(getActivity());
     }
 
     private Dialog buildDialog(Context context) {
+        final Resources res = getResources();
+        int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+        int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
+        int iconPadding = res.getDimensionPixelSize(R.dimen.team_score_padding);
+
         View view = LayoutInflater.from(context).inflate(R.layout.game_over_dialog, null);
-
-        Bundle args = getArguments();
-
-        Bundle scoreBoard = args.getBundle(EXTRA_SCOREBOARD);
-
-        Team teamA = scoreBoard.getParcelable(EXTRA_TEAM1);
-        Bitmap bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ant_normal);
-
-        bitmap = Bitmap.createScaledBitmap(bitmap, antWidth, antHeight, false);
-        bitmap = tintImage(bitmap, teamA.getAntSpecies().getTint());
-        Drawable drawable = new BitmapDrawable(getActivity().getResources(), bitmap);
-        drawable.setBounds(0, 0, antWidth, antHeight);
-
-        Team teamB = scoreBoard.getParcelable(EXTRA_TEAM2);
-        bitmap = tintImage(bitmap, teamB.getAntSpecies().getTint());
-        Drawable drawableB = new BitmapDrawable(getActivity().getResources(), bitmap);
-        drawableB.setBounds(0, 0, antWidth, antHeight);
-
-        Team teamC = scoreBoard.getParcelable(EXTRA_TEAM3);
-        bitmap = tintImage(bitmap, teamC.getAntSpecies().getTint());
-        Drawable drawableC = new BitmapDrawable(getActivity().getResources(), bitmap);
-        drawableC.setBounds(0, 0, antWidth, antHeight);
 
         final TextView tvTeamA = view.findViewById(R.id.teamA);
         final TextView tvTeamB = view.findViewById(R.id.teamB);
         final TextView tvTeamC = view.findViewById(R.id.teamC);
-        final TextView tvWinner = view.findViewById(R.id.tvWinner);
+        final TextView tvWinner = view.findViewById(R.id.winner);
 
-        tvTeamA.setText(teamA.getName() + " -  " + teamA.getAntSpecies().getName() + ": " + teamA.getScore());
-        tvTeamA.setCompoundDrawables(drawable, null, null, null);
-        tvTeamA.setCompoundDrawablePadding((int) getActivity().getResources().getDimension(R.dimen.tiny_padding));
+        Bundle args = getArguments();
+        Bundle scoreBoard = args.getBundle(EXTRA_SCOREBOARD);
 
-        tvTeamB.setText(teamB.getName() + " - " + teamB.getAntSpecies().getName() + ": " + teamB.getScore());
-        tvTeamB.setCompoundDrawables(drawableB, null, null, null);
-        tvTeamB.setCompoundDrawablePadding((int) getActivity().getResources().getDimension(R.dimen.tiny_padding));
+        Bitmap bitmapNormal = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
+        bitmapNormal = Bitmap.createScaledBitmap(bitmapNormal, antWidth, antHeight, false);
 
-        tvTeamC.setText(teamC.getName() + " - " + teamC.getAntSpecies().getName() + ": " + teamC.getScore());
-        tvTeamC.setCompoundDrawables(drawableC, null, null, null);
-        tvTeamC.setCompoundDrawablePadding((int) getActivity().getResources().getDimension(R.dimen.tiny_padding));
+        Team teamA = scoreBoard.getParcelable(EXTRA_TEAM1);
+        if (teamA != null) {
+            Bitmap bitmapA = tintImage(bitmapNormal, teamA.getAntSpecies().getTint());
+            Drawable drawableA = new BitmapDrawable(res, bitmapA);
+            drawableA.setBounds(0, 0, antWidth, antHeight);
+
+            tvTeamA.setText(getString(R.string.team_score_final, teamA.getName(), teamA.getAntSpecies().getName(), teamA.getScore()));
+            tvTeamA.setCompoundDrawablesRelative(drawableA, null, null, null);
+            tvTeamA.setCompoundDrawablePadding(iconPadding);
+        }
+
+        Team teamB = scoreBoard.getParcelable(EXTRA_TEAM2);
+        if (teamB != null) {
+            Bitmap bitmapB = tintImage(bitmapNormal, teamB.getAntSpecies().getTint());
+            Drawable drawableB = new BitmapDrawable(res, bitmapB);
+            drawableB.setBounds(0, 0, antWidth, antHeight);
+
+            tvTeamB.setText(getString(R.string.team_score_final, teamB.getName(), teamB.getAntSpecies().getName(), teamB.getScore()));
+            tvTeamB.setCompoundDrawablesRelative(drawableB, null, null, null);
+            tvTeamB.setCompoundDrawablePadding(iconPadding);
+        }
+
+        Team teamC = scoreBoard.getParcelable(EXTRA_TEAM3);
+        if (teamC != null) {
+            Bitmap bitmapC = tintImage(bitmapNormal, teamC.getAntSpecies().getTint());
+            Drawable drawableC = new BitmapDrawable(res, bitmapC);
+            drawableC.setBounds(0, 0, antWidth, antHeight);
+
+            tvTeamC.setText(getString(R.string.team_score_final, teamC.getName(), teamC.getAntSpecies().getName(), teamC.getScore()));
+            tvTeamC.setCompoundDrawablesRelative(drawableC, null, null, null);
+            tvTeamC.setCompoundDrawablePadding(iconPadding);
+        }
 
         Player winner = scoreBoard.getParcelable(EXTRA_WINNER);
-        tvWinner.setText(winner.getName() + ":" + winner.getTeamName()+ " - " + winner.getScore());
+        tvWinner.setText(getString(R.string.team_score_final, winner.getName(), winner.getTeamName(), winner.getScore()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))

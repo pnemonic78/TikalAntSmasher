@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,16 +14,20 @@
         tools:src="@drawable/board"/>
 
     <LinearLayout
+        android:id="@+id/score_panel_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_above="@+id/score_panel_2"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/score_player"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:background="@drawable/score_bg"
             android:gravity="center"
@@ -34,17 +38,60 @@
             tools:text="player"/>
 
         <TextView
-            android:id="@+id/score_team"
+            android:id="@+id/score_team_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:background="@drawable/score_bg"
             android:gravity="center"
             android:padding="8dp"
             android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/colorAccent"
-            tools:text="team"/>
+            tools:text="team A"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/score_panel_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/score_team_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/score_bg"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/colorAccent"
+            tools:text="team B"/>
+
+        <TextView
+            android:id="@+id/score_team_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/score_bg"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/colorAccent"
+            tools:text="team C"/>
     </LinearLayout>
 
     <com.tikalk.antsmasher.board.BoardView
@@ -56,7 +103,7 @@
         android:id="@+id/wait"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:indeterminate="true"/>
 
-</FrameLayout>
+</RelativeLayout>

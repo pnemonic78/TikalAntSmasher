@@ -76,8 +76,12 @@ public class BoardActivity extends AppCompatActivity implements
     protected ProgressBar progressBar;
     @BindView(R.id.score_player)
     protected TextView playerScoreText;
-    @BindView(R.id.score_team)
-    protected TextView teamScoreText;
+    @BindView(R.id.score_team_1)
+    protected TextView team1ScoreText;
+    @BindView(R.id.score_team_2)
+    protected TextView team2ScoreText;
+    @BindView(R.id.score_team_3)
+    protected TextView team3ScoreText;
 
     private BoardViewModel presenter;
     private TeamViewModel presenterTeams;
@@ -160,17 +164,38 @@ public class BoardActivity extends AppCompatActivity implements
                 game.setTeams(teams);
             }
             Player player = game.getPlayer(playerId);
-            Team team = game.getTeam(teamId);
-            teamScoreText.setTextColor(team.getAntSpecies().getTint());
-            Bitmap bitmap = boardView.getAntAlive(team.getAntSpecies());
-            Resources res = getResources();
-            int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
-            int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
-            Drawable drawable = new BitmapDrawable(res, bitmap);
-            drawable.setBounds(0, 0, antWidth, antHeight);
-         //   drawable.setAlpha(100);
-            teamScoreText.setCompoundDrawables(null, null, drawable, null);
-            setScore(player.getScore(), team.getScore());
+            Team team;
+            TextView teamScoreText;
+            final int size = teams.size();
+
+            for (int i = 0; i < size; i++) {
+                switch (i) {
+                    case 0:
+                        teamScoreText = team1ScoreText;
+                        break;
+                    case 1:
+                        teamScoreText = team2ScoreText;
+                        break;
+                    case 2:
+                        teamScoreText = team3ScoreText;
+                        break;
+                    default:
+                        continue;
+                }
+
+                team = teams.get(i);
+                Bitmap bitmap = boardView.getAntAlive(team.getAntSpecies());
+                Resources res = getResources();
+                int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+                int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
+                Drawable drawable = new BitmapDrawable(res, bitmap);
+                drawable.setBounds(0, 0, antWidth, antHeight);
+                drawable.setAlpha(150);
+
+                teamScoreText.setTextColor(team.getAntSpecies().getTint());
+                teamScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
+            }
+            showScore(player, teams);
         }
 
         boardView.clear();
@@ -311,13 +336,20 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setScore(int player, int team) {
-
+    public void showScore(Player player, List<Team> teams) {
         runOnUiThread(() -> {
-            playerScoreText.setText(String.valueOf(player));
-            teamScoreText.setText(String.valueOf(team));
+            playerScoreText.setText(String.valueOf(player.getScore()));
+            final int size = teams.size();
+            if (size >= 1) {
+                team1ScoreText.setText(String.valueOf(teams.get(0).getScore()));
+                if (size >= 2) {
+                    team2ScoreText.setText(String.valueOf(teams.get(1).getScore()));
+                    if (size >= 3) {
+                        team3ScoreText.setText(String.valueOf(teams.get(2).getScore()));
+                    }
+                }
+            }
         });
-
     }
 
     @Override

@@ -43,6 +43,8 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="game_over">Game Over</string>
     <string name="score_summary">Score Summary</string>
+    <string name="team_score_final">%1$s - %2$s : %3$d</string>
+    <string name="winner_score_final">%1$s - %2$s : %3$d</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
