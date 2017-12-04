@@ -169,7 +169,7 @@ public class BoardActivity extends AppCompatActivity implements
             Drawable drawable = new BitmapDrawable(res, bitmap);
             drawable.setBounds(0, 0, antWidth, antHeight);
             drawable.setAlpha(100);
-            teamScoreText.setCompoundDrawables(null, null, drawable, null);
+            teamScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
             setScore(player.getScore(), team.getScore());
         }
 

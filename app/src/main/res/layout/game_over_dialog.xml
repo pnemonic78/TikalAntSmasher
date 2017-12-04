@@ -7,41 +7,45 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvWinner"
+        android:id="@+id/winner"
         style="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_gravity="center_horizontal"
-        android:drawableLeft="@drawable/winner"
         android:layout_margin="@dimen/tiny_padding"
-        android:padding="@dimen/tiny_padding"/>
+        android:drawableStart="@drawable/winner"
+        android:gravity="center"
+        android:padding="@dimen/tiny_padding"
+        tools:text="Winner"/>
 
     <TextView
         android:id="@+id/teamA"
         style="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_margin="@dimen/tiny_padding"
-        android:padding="@dimen/tiny_padding"/>
+        android:gravity="center_vertical"
+        android:padding="@dimen/tiny_padding"
+        tools:text="Team A"/>
 
     <TextView
         android:id="@+id/teamB"
         style="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_margin="@dimen/tiny_padding"
-        android:padding="@dimen/tiny_padding"/>
+        android:gravity="center_vertical"
+        android:padding="@dimen/tiny_padding"
+        tools:text="Team B"/>
 
     <TextView
         android:id="@+id/teamC"
         style="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_margin="@dimen/tiny_padding"
-        android:padding="@dimen/tiny_padding"/>
+        android:gravity="center_vertical"
+        android:padding="@dimen/tiny_padding"
+        tools:text="Team C"/>
 
 </LinearLayout>
