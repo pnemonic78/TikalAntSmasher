@@ -1,0 +1,14 @@
+[
+  {
+    "name":"teamA",
+    "antSpeciesId": 1
+  },
+  {
+    "name":"teamB",
+    "antSpeciesId": 2
+  },
+  {
+    "name":"teamCC",
+    "antSpeciesId": 3
+  }
+]

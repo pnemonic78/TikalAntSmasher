@@ -24,6 +24,7 @@ public class ApiContract {
     public static final String UPDATE_ENDPOINT = "/users";
     public static final String CREATE_PLAYER = "/players";
     public static final String GAMES_LATEST = "/games/latest";
+    public static final String CREATE_GAME = "/games";
     public static final String TEAMS_CURRENT = "/teams/current";
     public static final String LEADERS = "/players/leaders";
     public static final String LATEST_TEAMS = "/teams/latest";
@@ -34,6 +35,7 @@ public class ApiContract {
     public static final String UPDATE_PARAM = "name";
     public static final String TEAM_PARAM = "teamId";
     public static final String USERID_PARAM = "userId";
+    public static final String GAME_TIME = "gameTime";
 
     //Websockets endpoints
     public static final String LR_MESSAGE = "lr-message";

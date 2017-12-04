@@ -6,7 +6,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.util.Patterns;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by motibartov on 26/11/2017.
@@ -31,5 +35,22 @@ public class Utils {
         activity.finish();
         alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 300, pendingIntent);
         System.exit(0);
+    }
+
+    public static String loadJSONFromAsset(AssetManager assetManager, String assetsFile) {
+        String json = null;
+        try {
+
+            InputStream is = assetManager.open(assetsFile);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }
