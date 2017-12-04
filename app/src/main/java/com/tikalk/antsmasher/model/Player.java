@@ -45,7 +45,7 @@ public class Player extends User {
         this.teamName = teamName;
     }
 
-    public Bundle toBundle(){
+    public Bundle toBundle() {
         Bundle b = new Bundle();
         b.putString("name", getName());
         b.putString("teamName", getTeamName());

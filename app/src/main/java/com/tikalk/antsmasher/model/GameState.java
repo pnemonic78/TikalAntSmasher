@@ -18,5 +18,5 @@ public enum GameState {
     @SerializedName("RESUMED")
     RESUMED,
     @SerializedName("FINISH")
-    FINISH
+    FINISHED
 }

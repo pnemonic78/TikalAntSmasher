@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TeamResponse {
 
-   public List<Team> teams;
+    public List<Team> teams;
 //    Team team;
 //    long score;
 }

@@ -3,6 +3,7 @@ package com.tikalk.antsmasher.networking;
 import android.util.Log;
 
 import com.google.gson.Gson;
+
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 
 import javax.inject.Inject;
@@ -22,7 +23,6 @@ public class RetrofitContainer {
     private String baseUrl;
     private GameRestService restService;
 
-
     @Inject
     public RetrofitContainer(Gson gson, OkHttpClient client, String baseUrl) {
         this.gson = gson;
@@ -30,7 +30,6 @@ public class RetrofitContainer {
         this.baseUrl = baseUrl;
         initRetrofit();
     }
-
 
     public void initRetrofit() {
         if (retrofit == null || !retrofit.baseUrl().equals(baseUrl)) {
@@ -42,7 +41,6 @@ public class RetrofitContainer {
                     .build();
         }
         Log.i(TAG, "getRetrofit: base url: " + retrofit.baseUrl());
-
     }
 
     public void updateBaseUrl(String baseUrl) {
@@ -55,6 +53,5 @@ public class RetrofitContainer {
             this.restService = retrofit.create(GameRestService.class);
         }
         return this.restService;
-
     }
 }
