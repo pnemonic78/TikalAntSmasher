@@ -75,7 +75,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         if (Utils.validateIpAddress(enteredIp)) {
             String oldValue = prefsHelper.getServerAuthority();
             prefsHelper.setServerAuthority(enteredIp);
-            prefsHelper.clearPreference(PrefsHelper.USER_ID);
+            prefsHelper.clear(PrefsHelper.USER_ID);
             try {
                 retrofitContainer.updateBaseUrl(ApiContract.buildAdminBaseUrl(enteredIp));
             } catch (URISyntaxException e) {

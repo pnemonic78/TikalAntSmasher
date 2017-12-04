@@ -159,4 +159,8 @@ public class Team implements Parcelable {
             return new Team[size];
         }
     };
+
+    public boolean contains(Player player) {
+        return getPlayer(player.getId()) != null;
+    }
 }

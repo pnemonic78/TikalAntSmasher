@@ -1,6 +1,5 @@
 package com.tikalk.antsmasher.board;
 
-import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -91,6 +90,7 @@ public class BoardActivity extends AppCompatActivity implements
     private SoundHelper soundHelper;
     private long teamId;
     private long playerId;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)   {
@@ -136,6 +136,10 @@ public class BoardActivity extends AppCompatActivity implements
         soundHelper = new SoundHelper(this);
         progressDialogFragment =new ProgressDialogFragment();
 
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        if ((vibrator != null) && vibrator.hasVibrator()) {
+            this.vibrator = vibrator;
+        }
     }
 
     @Override
@@ -170,7 +174,12 @@ public class BoardActivity extends AppCompatActivity implements
             Player player = game.getPlayer(playerId);
             Team team;
             TextView teamScoreText;
+            Bitmap bitmap;
+            Drawable drawable;
             final int size = teams.size();
+            final Resources res = getResources();
+            final int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
+            final int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
 
             for (int i = 0; i < size; i++) {
                 switch (i) {
@@ -188,16 +197,17 @@ public class BoardActivity extends AppCompatActivity implements
                 }
 
                 team = teams.get(i);
-                Bitmap bitmap = boardView.getAntAlive(team.getAntSpecies());
-                Resources res = getResources();
-                int antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
-                int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
-                Drawable drawable = new BitmapDrawable(res, bitmap);
+                bitmap = boardView.getAntAlive(team.getAntSpecies());
+                drawable = new BitmapDrawable(res, bitmap);
                 drawable.setBounds(0, 0, antWidth, antHeight);
                 drawable.setAlpha(150);
 
                 teamScoreText.setTextColor(team.getAntSpecies().getTint());
                 teamScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
+
+                if (team.contains(player)) {
+                    playerScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
+                }
             }
             showScore(player, teams);
         }
@@ -296,6 +306,7 @@ public class BoardActivity extends AppCompatActivity implements
             final boolean userTeam = (game != null) && game.isSameTeam(teamId, ant);
             Log.i(TAG, "smashAnt: by userTeam:" + userTeam);
             if (user) {
+                vibrate();
                 if (userTeam) {// Case 2: my user hits his my own team's ant (self hit).
                     playSound(SOUND_MISTAKE);
                 } else {// Case 3: my user hits another team's ant.
@@ -310,11 +321,8 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     private void vibrate() {
-        if (prefsHelper.isInteractiveVibrate()) {
-            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-            if ((vibrator != null) && vibrator.hasVibrator()) {
-                vibrator.vibrate(10L);
-            }
+        if (prefsHelper.isInteractiveVibrate() && (vibrator != null)) {
+            vibrator.vibrate(20L);
         }
     }
 

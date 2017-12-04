@@ -2,7 +2,6 @@ package com.tikalk.antsmasher.networking;
 
 import android.net.Uri;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
@@ -12,7 +11,7 @@ import java.net.URISyntaxException;
 public class ApiContract {
 
     //URL's
-    public static final String AUTHORITY = "localhost";
+    public static final String AUTHORITY = "35.167.230.149";
 
     public static final int ANT_PUBLISH_PORT = 6080;
     public static final int SMASH_SERVICE_PORT = 5080;
@@ -51,21 +50,26 @@ public class ApiContract {
     public static final String SMASH_MESSAGE = "smash-message";
 
     public static String buildAntPublishSocketUrl(String baseUrl) {
-        return new Uri.Builder().scheme(null)
+        return new Uri.Builder()
+                .scheme(null)
                 .encodedAuthority(baseUrl + ":" + ANT_PUBLISH_PORT)
-                .appendPath(REGISTRY_URL_PATH).build().toString();
+                .appendPath(REGISTRY_URL_PATH)
+                .build().toString();
     }
 
     public static String buildAntSmashSocketUrl(String baseUrl) {
-        return new Uri.Builder().scheme(null)
+        return new Uri.Builder()
+                .scheme(null)
                 .encodedAuthority(baseUrl + ":" + SMASH_SERVICE_PORT)
-                .appendPath(REGISTRY_URL_PATH).build().toString();
+                .appendPath(REGISTRY_URL_PATH)
+                .build().toString();
     }
 
     public static String buildAdminBaseUrl(String baseUrl) throws URISyntaxException {
-        //FIXME use Uri.Builder
-        URI uri = new URI("http", null, baseUrl, ADMIN_REST_PORT, null, null, null);
-        return uri.toString();
+        return new Uri.Builder()
+                .scheme("http")
+                .encodedAuthority(baseUrl + ":" + ADMIN_REST_PORT)
+                .build().toString();
     }
 
 }

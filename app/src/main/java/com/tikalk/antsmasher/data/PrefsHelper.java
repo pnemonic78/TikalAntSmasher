@@ -33,6 +33,10 @@ public class PrefsHelper {
         preferences.edit().clear().apply();
     }
 
+
+    public void clear(String key) {
+        preferences.edit().remove(key).apply();
+    }
     public void setUserName(String value) {
         saveStringToPrefs(USER_NAME, value);
     }
@@ -123,9 +127,5 @@ public class PrefsHelper {
 
     public boolean isServerAuthorityEmpty() {
         return !preferences.contains(BASE_IP) || TextUtils.isEmpty(getServerAuthority());
-    }
-
-    public void clearPreference(String key){
-        preferences.edit().remove(key).apply();
     }
 }

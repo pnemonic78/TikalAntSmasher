@@ -20,6 +20,14 @@ public class AntRect extends RectF {
         return alive && contains(x, y);
     }
 
+    public boolean isHit(RectF spot) {
+        return alive && intersect(spot);
+    }
+
+    public boolean isHit(float left, float top, float right, float bottom) {
+        return alive && intersect(left, top, right, bottom);
+    }
+
     public boolean isVisible(float screenWidth, float screenHeight) {
         return (left >= 0) && (left < screenWidth) && (top >= 0) && (top < screenHeight);
     }
