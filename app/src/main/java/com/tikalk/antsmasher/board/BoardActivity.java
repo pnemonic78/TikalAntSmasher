@@ -1,5 +1,6 @@
 package com.tikalk.antsmasher.board;
 
+import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -47,7 +48,7 @@ import butterknife.ButterKnife;
 public class BoardActivity extends AppCompatActivity implements
         BoardViewModel.View,
         Observer<Game>,
-        BoardView.AntListener, GameOverDialogFragment.GameOverDialogListener {
+        BoardView.AntListener, GameOverDialogFragment.GameOverDialogListener, ProgressDialogFragment.ProgressDialogEventListener {
 
     private static final String TAG = "BoardActivity";
 
@@ -74,6 +75,7 @@ public class BoardActivity extends AppCompatActivity implements
     protected BoardView boardView;
     @BindView(R.id.wait)
     protected ProgressBar progressBar;
+    ProgressDialogFragment progressDialogFragment;
     @BindView(R.id.score_player)
     protected TextView playerScoreText;
     @BindView(R.id.score_team_1)
@@ -91,7 +93,7 @@ public class BoardActivity extends AppCompatActivity implements
     private long playerId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)   {
         super.onCreate(savedInstanceState);
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
         setContentView(R.layout.activity_board);
@@ -132,6 +134,8 @@ public class BoardActivity extends AppCompatActivity implements
         presenterTeams = ViewModelProviders.of(this, teamsViewModelFactory).get(TeamViewModel.class);
 
         soundHelper = new SoundHelper(this);
+        progressDialogFragment =new ProgressDialogFragment();
+
     }
 
     @Override
@@ -229,12 +233,19 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        progressDialogFragment.show(getSupportFragmentManager(), "ProgressDialog");
+    }
+
+    @Override
     public void onGameStarted() {
         if (prefsHelper.isInteractiveMusic()) {
             soundHelper.playMusic();
         }
         runOnUiThread(() -> {
-            progressBar.setVisibility(View.GONE);
+            if(progressDialogFragment != null)
+                progressDialogFragment.dismiss();
         });
     }
 
@@ -361,5 +372,10 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onDialogClosed() {
         finish();
+    }
+
+    @Override
+    public void onProgressDialogClosed() {
+        presenter.startGame();
     }
 }

@@ -284,6 +284,26 @@ public class BoardViewModel extends AndroidViewModel implements
                 });
     }
 
+    public void startGame() {
+        gameRestService.startGame(1, 3)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<GameResponse>() {
+                    @Override
+                    public void onNext(GameResponse response) {
+                        Log.i(TAG, "onNext: " + response.state);
+                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
     @Override
     public void onAntMoved(AntLocation event) {
         Game game = getGameValue();
