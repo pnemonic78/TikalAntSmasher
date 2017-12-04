@@ -116,6 +116,12 @@ public class GameOverDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        gameOverDialogListener.onDialogClosed();
+    }
+
     interface GameOverDialogListener {
         void onDialogClosed();
     }

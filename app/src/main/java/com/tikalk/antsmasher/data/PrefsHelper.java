@@ -16,7 +16,7 @@ import com.tikalk.antsmasher.networking.ApiContract;
 public class PrefsHelper {
 
     public static final String USER_NAME = "user_name";
-    private static final String USER_ID = "user_id";
+    public static final String USER_ID = "user_id";
     private static final String TEAM_ID = "team_id";
     private static final String PLAYER_ID = "player_id";
     private static final String GAME_ID = "game_id";
@@ -123,5 +123,9 @@ public class PrefsHelper {
 
     public boolean isServerAuthorityEmpty() {
         return !preferences.contains(BASE_IP) || TextUtils.isEmpty(getServerAuthority());
+    }
+
+    public void clearPreference(String key){
+        preferences.edit().remove(key).apply();
     }
 }
