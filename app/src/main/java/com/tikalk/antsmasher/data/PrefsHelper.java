@@ -2,15 +2,12 @@ package com.tikalk.antsmasher.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.tikalk.antsmasher.networking.ApiContract;
-import com.tikalk.antsmasher.R;
-import com.tikalk.antsmasher.networking.ApiContract;
-
 import javax.inject.Inject;
+
+import com.tikalk.antsmasher.networking.ApiContract;
 
 /**
  * Created by tamirnoach on 24/10/2017.
@@ -23,17 +20,13 @@ public class PrefsHelper {
     private static final String TEAM_ID = "team_id";
     private static final String PLAYER_ID = "player_id";
     private static final String GAME_ID = "game_id";
-    private static final String ANTPUBLISH_SOCKET_URL = "ants_ip";
     public static final String BASE_IP = "base_ip";
-    private static final String SMASH_SOCKET_URL = "smash_ip";
 
     private final SharedPreferences preferences;
-    private final Resources resources;
 
     @Inject
     public PrefsHelper(Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        resources = context.getResources();
     }
 
     public void clear() {

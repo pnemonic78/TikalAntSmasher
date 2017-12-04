@@ -4,18 +4,16 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.net.URISyntaxException;
+
 import javax.inject.Inject;
 
-import com.tikalk.antsmasher.AntApplication;
 import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.User;
 import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.RetrofitContainer;
-import com.tikalk.antsmasher.networking.rest.GameRestService;
 import com.tikalk.antsmasher.utils.Utils;
-
-import java.net.URISyntaxException;
 
 import io.reactivex.disposables.Disposable;
 

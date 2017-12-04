@@ -20,10 +20,6 @@ public class ApiContract {
 
     public static final String REGISTRY_URL_PATH = "client.register";
 
-    public static final String ANT_PUBLISHER_URL = AUTHORITY + ":" + ANT_PUBLISH_PORT + "/" + REGISTRY_URL_PATH;
-    public static final String SMASH_SERVICE_URL = AUTHORITY + ":" + SMASH_SERVICE_PORT + "/" + REGISTRY_URL_PATH;
-    public static final String ADMIN_SERVICE_URL = "http://" + AUTHORITY + ":" + ADMIN_REST_PORT + "/";
-
     //Requests Endpoints
     public static final String LOGIN_ENDPOINT = "/users";
     public static final String UPDATE_ENDPOINT = "/users";

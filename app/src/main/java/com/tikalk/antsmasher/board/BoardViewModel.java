@@ -19,6 +19,8 @@ import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import com.tikalk.antsmasher.data.PrefsHelper;
@@ -29,20 +31,14 @@ import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.AntLocation;
 import com.tikalk.antsmasher.model.socket.AntSmash;
-import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.model.socket.PlayerScore;
 import com.tikalk.antsmasher.model.socket.TeamScore;
+import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.networking.response.GameResponse;
-import com.tikalk.antsmasher.networking.response.TeamResponse;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
 import com.tikalk.antsmasher.service.AppService;
 
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -228,7 +224,6 @@ public class BoardViewModel extends AndroidViewModel implements
         view.onGameStarted();
     }
 
-
     @Override
     public void onGameFinished() {
     }
@@ -242,63 +237,51 @@ public class BoardViewModel extends AndroidViewModel implements
                 view.onGameStarted();
                 break;
             case STOPPED:
-            case FINISH:
-                Observable<List<Team>> latestTeamsCall = gameRestService.getLatestTeams();
-                latestTeamsCall.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Team>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+            case FINISHED:
+                gameRestService.getLatestTeams()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new DisposableObserver<List<Team>>() {
+                            @Override
+                            public void onNext(List<Team> teams) {
+                                Log.i(TAG, "onNext: got " + teams.size() + " teams");
+                                latestTeams = teams;
+                                getLeaderPlayer();
+                            }
 
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e(TAG, "onError: Failed to fetch teams: " + e.getLocalizedMessage(), e);
+                            }
 
-                    @Override
-                    public void onNext(List<Team> teams) {
-                        Log.i(TAG, "onNext: got " + teams.size() + " teams");
-                        latestTeams = teams;
-                        getLeaderPlayer();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "onError: ", e );
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                            @Override
+                            public void onComplete() {
+                            }
+                        });
                 break;
         }
     }
 
     private void getLeaderPlayer() {
-        Observable<List<Player>> latestTeamsCall = gameRestService.getLeaderPlayer();
-        latestTeamsCall.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Player>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+        gameRestService.getLeaderPlayer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<List<Player>>() {
+                    @Override
+                    public void onNext(List<Player> players) {
+                        Log.i(TAG, "onNext: winner " + players.get(0).getName() + ", score: " + players.get(0).getScore());
+                        view.onGameFinished(latestTeams, players.get(0));
+                    }
 
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: Failed to fetch lead player: " + e.getLocalizedMessage(), e);
+                    }
 
-            @Override
-            public void onNext(List<Player> players) {
-                Log.i(TAG, "onNext: winner " + players.get(0).getName() + ", score: " + players.get(0).getScore());
-                view.onGameFinished(latestTeams, players.get(0));
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "onError: ", e );
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     @Override

@@ -2,11 +2,14 @@ package com.tikalk.antsmasher.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * User.
  */
 
-public class User {
+public class User implements Parcelable {
 
     @SerializedName("id")
     private long id;
@@ -22,6 +25,12 @@ public class User {
     public User(long id, String name) {
         setId(id);
         setName(name);
+    }
+
+    protected User(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        avatarUri = in.readString();
     }
 
     public long getId() {
@@ -56,4 +65,28 @@ public class User {
                 ", avatarUri='" + avatarUri + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(avatarUri);
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }
