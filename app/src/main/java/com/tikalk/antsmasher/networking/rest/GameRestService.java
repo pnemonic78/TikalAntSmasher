@@ -7,6 +7,7 @@ import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.User;
 import com.tikalk.antsmasher.model.socket.PlayingTeam;
+import com.tikalk.antsmasher.model.socket.StartBody;
 import com.tikalk.antsmasher.networking.requests.CreateUserRequest;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 
@@ -29,6 +30,9 @@ import static com.tikalk.antsmasher.networking.ApiContract.ID_PARAM;
 import static com.tikalk.antsmasher.networking.ApiContract.LATEST_TEAMS;
 import static com.tikalk.antsmasher.networking.ApiContract.LEADERS;
 import static com.tikalk.antsmasher.networking.ApiContract.LOGIN_ENDPOINT;
+import static com.tikalk.antsmasher.networking.ApiContract.POPULATION;
+import static com.tikalk.antsmasher.networking.ApiContract.START_GAME;
+import static com.tikalk.antsmasher.networking.ApiContract.STEP_PER_SECOND;
 import static com.tikalk.antsmasher.networking.ApiContract.TEAMS_CURRENT;
 import static com.tikalk.antsmasher.networking.ApiContract.TEAM_PARAM;
 import static com.tikalk.antsmasher.networking.ApiContract.UPDATE_ENDPOINT;
@@ -51,6 +55,10 @@ public interface GameRestService {
     @Headers("Content-Type: application/json")
     @POST(CREATE_GAME)
     Observable<GameResponse> createGame(@Query(GAME_TIME) int time, @Body() List<PlayingTeam> body);
+
+    @Headers("Content-Type: application/json")
+    @PUT(START_GAME)
+    Observable<GameResponse> startGame(@Query(POPULATION) int population, @Query(STEP_PER_SECOND) int stepsPerSecond, @Body StartBody body);
 
     @GET(TEAMS_CURRENT)
     Observable<List<Team>> getCurrentTeams();

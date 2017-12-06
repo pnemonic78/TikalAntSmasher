@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import static com.tikalk.graphics.ImageUtils.tintImage;
 
 public class GameOverDialogFragment extends DialogFragment {
 
+    private static final String TAG = "TAG_GameOverDialog";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_LABEL = "label";
     public static final String EXTRA_SCOREBOARD = "scoreBoard";
@@ -66,6 +68,7 @@ public class GameOverDialogFragment extends DialogFragment {
 
         Team teamA = scoreBoard.getParcelable(EXTRA_TEAM1);
         if (teamA != null) {
+            Log.i(TAG, "buildDialog: teamA score: " + teamA.getScore());
             Bitmap bitmapA = tintImage(bitmapNormal, teamA.getAntSpecies().getTint());
             Drawable drawableA = new BitmapDrawable(res, bitmapA);
             drawableA.setBounds(0, 0, antWidth, antHeight);
