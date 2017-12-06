@@ -190,7 +190,7 @@ public class BoardView extends View {
                 if (listener != null) {
                     final float x = event.getX();
                     final float y = event.getY();
-                    final float radius = event.getTouchMajor();
+                    final float radius = event.getTouchMinor();
                     final float left = x - radius;
                     final float top = y - radius;
                     final float right = x + radius;
