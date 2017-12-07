@@ -13,7 +13,8 @@
     <dimen name="ant_width">23.325dp</dimen>
     <dimen name="ant_height">33.45dp</dimen>
     <dimen name="ant_dead_width">35.025dp</dimen>
-    <dimen name="ant_ded_height">25.125dp</dimen>
+    <dimen name="ant_dead_height">25.125dp</dimen>
+    <dimen name="finger_size">20dp</dimen>
 
     <dimen name="team_score_padding">@dimen/small_padding</dimen>
 </resources>

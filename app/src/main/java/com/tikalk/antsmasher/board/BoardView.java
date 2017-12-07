@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +35,17 @@ public class BoardView extends View {
         void onAntTouch(@Nullable String antId);
     }
 
-    int antWidth;
-    int antHeight;
-    int antDeadWidth;
-    int antDeadHeight;
+    private int antWidth;
+    private int antHeight;
+    private int antDeadWidth;
+    private int antDeadHeight;
+    private int fingerSize;
     private final Map<Long, Bitmap> bitmapsAlive = new HashMap<>();
     private final Map<Long, Bitmap> bitmapsDead = new HashMap<>();
     private final List<AntRect> ants = new CopyOnWriteArrayList<>();
     private final Map<String, AntRect> antsById = new HashMap<>();
     private AntListener antListener;
+    private final List<String> antsTouched = new ArrayList<>();
 
     public BoardView(Context context) {
         super(context);
@@ -64,7 +67,8 @@ public class BoardView extends View {
         antWidth = res.getDimensionPixelSize(R.dimen.ant_width);
         antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
         antDeadWidth = res.getDimensionPixelSize(R.dimen.ant_dead_width);
-        antDeadHeight = res.getDimensionPixelSize(R.dimen.ant_ded_height);
+        antDeadHeight = res.getDimensionPixelSize(R.dimen.ant_dead_height);
+        fingerSize = res.getDimensionPixelSize(R.dimen.finger_size);
     }
 
     public void clear() {
@@ -190,20 +194,22 @@ public class BoardView extends View {
                 if (listener != null) {
                     final float x = event.getX();
                     final float y = event.getY();
-                    final float radius = event.getTouchMinor();
-                    final float left = x - radius;
-                    final float top = y - radius;
-                    final float right = x + radius;
-                    final float bottom = y + radius;
-                    boolean hit = false;
+                    final float left = x - fingerSize;
+                    final float top = y - fingerSize;
+                    final float right = x + fingerSize;
+                    final float bottom = y + fingerSize;
                     for (AntRect ant : ants) {
                         if (ant.isHit(left, top, right, bottom)) {
-                            hit = true;
-                            listener.onAntTouch(ant.id);
+                            antsTouched.add(ant.id);
                         }
                     }
-                    if (!hit) {
+                    if (antsTouched.isEmpty()) {
                         listener.onAntTouch(null);
+                    } else {
+                        for (String antId : antsTouched) {
+                            listener.onAntTouch(antId);
+                        }
+                        antsTouched.clear();
                     }
                     return true;
                 }
