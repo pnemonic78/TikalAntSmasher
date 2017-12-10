@@ -39,7 +39,7 @@ public class BoardView extends View {
     private int antHeight;
     private int antDeadWidth;
     private int antDeadHeight;
-    private int fingerSize;
+    private float fingerSize;
     private final Map<Long, Bitmap> bitmapsAlive = new HashMap<>();
     private final Map<Long, Bitmap> bitmapsDead = new HashMap<>();
     private final List<AntRect> ants = new CopyOnWriteArrayList<>();
@@ -68,7 +68,7 @@ public class BoardView extends View {
         antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
         antDeadWidth = res.getDimensionPixelSize(R.dimen.ant_dead_width);
         antDeadHeight = res.getDimensionPixelSize(R.dimen.ant_dead_height);
-        fingerSize = res.getDimensionPixelSize(R.dimen.finger_size);
+        fingerSize = res.getDimension(R.dimen.finger_size);
     }
 
     public void clear() {
