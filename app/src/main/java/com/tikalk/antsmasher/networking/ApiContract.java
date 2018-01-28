@@ -4,20 +4,17 @@ import android.net.Uri;
 
 import java.net.URISyntaxException;
 
-/**
- * Created by motibartov on 16/11/2017.
- */
 
 public class ApiContract {
 
     //URL's
-    public static final String AUTHORITY = "35.167.230.149";
+    public static final String AUTHORITY = "ants.fuze.tikal.io";
 
-    public static final int ANT_PUBLISH_PORT = 6080;
-    public static final int SMASH_SERVICE_PORT = 5080;
-    public static final int ADMIN_REST_PORT = 8080;
+    private static final int ANT_PUBLISH_PORT = 6080;
+    private static final int SMASH_SERVICE_PORT = 5080;
+    private static final int ADMIN_REST_PORT = 8080;
 
-    public static final String REGISTRY_URL_PATH = "client.register";
+    private static final String REGISTRY_URL_PATH = "client.register";
 
     //Requests Endpoints
     public static final String LOGIN_ENDPOINT = "/users";
@@ -65,7 +62,7 @@ public class ApiContract {
                 .build().toString();
     }
 
-    public static String buildAdminBaseUrl(String baseUrl) throws URISyntaxException {
+    static String buildAdminBaseUrl(String baseUrl) throws URISyntaxException {
         return new Uri.Builder()
                 .scheme("http")
                 .encodedAuthority(baseUrl + ":" + ADMIN_REST_PORT)

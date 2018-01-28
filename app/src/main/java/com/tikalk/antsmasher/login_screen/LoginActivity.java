@@ -21,7 +21,6 @@ import com.tikalk.antsmasher.utils.Utils;
 
 public class LoginActivity extends AppCompatActivity implements
         EditDialogFragment.EditDialogEventListener,
-        IpDialogFragment.IpDialogEventListener,
         LoginContract.View {
 
     private static final String TAG = "TAG_LoginActivity";
@@ -65,7 +64,6 @@ public class LoginActivity extends AppCompatActivity implements
         switch (action) {
             case ACTION_ASK_IP:
                 dismissAfterEdit = intent.getBooleanExtra(EXTRA_DISMISS, false);
-                showEnterIpDialog();
                 break;
             case ACTION_ASK_NAME:
                 dismissAfterEdit = intent.getBooleanExtra(EXTRA_DISMISS, false);
@@ -77,9 +75,7 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (!dismissAfterEdit) {
-            mLoginPresenter.onResume();
-        }
+        mLoginPresenter.login();
     }
 
     @Override
@@ -88,33 +84,12 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void showEnterIpDialog() {
-        IpDialogFragment dialog = new IpDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(IpDialogFragment.EXTRA_TITLE, getString(R.string.ip_dialog_title));
-        args.putString(IpDialogFragment.EXTRA_LABEL, getString(R.string.ip_dialog_body));
-        args.putString(IpDialogFragment.EXTRA_VALUE, mLoginPresenter.getServerAuthority());
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), "EditAuthority");
-    }
-
-    @Override
-    public void showInvalidIpDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.invalid_ip_header)
-                .setMessage(R.string.invalid_ip_body)
-                .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
-                .setPositiveButton(R.string.retry_button, (dialogInterface, i) -> mLoginPresenter.checkBaseIp())
-                .show();
-    }
-
-    @Override
     public void showUserNameDialog() {
         EditDialogFragment dialog = new EditDialogFragment();
         Bundle args = new Bundle();
         args.putString(EditDialogFragment.EXTRA_TITLE, getString(R.string.login_dialog_header));
         args.putString(EditDialogFragment.EXTRA_LABEL, getString(R.string.login_dialog_body));
-        args.putString(EditDialogFragment.EXTRA_VALUE, mLoginPresenter.getUserName());
+        args.putString(EditDialogFragment.EXTRA_VALUE, mPrefsHelper.getUserName());
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "EditUserName");
     }
@@ -146,11 +121,6 @@ public class LoginActivity extends AppCompatActivity implements
             startActivity(intent);
             finish();
         }, timeout);
-    }
-
-    @Override
-    public void onIpEntered(String input) {
-        mLoginPresenter.onIpEntered(input);
     }
 
     @Override

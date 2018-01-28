@@ -17,10 +17,6 @@ import com.tikalk.antsmasher.utils.Utils;
 
 import io.reactivex.disposables.Disposable;
 
-/**
- * Created by tamirnoach on 23/10/2017.
- */
-
 public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         LoginContract.Presenter,
         LoginInterceptor.OnLoginFinishedListener {
@@ -37,14 +33,14 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     private LoginManager loginManager;
 
-    PrefsHelper prefsHelper;
+    private PrefsHelper prefsHelper;
 
 
-    RetrofitContainer retrofitContainer;
+    private RetrofitContainer retrofitContainer;
 
 
     @Inject
-    public LoginPresenter(Context context, PrefsHelper prefsHelper, RetrofitContainer retrofitContainer) {
+    private LoginPresenter(Context context, PrefsHelper prefsHelper, RetrofitContainer retrofitContainer) {
         this.context = context;
         this.prefsHelper = prefsHelper;
         this.retrofitContainer = retrofitContainer;
@@ -60,38 +56,14 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         if (mDisposable != null) mDisposable.dispose();
     }
 
-    @Override
-    public void checkBaseIp() {
-        if (prefsHelper.isServerAuthorityEmpty()) {
-            view.showEnterIpDialog();
-        } else {
-            login();
-        }
-    }
-
-    @Override
-    public void onIpEntered(String enteredIp) {
-        Log.i(TAG, "onIpEntered: " + enteredIp);
-        if (Utils.validateIpAddress(enteredIp)) {
-            String oldValue = prefsHelper.getServerAuthority();
-            prefsHelper.setServerAuthority(enteredIp);
-            prefsHelper.clear(PrefsHelper.USER_ID);
-            try {
-                retrofitContainer.updateBaseUrl(ApiContract.buildAdminBaseUrl(enteredIp));
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-
-            if (enteredIp.equals(oldValue)) {
-                login();
-            } else {
-                view.restartApp();
-            }
-        } else {
-            view.showInvalidIpDialog();
-        }
-    }
-
+//    @Override
+//    public void checkBaseIp() {
+//        if (prefsHelper.isServerAuthorityEmpty()) {
+//            view.showEnterIpDialog();
+//        } else {
+//            login();
+//        }
+//    }
 
     public void login() {
         String username = prefsHelper.getUserName();
@@ -129,17 +101,5 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     public void onLoginFailed(Throwable e) {
         view.showLoginFailedDialog();
         //  view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
-    }
-
-    public String getServerAuthority() {
-        return prefsHelper.getServerAuthority();
-    }
-
-    public String getUserName() {
-        return prefsHelper.getUserName();
-    }
-
-    public void onResume() {
-        checkBaseIp();
     }
 }
