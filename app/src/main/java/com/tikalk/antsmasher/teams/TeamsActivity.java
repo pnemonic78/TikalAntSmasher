@@ -171,26 +171,15 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        if (key.equals(PrefsHelper.BASE_IP)) {
-            String prefIp = sharedPreferences.getString(key, "");
-            Log.i(TAG, "prefsIp: " + prefIp);
-            if (prefIp.isEmpty() || !Utils.validateIpAddress(prefIp)) {
-                Log.i(TAG, "onSharedPreferenceChanged: invalid ip");
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Invalid IP");
-                builder.setMessage("Please enter valid IP in format:\n\nXXX.XXX.XXX.XXX");
-                builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
-                builder.setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {});
-                builder.show();
-            } else {
-                Log.i(TAG, "onSharedPreferenceChanged: restart app dialog");
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("New IP");
-                builder.setMessage("IP Changed.\nRestart app to apply changes...");
-                builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
-                builder.setPositiveButton("Restart", (dialogInterface, i) -> restartApplication());
-                builder.show();
-            }
+        if (key.equals(getString(R.string.server_name_key))) {
+            String serverName = sharedPreferences.getString(key, getString(R.string.default_server_name));
+            Log.i(TAG, "prefsIp: " + serverName);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("New IP");
+            builder.setMessage("IP Changed.\nRestart app to apply changes...");
+            builder.setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+            builder.setPositiveButton("Restart", (dialogInterface, i) -> restartApplication());
+            builder.show();
         }
     }
 

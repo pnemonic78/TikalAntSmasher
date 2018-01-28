@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="server_name_key">serverPrefNameKey</string>
+    <string name="user_name_key">userPrefNameKey</string>
+    <string name="user_id_key">userIdKey</string>
+    <string name="team_id_key">teamIdKey</string>
+    <string name="player_id_key">playerIdKey</string>
+    <string name="game_id_key">gameIdKey</string>
+    <string name="game_music_key">musicPrefKey</string>
+    <string name="game_sound_efcts_key">gameSfctsPrefKey</string>
+    <string name="game_vibrate_key">vibratePrefKey</string>
+
+    <string name="default_server_name">ants.fuze.tikal.io</string>
+</resources>

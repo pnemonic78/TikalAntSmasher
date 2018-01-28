@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceScreen
+        android:key="@string/pref_header_general"
+        android:title="@string/pref_header_general">
+
+        <EditTextPreference
+            android:key="@string/server_name_key"
+            android:title="@string/ip_dialog_title"
+            android:defaultValue="@string/default_server_name"/>
+
+        <EditTextPreference
+            android:key="@string/user_name_key"
+            android:title="@string/login_dialog_header"/>
+
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:key="@string/pref_header_notifications"
+        android:title="@string/pref_header_notifications">
+
+
+        <SwitchPreference
+            android:key="@string/game_music_key"
+            android:title="@string/pref_title_music"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="@string/game_sound_efcts_key"
+            android:title="@string/pref_title_sound"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="@string/game_vibrate_key"
+            android:title="@string/pref_title_vibrate"
+            android:defaultValue="true" />
+
+    </PreferenceScreen>
+
+</PreferenceScreen>

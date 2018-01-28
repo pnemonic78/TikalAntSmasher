@@ -40,7 +40,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
 
     @Inject
-    private LoginPresenter(Context context, PrefsHelper prefsHelper, RetrofitContainer retrofitContainer) {
+    public LoginPresenter(Context context, PrefsHelper prefsHelper, RetrofitContainer retrofitContainer) {
         this.context = context;
         this.prefsHelper = prefsHelper;
         this.retrofitContainer = retrofitContainer;
@@ -91,6 +91,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         checkUserId(userName);
     }
 
+
+
     @Override
     public void onLoginSuccess(User user) {
         prefsHelper.setUserId(user.getId());
@@ -102,4 +104,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         view.showLoginFailedDialog();
         //  view.completeSplash(LoginActivity.SPLASH_EDIT_TIMEOUT);
     }
+
+    @Override
+    public void loginFailedMessageDismissed() {
+        view.completeSplash(0);
+    }
+
+
 }

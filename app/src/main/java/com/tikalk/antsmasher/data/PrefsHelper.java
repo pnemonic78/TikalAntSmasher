@@ -3,10 +3,10 @@ package com.tikalk.antsmasher.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 
 import javax.inject.Inject;
 
+import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.networking.ApiContract;
 
 /**
@@ -15,17 +15,13 @@ import com.tikalk.antsmasher.networking.ApiContract;
 
 public class PrefsHelper {
 
-    public static final String USER_NAME = "user_name";
-    public static final String USER_ID = "user_id";
-    private static final String TEAM_ID = "team_id";
-    private static final String PLAYER_ID = "player_id";
-    private static final String GAME_ID = "game_id";
-    public static final String BASE_IP = "base_ip";
 
     private final SharedPreferences preferences;
+    private Context context;
 
     @Inject
     public PrefsHelper(Context context) {
+        this.context = context;
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -38,7 +34,7 @@ public class PrefsHelper {
         preferences.edit().remove(key).apply();
     }
     public void setUserName(String value) {
-        saveStringToPrefs(USER_NAME, value);
+        saveStringToPrefs(context.getString(R.string.user_name_key), value);
     }
 
     private String getString(String key) {
@@ -70,15 +66,15 @@ public class PrefsHelper {
     }
 
     public long getUserId() {
-        return getLong(USER_ID);
+        return getLong(context.getString(R.string.user_id_key));
     }
 
     public void setUserId(long value) {
-        saveLongToPrefs(USER_ID, value);
+        saveLongToPrefs(context.getString(R.string.user_id_key), value);
     }
 
     public String getUserName() {
-        return getString(USER_NAME);
+        return getString(context.getString(R.string.user_name_key));
     }
 
     public boolean isInteractiveMusic() {
@@ -94,38 +90,30 @@ public class PrefsHelper {
     }
 
     public long getTeamId() {
-        return getLong(TEAM_ID);
+        return getLong(context.getString(R.string.team_id_key));
     }
 
     public void setTeamId(long teamId) {
-        saveLongToPrefs(TEAM_ID, teamId);
+        saveLongToPrefs(context.getString(R.string.team_id_key), teamId);
     }
 
     public long getGameId() {
-        return getLong(GAME_ID);
+        return getLong(context.getString(R.string.game_id_key));
     }
 
     public void setGameId(long gameId) {
-        saveLongToPrefs(GAME_ID, gameId);
+        saveLongToPrefs(context.getString(R.string.game_id_key), gameId);
     }
 
     public long getPlayerId() {
-        return getLong(PLAYER_ID);
+        return getLong(context.getString(R.string.player_id_key));
     }
 
     public void setPlayerId(long playerId) {
-        saveLongToPrefs(PLAYER_ID, playerId);
+        saveLongToPrefs(context.getString(R.string.player_id_key), playerId);
     }
 
-    public String getServerAuthority() {
-        return preferences.getString(BASE_IP, ApiContract.AUTHORITY);
-    }
-
-    public void setServerAuthority(String authority) {
-        saveStringToPrefs(BASE_IP, authority);
-    }
-
-    public boolean isServerAuthorityEmpty() {
-        return !preferences.contains(BASE_IP) || TextUtils.isEmpty(getServerAuthority());
+    public String getServerName() {
+        return preferences.getString(context.getString(R.string.default_server_name), ApiContract.AUTHORITY);
     }
 }

@@ -101,17 +101,12 @@ public class LoginActivity extends AppCompatActivity implements
                 .setMessage(R.string.login_dialog_failed)
                 .setIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_launcher))
                 .setPositiveButton(R.string.ok_button, (dialogInterface, i) -> {
-                    finish();
-                })
-                .show();
+                    mLoginPresenter.loginFailedMessageDismissed();
+                }).show();
     }
 
     @Override
     public void completeSplash(long timeout) {
-        if (dismissAfterEdit) {
-            finish();
-            return;
-        }
 
         Intent service = new Intent(this, AppService.class);
         startService(service);

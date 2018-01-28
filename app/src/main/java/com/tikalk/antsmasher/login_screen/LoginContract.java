@@ -17,5 +17,6 @@ public interface LoginContract {
     interface Presenter {
         void login();
         void saveUserName(String userName);
+        void loginFailedMessageDismissed();
     }
 }
