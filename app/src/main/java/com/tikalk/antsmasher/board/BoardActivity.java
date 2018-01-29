@@ -130,7 +130,6 @@ public class BoardActivity extends AppCompatActivity implements
 
         soundHelper = new SoundHelper(this);
         progressDialogFragment = new ProgressDialogFragment();
-        progressDialogFragment.setCancelable(false);
 
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         if ((vibrator != null) && vibrator.hasVibrator()) {
@@ -362,5 +361,10 @@ public class BoardActivity extends AppCompatActivity implements
     public void onProgressDialogClosed() {
         Log.i(TAG, "onProgressDialogClosed: ");
         presenter.startGame();
+    }
+
+    @Override
+    public void onProgressBarCanceled() {
+        finish();
     }
 }
