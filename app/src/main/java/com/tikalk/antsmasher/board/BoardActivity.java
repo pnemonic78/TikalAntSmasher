@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,17 +71,13 @@ public class BoardActivity extends AppCompatActivity implements
 
     @BindView(R.id.board)
     protected BoardView boardView;
-    @BindView(R.id.wait)
-    protected ProgressBar progressBar;
     ProgressDialogFragment progressDialogFragment;
-    @BindView(R.id.score_player)
+    @BindView(R.id.tvPlayerName)
     protected TextView playerScoreText;
-    @BindView(R.id.score_team_1)
-    protected TextView team1ScoreText;
-    @BindView(R.id.score_team_2)
-    protected TextView team2ScoreText;
-    @BindView(R.id.score_team_3)
-    protected TextView team3ScoreText;
+    @BindView(R.id.tvHit)
+    protected TextView tvHit;
+    @BindView(R.id.tvMiss)
+    protected TextView tvMiss;
 
     private BoardViewModel presenter;
     private TeamViewModel presenterTeams;
@@ -93,7 +88,7 @@ public class BoardActivity extends AppCompatActivity implements
     private Vibrator vibrator;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)   {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
         setContentView(R.layout.activity_board);
@@ -134,7 +129,7 @@ public class BoardActivity extends AppCompatActivity implements
         presenterTeams = ViewModelProviders.of(this, teamsViewModelFactory).get(TeamViewModel.class);
 
         soundHelper = new SoundHelper(this);
-        progressDialogFragment =new ProgressDialogFragment();
+        progressDialogFragment = new ProgressDialogFragment();
         progressDialogFragment.setCancelable(false);
 
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -183,31 +178,17 @@ public class BoardActivity extends AppCompatActivity implements
             final int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
 
             for (int i = 0; i < size; i++) {
-                switch (i) {
-                    case 0:
-                        teamScoreText = team1ScoreText;
-                        break;
-                    case 1:
-                        teamScoreText = team2ScoreText;
-                        break;
-                    case 2:
-                        teamScoreText = team3ScoreText;
-                        break;
-                    default:
-                        continue;
-                }
 
                 team = teams.get(i);
-                bitmap = boardView.getAntAlive(team.getAntSpecies());
-                drawable = new BitmapDrawable(res, bitmap);
-                drawable.setBounds(0, 0, antWidth, antHeight);
-                drawable.setAlpha(150);
-
-                teamScoreText.setTextColor(team.getAntSpecies().getTint());
-                teamScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
 
                 if (team.contains(player)) {
+                    bitmap = boardView.getAntAlive(team.getAntSpecies());
+                    drawable = new BitmapDrawable(res, bitmap);
+                    drawable.setBounds(0, 0, antWidth, antHeight);
+                    drawable.setAlpha(150);
                     playerScoreText.setCompoundDrawablesRelative(null, null, drawable, null);
+                    playerScoreText.setText(prefsHelper.getUserName());
+                    playerScoreText.setTextColor(team.getAntSpecies().getTint());
                 }
             }
             showScore(player, teams);
@@ -255,7 +236,7 @@ public class BoardActivity extends AppCompatActivity implements
             soundHelper.playMusic();
         }
         runOnUiThread(() -> {
-            if(progressDialogFragment != null)
+            if (progressDialogFragment != null)
                 progressDialogFragment.dismiss();
         });
     }
@@ -265,9 +246,7 @@ public class BoardActivity extends AppCompatActivity implements
         Log.v(TAG, "onGameFinished: ");
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
-            runOnUiThread(() -> {
-                showGameOverDialog(teams, winner);
-            });
+            runOnUiThread(() -> showGameOverDialog(teams, winner));
             if (prefsHelper.isInteractiveSounds()) {
                 soundHelper.playGameOver();
             }
@@ -358,15 +337,11 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void showScore(Player player, List<Team> teams) {
         runOnUiThread(() -> {
-            playerScoreText.setText(String.valueOf(player.getScore()));
             final int size = teams.size();
             if (size >= 1) {
-                team1ScoreText.setText(String.valueOf(teams.get(0).getScore()));
+                tvHit.setText(String.valueOf(teams.get(0).getScore()));
                 if (size >= 2) {
-                    team2ScoreText.setText(String.valueOf(teams.get(1).getScore()));
-                    if (size >= 3) {
-                        team3ScoreText.setText(String.valueOf(teams.get(2).getScore()));
-                    }
+                    tvMiss.setText(String.valueOf(teams.get(1).getScore()));
                 }
             }
         });

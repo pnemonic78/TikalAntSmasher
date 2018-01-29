@@ -8,101 +8,80 @@
 
     <ImageView
         android:id="@+id/board_bg"
+        android:contentDescription="Game Board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/board"
         android:scaleType="fitXY"
-        tools:src="@drawable/board"/>
+        tools:src="@drawable/board" />
 
     <TextView
-        android:id="@+id/score_player"
-        android:layout_width="0dp"
+        android:id="@+id/tvPlayerName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/score_bg"
         android:gravity="center"
-        android:padding="4dp"
+        android:padding="8dp"
         android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/score_team_2"
-        app:layout_constraintEnd_toStartOf="@+id/score_team_1"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="player"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="player" />
 
     <TextView
-        android:id="@+id/score_team_1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:background="@drawable/score_bg"
-        android:gravity="center"
-        android:padding="4dp"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/score_team_3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/score_player"
-        tools:text="team A"/>
-
-    <TextView
-        android:id="@+id/score_team_2"
+        android:id="@+id/tvHit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
         android:background="@drawable/score_bg"
+        android:drawableEnd="@drawable/ic_action_like"
+        android:drawablePadding="4dp"
         android:gravity="center"
         android:padding="4dp"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/score_team_3"
+        app:layout_constraintEnd_toStartOf="@+id/tvMiss"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="team B"/>
+        tools:text="team A" />
+
 
     <TextView
-        android:id="@+id/score_team_3"
+        android:id="@+id/tvMiss"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/score_bg"
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/ic_action_dontlike"
         android:gravity="center"
         android:padding="4dp"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/score_team_2"
-        tools:text="team C"/>
+        app:layout_constraintStart_toEndOf="@+id/tvHit"
+        tools:text="team B" />
+
 
     <com.tikalk.antsmasher.board.BoardView
         android:id="@+id/board"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <ProgressBar
-        android:id="@+id/wait"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:indeterminate="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>
