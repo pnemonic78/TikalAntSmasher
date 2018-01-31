@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import javax.inject.Inject;
 
 import com.tikalk.antsmasher.R;
-import com.tikalk.antsmasher.networking.ApiContract;
 
 /**
  * Created by tamirnoach on 24/10/2017.
@@ -41,8 +40,8 @@ public class PrefsHelper {
         return preferences.getString(key, null);
     }
 
-    private void saveStringToPrefs(String key, String value) {
-        preferences.edit().putString(key, value).apply();
+    public void saveStringToPrefs(String key, String value) {
+        preferences.edit().putString(key, value).commit();
     }
 
     private String getStringPref(String key) {
@@ -114,6 +113,6 @@ public class PrefsHelper {
     }
 
     public String getServerName() {
-        return preferences.getString(context.getString(R.string.default_server_name), ApiContract.AUTHORITY);
+        return preferences.getString(context.getString(R.string.server_name_key), null);
     }
 }

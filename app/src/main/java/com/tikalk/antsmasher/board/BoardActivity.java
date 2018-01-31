@@ -74,10 +74,6 @@ public class BoardActivity extends AppCompatActivity implements
     ProgressDialogFragment progressDialogFragment;
     @BindView(R.id.tvPlayerName)
     protected TextView playerScoreText;
-    @BindView(R.id.tvHit)
-    protected TextView tvHit;
-    @BindView(R.id.tvMiss)
-    protected TextView tvMiss;
 
     private BoardViewModel presenter;
     private TeamViewModel presenterTeams;
@@ -190,7 +186,6 @@ public class BoardActivity extends AppCompatActivity implements
                     playerScoreText.setTextColor(team.getAntSpecies().getTint());
                 }
             }
-            showScore(player, teams);
         }
 
         boardView.clear();
@@ -287,13 +282,17 @@ public class BoardActivity extends AppCompatActivity implements
             if (user) {
                 vibrate();
                 if (userTeam) {// Case 2: my user hits his my own team's ant (self hit).
+                    showToast("Self Smash be careful");
                     playSound(SOUND_MISTAKE);
                 } else {// Case 3: my user hits another team's ant.
+                    showToast("Smash...");
                     playSound(SOUND_SMASH);
                 }
             } else if (userTeam) {// Case 4: teammate hits our team's ant.
+                showToast("Bad luck");
                 playSound(SOUND_SAME_TEAM);
             } else {// Case 5: other user hits other team's ant.
+                showToast("Lost it!");
                 playSound(SOUND_SMASH_OTHER);
             }
         }
@@ -334,19 +333,6 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void showScore(Player player, List<Team> teams) {
-        runOnUiThread(() -> {
-            final int size = teams.size();
-            if (size >= 1) {
-                tvHit.setText(String.valueOf(teams.get(0).getScore()));
-                if (size >= 2) {
-                    tvMiss.setText(String.valueOf(teams.get(1).getScore()));
-                }
-            }
-        });
-    }
-
-    @Override
     public void showFetchGameError(Throwable e) {
         //FIXME show error dialog.
         Toast.makeText(this, "Failed to fetch game: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
@@ -366,5 +352,14 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onProgressBarCanceled() {
         finish();
+    }
+
+    private void showToast(String message){
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(BoardActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

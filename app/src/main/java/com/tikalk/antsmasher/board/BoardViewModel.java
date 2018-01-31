@@ -92,8 +92,6 @@ public class BoardViewModel extends AndroidViewModel implements
 
         void smashAnt(@Nullable Ant ant, boolean user);
 
-        void showScore(Player player, List<Team> teams);
-
         void showFetchGameError(Throwable e);
     }
 
@@ -133,7 +131,7 @@ public class BoardViewModel extends AndroidViewModel implements
         this.player = null;
     }
 
-    public void setTeamId(long teamId) {
+    void setTeamId(long teamId) {
         this.teamId = teamId;
         this.team = null;
     }
@@ -142,7 +140,7 @@ public class BoardViewModel extends AndroidViewModel implements
         return getGame(false);
     }
 
-    public LiveData<Game> getGame(boolean fetch) {
+    LiveData<Game> getGame(boolean fetch) {
         Game value = game.getValue();
         if (fetch || (value == null)) {
             loadGame();
@@ -164,13 +162,18 @@ public class BoardViewModel extends AndroidViewModel implements
                 .subscribe(new DisposableObserver<GameResponse>() {
                     @Override
                     public void onNext(GameResponse response) {
-                        Log.v(TAG, "onNext: have game");
+                        Log.v(TAG, "onNext: have game " + response.state);
                         Game data = new Game();
                         data.setId(response.id);
                         data.setState(response.state);
+
                         player = null;
                         team = null;
                         game.postValue(data);
+                        if(response.state == GameState.STARTED){
+                            view.paint();
+                            view.onGameStarted();
+                        }
                     }
 
                     @Override
@@ -197,10 +200,10 @@ public class BoardViewModel extends AndroidViewModel implements
     /**
      * Stop the game.
      */
-    public void stop() {
+    void stop() {
     }
 
-    public void onAntTouch(String antId) {
+    void onAntTouch(String antId) {
         // Send hit/miss to server via socket.
         Game game = getGameValue();
         if (game != null) {
@@ -210,13 +213,13 @@ public class BoardViewModel extends AndroidViewModel implements
         }
     }
 
-    public void onBoardReady() {
+     void onBoardReady() {
         if (allowStart()) {
             start();
         }
     }
 
-    public boolean allowStart() {
+    private boolean allowStart() {
         Game game = getGameValue();
         return (game != null) && ((game.getState() == GameState.STARTED) || (game.getState() == GameState.RESUMED));
     }
@@ -272,6 +275,7 @@ public class BoardViewModel extends AndroidViewModel implements
                 .subscribe(new DisposableObserver<List<Player>>() {
                     @Override
                     public void onNext(List<Player> players) {
+
                         Log.i(TAG, "onNext: winner " + players.get(0).getName() + ", score: " + players.get(0).getScore());
                         view.onGameFinished(latestTeams, players.get(0));
                     }
@@ -287,7 +291,7 @@ public class BoardViewModel extends AndroidViewModel implements
                 });
     }
 
-    public void startGame() {
+    void startGame() {
         Log.i(TAG, "startGame: ");
         gameRestService.startGame(1, 3, new StartBody(prefsHelper.getUserName()))
                 .subscribeOn(Schedulers.io())
@@ -403,9 +407,9 @@ public class BoardViewModel extends AndroidViewModel implements
         Player player = getPlayer();
         if ((player != null) && (player.getId() == event.playerId)) {
             player.setScore(event.score);
-            if (view != null) {
-                view.showScore(player, getGameValue().getTeams());
-            }
+//            if (view != null) {
+//                view.showScore(player, getGameValue().getTeams());
+//            }
         }
     }
 
@@ -414,9 +418,9 @@ public class BoardViewModel extends AndroidViewModel implements
         Team team = getGameValue().getTeam(event.teamId);
         if (team != null) {
             team.setScore(event.score);
-            if (view != null) {
-                view.showScore(getPlayer(), getGameValue().getTeams());
-            }
+//            if (view != null) {
+//                view.showScore(getPlayer(), getGameValue().getTeams());
+//            }
         }
     }
 

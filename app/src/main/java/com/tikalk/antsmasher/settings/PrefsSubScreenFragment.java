@@ -138,11 +138,10 @@ public class PrefsSubScreenFragment extends PreferenceFragmentCompat implements 
 
     private void resetServerName(Preference preference) {
 
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putString(getString(R.string.server_name_key), getString(R.string.default_server_name));
-        editor.apply();
         ((EditTextPreference) preference).setText(getString(R.string.default_server_name));
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(getString(R.string.server_name_key), getString(R.string.default_server_name));
+        editor.commit();
     }
 
 }

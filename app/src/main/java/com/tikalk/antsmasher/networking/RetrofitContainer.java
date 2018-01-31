@@ -40,12 +40,13 @@ public class RetrofitContainer {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
         }
-        Log.i(TAG, "getRetrofit: base url: " + retrofit.baseUrl());
+        Log.i(TAG, "initRetrofit: base url: " + retrofit.baseUrl());
     }
 
     public void updateBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
         initRetrofit();
+        this.restService = null;
     }
 
     public GameRestService getRestService() {

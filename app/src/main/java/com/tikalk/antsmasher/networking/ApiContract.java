@@ -62,7 +62,7 @@ public class ApiContract {
                 .build().toString();
     }
 
-    static String buildAdminBaseUrl(String baseUrl) throws URISyntaxException {
+    public static String buildAdminBaseUrl(String baseUrl) throws URISyntaxException {
         return new Uri.Builder()
                 .scheme("http")
                 .encodedAuthority(baseUrl + ":" + ADMIN_REST_PORT)

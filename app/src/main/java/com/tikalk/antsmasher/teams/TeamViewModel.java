@@ -10,6 +10,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.os.Handler;
 import android.util.Log;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,6 +20,7 @@ import com.tikalk.antsmasher.model.GameState;
 import com.tikalk.antsmasher.model.Player;
 import com.tikalk.antsmasher.model.Team;
 import com.tikalk.antsmasher.model.socket.PlayingTeam;
+import com.tikalk.antsmasher.networking.ApiContract;
 import com.tikalk.antsmasher.networking.RetrofitContainer;
 import com.tikalk.antsmasher.networking.response.GameResponse;
 import com.tikalk.antsmasher.networking.rest.GameRestService;
@@ -47,6 +49,7 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
     private final MutableLiveData<List<Team>> teams = new MutableLiveData<>();
     private Team team;
     private GameRestService gameRestService;
+    private RetrofitContainer retrofitContainer;
     private PrefsHelper prefsHelper;
     private long userId;
     private final Handler handler = new Handler();
@@ -57,6 +60,7 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
     public TeamViewModel(Application application, RetrofitContainer retrofitContainer, PrefsHelper prefsHelper) {
         super(application);
         Log.v(TAG, "TeamViewModel: ");
+        this.retrofitContainer = retrofitContainer;
         this.gameRestService = retrofitContainer.getRestService();
         this.prefsHelper = prefsHelper;
         this.userId = prefsHelper.getUserId();
@@ -76,11 +80,11 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
         return teams;
     }
 
-    public void refreshTeams(){
+    void refreshTeams(){
         loadTeams();
     }
 
-    public void createGame(List<PlayingTeam> body){
+    void createGame(List<PlayingTeam> body){
         Log.i(TAG, "createGame: ");
         gameRestService.createGame(1, body)
                 .subscribeOn(Schedulers.io())
@@ -109,7 +113,7 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
                 });
     }
 
-    public void checkGameState(){
+    private void checkGameState(){
         Log.i(TAG, "checkGameState: ");
         gameRestService.getLatestGame()
                 .subscribeOn(Schedulers.io())
@@ -175,7 +179,7 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
                 });
     }
 
-    public void teamClicked(final Team team) {
+    void teamClicked(final Team team) {
         Log.v(TAG, "onNext: about to join the game team: " + team.getId() + ", user: " + userId);
 
         gameRestService.createPlayer(team.getId(), userId)
@@ -218,12 +222,14 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onStart() {
-        Log.v(TAG, "onStart");
         allowPolling = true;
+        loadTeams();
+
+        Log.v(TAG, "onStart:");
         // Were we busy polling before we were rudely stopped.
-        if (pollTeams != null) {
-            loadTeams();
-        }
+//        if (pollTeams != null) {
+//            Log.v(TAG, "About to load teams");
+//        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -236,5 +242,15 @@ public class TeamViewModel extends AndroidViewModel implements LifecycleObserver
     void onDestroy() {
         Log.v(TAG, "onDestroy");
         view = null;
+    }
+
+    void onServerNameChanged(String serverName){
+        try {
+            this.retrofitContainer.updateBaseUrl(ApiContract.buildAdminBaseUrl(serverName));
+            this.gameRestService = this.retrofitContainer.getRestService();
+            teams.setValue(null);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 }

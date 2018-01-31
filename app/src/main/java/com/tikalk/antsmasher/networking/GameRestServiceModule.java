@@ -22,7 +22,6 @@ public class GameRestServiceModule {
     private static final String TAG = "TAG_RestServiceModule";
 
     @Provides
-    @Singleton
     RetrofitContainer provideRetrofitContainer(OkHttpClient client, @Named("PlainGson") Gson gson, PrefsHelper prefsHelper, Application application) {
         String baseUrl = null;
         try {

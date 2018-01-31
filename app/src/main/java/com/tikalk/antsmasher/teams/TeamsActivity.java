@@ -45,6 +45,7 @@ public class TeamsActivity extends AppCompatActivity implements
         Observer<List<Team>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final int BOARD_ACTIVITY = 100;
+    public static final int SETTING_ACTIVITY = 200;
     private static final String TAG = "TAG_TeamsActivity";
     @Inject
     protected PrefsHelper prefsHelper;
@@ -96,6 +97,7 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        presenter.onStart();
     }
 
 
@@ -143,7 +145,8 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BOARD_ACTIVITY) {
+        if (requestCode == BOARD_ACTIVITY || requestCode == SETTING_ACTIVITY) {
+            Log.i(TAG, "onActivityResult: ");
             presenter.refreshTeams();
         }
     }
@@ -170,10 +173,11 @@ public class TeamsActivity extends AppCompatActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
         if (key.equals(getString(R.string.server_name_key))) {
-            String serverName = sharedPreferences.getString(key, getString(R.string.default_server_name));
+            String serverName = prefsHelper.getServerName();
             Log.i(TAG, "prefsIp: " + serverName);
+            presenter.onServerNameChanged(serverName);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("New IP");
             builder.setMessage("IP Changed.\nRestart app to apply changes...");

@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
+import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.base.BasePresenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
 import com.tikalk.antsmasher.model.User;
@@ -66,6 +67,18 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 //    }
 
     public void login() {
+
+        if(prefsHelper.getServerName() == null || prefsHelper.getServerName().isEmpty()){
+            //Create server name preferences, set it to default
+            prefsHelper.saveStringToPrefs(context.getString(R.string.server_name_key), context.getString(R.string.default_server_name));
+
+            try {
+                retrofitContainer.updateBaseUrl(ApiContract.buildAdminBaseUrl(prefsHelper.getServerName()));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
         String username = prefsHelper.getUserName();
         if (TextUtils.isEmpty(username)) {
             view.showUserNameDialog();
@@ -75,6 +88,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     private void checkUserId(String username) {
+
         if (prefsHelper.getUserId() == 0) {
             Log.v(TAG, "checkUserId: about to createUser to server");
             //((AntApplication) (context.getApplicationContext())).getApplicationComponent().inject(this);

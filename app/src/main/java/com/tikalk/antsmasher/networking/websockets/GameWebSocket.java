@@ -38,8 +38,9 @@ public class GameWebSocket extends AppWebSocket {
                 socketMessageListener.onAntMoved(location);
                 break;
             case ApiContract.GAME_STATE_MESSAGE:
+                Log.i(TAG, "handleNewMessage: game state message: " + message.body);
+
                 GameStateBody state = socketMessageGson.fromJson(message.body, GameStateBody.class);
-                //Log.i(TAG, "handleNewMessage: game state message: " + state);
                 socketMessageListener.onGameStateMessage(state.getState());
                 break;
         }
