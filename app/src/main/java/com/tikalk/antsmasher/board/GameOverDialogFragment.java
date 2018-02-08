@@ -66,42 +66,50 @@ public class GameOverDialogFragment extends DialogFragment {
         Bitmap bitmapNormal = BitmapFactory.decodeResource(res, R.drawable.ant_normal);
         bitmapNormal = Bitmap.createScaledBitmap(bitmapNormal, antWidth, antHeight, false);
 
-        Team teamA = scoreBoard.getParcelable(EXTRA_TEAM1);
-        if (teamA != null) {
-            Log.i(TAG, "buildDialog: teamA score: " + teamA.getScore());
-            Bitmap bitmapA = tintImage(bitmapNormal, teamA.getAntSpecies().getTint());
-            Drawable drawableA = new BitmapDrawable(res, bitmapA);
-            drawableA.setBounds(0, 0, antWidth, antHeight);
+        if (scoreBoard != null) {
+            Team teamA = scoreBoard.getParcelable(EXTRA_TEAM1);
+            if (teamA != null) {
+                Log.i(TAG, "buildDialog: teamA score: " + teamA.getScore());
+                Bitmap bitmapA = tintImage(bitmapNormal, teamA.getAntSpecies().getTint());
+                Drawable drawableA = new BitmapDrawable(res, bitmapA);
+                drawableA.setBounds(0, 0, antWidth, antHeight);
 
-            tvTeamA.setText(getString(R.string.team_score_final, teamA.getName(), teamA.getAntSpecies().getName(), teamA.getScore()));
-            tvTeamA.setCompoundDrawablesRelative(drawableA, null, null, null);
-            tvTeamA.setCompoundDrawablePadding(iconPadding);
+                tvTeamA.setText(getString(R.string.team_score_final, teamA.getName(), teamA.getAntSpecies().getName(), teamA.getScore()));
+                tvTeamA.setCompoundDrawablesRelative(drawableA, null, null, null);
+                tvTeamA.setCompoundDrawablePadding(iconPadding);
+            }
+
+            Team teamB = scoreBoard.getParcelable(EXTRA_TEAM2);
+            if (teamB != null) {
+                Bitmap bitmapB = tintImage(bitmapNormal, teamB.getAntSpecies().getTint());
+                Drawable drawableB = new BitmapDrawable(res, bitmapB);
+                drawableB.setBounds(0, 0, antWidth, antHeight);
+
+                tvTeamB.setText(getString(R.string.team_score_final, teamB.getName(), teamB.getAntSpecies().getName(), teamB.getScore()));
+                tvTeamB.setCompoundDrawablesRelative(drawableB, null, null, null);
+                tvTeamB.setCompoundDrawablePadding(iconPadding);
+            }
+
+            Team teamC = scoreBoard.getParcelable(EXTRA_TEAM3);
+            if (teamC != null) {
+                Bitmap bitmapC = tintImage(bitmapNormal, teamC.getAntSpecies().getTint());
+                Drawable drawableC = new BitmapDrawable(res, bitmapC);
+                drawableC.setBounds(0, 0, antWidth, antHeight);
+
+                tvTeamC.setText(getString(R.string.team_score_final, teamC.getName(), teamC.getAntSpecies().getName(), teamC.getScore()));
+                tvTeamC.setCompoundDrawablesRelative(drawableC, null, null, null);
+                tvTeamC.setCompoundDrawablePadding(iconPadding);
+            }
+
+            Player winner = scoreBoard.getParcelable(EXTRA_WINNER);
+            tvWinner.setText(getString(R.string.team_score_final, winner.getName(), winner.getTeamName(), winner.getScore()));
+
+        }else {
+            tvWinner.setVisibility(View.GONE);
+            tvTeamA.setVisibility(View.GONE);
+            tvTeamB.setVisibility(View.GONE);
+            tvTeamC.setVisibility(View.GONE);
         }
-
-        Team teamB = scoreBoard.getParcelable(EXTRA_TEAM2);
-        if (teamB != null) {
-            Bitmap bitmapB = tintImage(bitmapNormal, teamB.getAntSpecies().getTint());
-            Drawable drawableB = new BitmapDrawable(res, bitmapB);
-            drawableB.setBounds(0, 0, antWidth, antHeight);
-
-            tvTeamB.setText(getString(R.string.team_score_final, teamB.getName(), teamB.getAntSpecies().getName(), teamB.getScore()));
-            tvTeamB.setCompoundDrawablesRelative(drawableB, null, null, null);
-            tvTeamB.setCompoundDrawablePadding(iconPadding);
-        }
-
-        Team teamC = scoreBoard.getParcelable(EXTRA_TEAM3);
-        if (teamC != null) {
-            Bitmap bitmapC = tintImage(bitmapNormal, teamC.getAntSpecies().getTint());
-            Drawable drawableC = new BitmapDrawable(res, bitmapC);
-            drawableC.setBounds(0, 0, antWidth, antHeight);
-
-            tvTeamC.setText(getString(R.string.team_score_final, teamC.getName(), teamC.getAntSpecies().getName(), teamC.getScore()));
-            tvTeamC.setCompoundDrawablesRelative(drawableC, null, null, null);
-            tvTeamC.setCompoundDrawablePadding(iconPadding);
-        }
-
-        Player winner = scoreBoard.getParcelable(EXTRA_WINNER);
-        tvWinner.setText(getString(R.string.team_score_final, winner.getName(), winner.getTeamName(), winner.getScore()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setIcon(ActivityCompat.getDrawable(context, R.mipmap.ic_launcher))

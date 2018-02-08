@@ -248,18 +248,27 @@ public class BoardActivity extends AppCompatActivity implements
     }
 
     private void showGameOverDialog(List<Team> teams, Player winner) {
-        Bundle scoreBoard = new Bundle();
-        scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_TEAM1, teams.get(0));
-        scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_TEAM2, teams.get(1));
-        scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_TEAM3, teams.get(2));
-        scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_WINNER, winner);
+        Bundle scoreBoard = null;
+        if(teams != null && winner != null){
+            scoreBoard = new Bundle();
+            scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_TEAM1, teams.get(0));
+            scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_TEAM2, teams.get(1));
+            scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_TEAM3, teams.get(2));
+            scoreBoard.putParcelable(GameOverDialogFragment.EXTRA_WINNER, winner);
+            Log.i(TAG, "showGameOverDialog: " + scoreBoard);
+        }
 
         GameOverDialogFragment dialog = new GameOverDialogFragment();
         Bundle args = new Bundle();
-        args.putString(GameOverDialogFragment.EXTRA_TITLE, getString(R.string.game_over));
-        args.putString(GameOverDialogFragment.EXTRA_LABEL, getString(R.string.score_summary));
-        args.putBundle(GameOverDialogFragment.EXTRA_SCOREBOARD, scoreBoard);
-        Log.i(TAG, "showGameOverDialog: " + scoreBoard);
+        args.putString(GameOverDialogFragment.EXTRA_TITLE, getString(R.string.app_name));
+
+        if(scoreBoard != null){
+            args.putString(GameOverDialogFragment.EXTRA_LABEL, getString(R.string.score_summary));
+            args.putBundle(GameOverDialogFragment.EXTRA_SCOREBOARD, scoreBoard);
+        }else {
+            args.putString(GameOverDialogFragment.EXTRA_LABEL, getString(R.string.game_over));
+        }
+
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "GameOver");
     }

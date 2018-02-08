@@ -275,14 +275,19 @@ public class BoardViewModel extends AndroidViewModel implements
                 .subscribe(new DisposableObserver<List<Player>>() {
                     @Override
                     public void onNext(List<Player> players) {
-
                         Log.i(TAG, "onNext: winner " + players.get(0).getName() + ", score: " + players.get(0).getScore());
-                        view.onGameFinished(latestTeams, players.get(0));
+
+                        if(players.isEmpty() || players.size() == 0){
+                            view.onGameFinished(null, null);
+                        }else {
+                            view.onGameFinished(latestTeams, players.get(0));
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: Failed to fetch lead player: " + e.getLocalizedMessage(), e);
+                        view.onGameFinished(null, null);
                     }
 
                     @Override
