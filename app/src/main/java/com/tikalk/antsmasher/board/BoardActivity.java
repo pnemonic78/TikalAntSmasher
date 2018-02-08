@@ -240,6 +240,7 @@ public class BoardActivity extends AppCompatActivity implements
         Log.v(TAG, "onGameFinished: ");
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
+            presenter.stop();
             runOnUiThread(() -> showGameOverDialog(teams, winner));
             if (prefsHelper.isInteractiveSounds()) {
                 soundHelper.playGameOver();
@@ -337,7 +338,6 @@ public class BoardActivity extends AppCompatActivity implements
     protected void onDestroy() {
         Log.v(TAG, "onDestroy");
         super.onDestroy();
-        presenter.stop();
         soundHelper.dispose();
     }
 

@@ -201,6 +201,14 @@ public class BoardViewModel extends AndroidViewModel implements
      * Stop the game.
      */
     void stop() {
+        if (appService != null && serviceBound) {
+            Log.i(TAG, "stop: about to stop the game service");
+            final Context context = getApplication();
+            context.unbindService(connection);
+            context.stopService(serviceIntent);
+            serviceBound = false;
+            appService = null;
+        }
     }
 
     void onAntTouch(String antId) {
@@ -257,6 +265,7 @@ public class BoardViewModel extends AndroidViewModel implements
 
                             @Override
                             public void onError(Throwable e) {
+                                view.onGameFinished(null, null);
                                 Log.e(TAG, "onError: Failed to fetch teams: " + e.getLocalizedMessage(), e);
                             }
 
@@ -281,6 +290,7 @@ public class BoardViewModel extends AndroidViewModel implements
                             view.onGameFinished(null, null);
                         }else {
                             view.onGameFinished(latestTeams, players.get(0));
+//                            view.onGameFinished(null, null);
                         }
                     }
 
@@ -376,14 +386,6 @@ public class BoardViewModel extends AndroidViewModel implements
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void onDestroy() {
         Log.v(TAG, "onDestroy");
-        if (appService != null && serviceBound) {
-            Log.i(TAG, "onDestroy: about to stop the service");
-            final Context context = getApplication();
-            context.unbindService(connection);
-            context.stopService(serviceIntent);
-            serviceBound = false;
-            appService = null;
-        }
 
         view = null;
     }

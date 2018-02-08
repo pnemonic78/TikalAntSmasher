@@ -2,6 +2,7 @@ package com.tikalk.antsmasher.board;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -44,7 +46,8 @@ public class GameOverDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         gameOverDialogListener = (GameOverDialogListener) getActivity();
-        return buildDialog(getActivity());
+        Dialog dialog = buildDialog(getActivity());
+        return dialog;
     }
 
     private Dialog buildDialog(Context context) {
@@ -53,12 +56,8 @@ public class GameOverDialogFragment extends DialogFragment {
         int antHeight = res.getDimensionPixelSize(R.dimen.ant_height);
         int iconPadding = res.getDimensionPixelSize(R.dimen.team_score_padding);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.game_over_dialog, null);
+        View view = null;
 
-        final TextView tvTeamA = view.findViewById(R.id.teamA);
-        final TextView tvTeamB = view.findViewById(R.id.teamB);
-        final TextView tvTeamC = view.findViewById(R.id.teamC);
-        final TextView tvWinner = view.findViewById(R.id.winner);
 
         Bundle args = getArguments();
         Bundle scoreBoard = args.getBundle(EXTRA_SCOREBOARD);
@@ -67,6 +66,12 @@ public class GameOverDialogFragment extends DialogFragment {
         bitmapNormal = Bitmap.createScaledBitmap(bitmapNormal, antWidth, antHeight, false);
 
         if (scoreBoard != null) {
+            view = LayoutInflater.from(context).inflate(R.layout.game_over_dialog, null);
+            final TextView tvTeamA = view.findViewById(R.id.teamA);
+            final TextView tvTeamB = view.findViewById(R.id.teamB);
+            final TextView tvTeamC = view.findViewById(R.id.teamC);
+            final TextView tvWinner = view.findViewById(R.id.winner);
+
             Team teamA = scoreBoard.getParcelable(EXTRA_TEAM1);
             if (teamA != null) {
                 Log.i(TAG, "buildDialog: teamA score: " + teamA.getScore());
@@ -103,12 +108,6 @@ public class GameOverDialogFragment extends DialogFragment {
 
             Player winner = scoreBoard.getParcelable(EXTRA_WINNER);
             tvWinner.setText(getString(R.string.team_score_final, winner.getName(), winner.getTeamName(), winner.getScore()));
-
-        }else {
-            tvWinner.setVisibility(View.GONE);
-            tvTeamA.setVisibility(View.GONE);
-            tvTeamB.setVisibility(View.GONE);
-            tvTeamC.setVisibility(View.GONE);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
@@ -123,7 +122,16 @@ public class GameOverDialogFragment extends DialogFragment {
                         });
 
         final AlertDialog dialog = builder.create();
-
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                TextView textView = dialog.findViewById(android.R.id.message);
+                if (textView != null) {
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setTextAppearance(getContext(), android.R.style.TextAppearance_Large);
+                }
+            }
+        });
         return dialog;
     }
 
