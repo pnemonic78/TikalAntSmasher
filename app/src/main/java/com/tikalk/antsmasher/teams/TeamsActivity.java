@@ -53,9 +53,6 @@ public class TeamsActivity extends AppCompatActivity implements
     @BindView(android.R.id.list)
     protected RecyclerView listView;
 
-    @BindView(R.id.swipeContainer)
-    protected SwipeRefreshLayout swipeContainer;
-
     private TeamViewModel presenter;
     private TeamAdapter adapter;
 
@@ -84,14 +81,6 @@ public class TeamsActivity extends AppCompatActivity implements
 
         String str = Utils.loadJSONFromAsset(getAssets(),"teams.json");
 
-        List<PlayingTeam> playingTeams = new Gson().fromJson(str, new TypeToken<List<PlayingTeam>>(){}.getType());
-        swipeContainer.setOnRefreshListener(() -> presenter.createGame(playingTeams));
-
-
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
     }
 
     @Override
@@ -110,7 +99,6 @@ public class TeamsActivity extends AppCompatActivity implements
     @Override
     public void onChanged(@Nullable List<Team> teams) {
         adapter.setData(teams);
-        swipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -165,9 +153,7 @@ public class TeamsActivity extends AppCompatActivity implements
 
     @Override
     public void dismissSwipeToRefresh(String message) {
-        swipeContainer.setRefreshing(false);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
     }
 
 
