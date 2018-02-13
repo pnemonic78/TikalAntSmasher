@@ -59,6 +59,13 @@ public class BoardActivity extends AppCompatActivity implements
     private static final int SOUND_SAME_TEAM = 3;
     private static final int SOUND_SMASH_OTHER = 4;
 
+
+    private static final int NOT_STARTED = 1;
+    private static final int STARTED = 2;
+    private static final int FINISHED = 3;
+
+    private int gameState = NOT_STARTED;
+
     @Inject
     protected PrefsHelper prefsHelper;
 
@@ -82,6 +89,7 @@ public class BoardActivity extends AppCompatActivity implements
     private long teamId;
     private long playerId;
     private Vibrator vibrator;
+    boolean gameStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +133,6 @@ public class BoardActivity extends AppCompatActivity implements
         presenterTeams = ViewModelProviders.of(this, teamsViewModelFactory).get(TeamViewModel.class);
 
         soundHelper = new SoundHelper(this);
-        progressDialogFragment = new ProgressDialogFragment();
 
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         if ((vibrator != null) && vibrator.hasVibrator()) {
@@ -221,11 +228,27 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        progressDialogFragment.show(getSupportFragmentManager(), "ProgressDialog");
+
+        switch (gameState){
+            case NOT_STARTED:
+                if(progressDialogFragment != null && progressDialogFragment.getDialog() != null){
+                    progressDialogFragment.dismiss();
+                }
+                progressDialogFragment = new ProgressDialogFragment();
+                progressDialogFragment.show(getSupportFragmentManager(), "ProgressDialog");
+                break;
+            case STARTED:
+                break;
+            case FINISHED:
+                break;
+        }
+
+
     }
 
     @Override
     public void onGameStarted() {
+        gameState = STARTED;
         if (prefsHelper.isInteractiveMusic()) {
             soundHelper.playMusic();
         }
@@ -238,6 +261,7 @@ public class BoardActivity extends AppCompatActivity implements
     @Override
     public void onGameFinished(List<Team> teams, Player winner) {
         Log.v(TAG, "onGameFinished: ");
+        gameState = FINISHED;
         soundHelper.pauseMusic();
         if (!isDestroyed() && !isFinishing()) {
             presenter.stop();
