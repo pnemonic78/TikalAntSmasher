@@ -89,7 +89,7 @@ public class BoardViewModel extends AndroidViewModel implements
          * Notification that the game has finished.
          */
         void onGameFinished(List<Team> teams, Player winner);
-
+       
         void smashAnt(@Nullable Ant ant, boolean user);
 
         void showFetchGameError(Throwable e);
@@ -252,29 +252,33 @@ public class BoardViewModel extends AndroidViewModel implements
                 break;
             case STOPPED:
             case FINISHED:
-                gameRestService.getLatestTeams()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new DisposableObserver<List<Team>>() {
-                            @Override
-                            public void onNext(List<Team> teams) {
-                                Log.i(TAG, "onNext: got " + teams.size() + " teams");
-                                latestTeams = teams;
-                                getLeaderPlayer();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                view.onGameFinished(null, null);
-                                Log.e(TAG, "onError: Failed to fetch teams: " + e.getLocalizedMessage(), e);
-                            }
-
-                            @Override
-                            public void onComplete() {
-                            }
-                        });
+                getLatestGame();
                 break;
         }
+    }
+
+    public void getLatestGame(){
+        gameRestService.getLatestTeams()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<List<Team>>() {
+                    @Override
+                    public void onNext(List<Team> teams) {
+                        Log.i(TAG, "onNext: got " + teams.size() + " teams");
+                        latestTeams = teams;
+                        getLeaderPlayer();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.onGameFinished(null, null);
+                        Log.e(TAG, "onError: Failed to fetch teams: " + e.getLocalizedMessage(), e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     private void getLeaderPlayer() {
@@ -284,11 +288,10 @@ public class BoardViewModel extends AndroidViewModel implements
                 .subscribe(new DisposableObserver<List<Player>>() {
                     @Override
                     public void onNext(List<Player> players) {
-                        Log.i(TAG, "onNext: winner " + players.get(0).getName() + ", score: " + players.get(0).getScore());
-
                         if(players.isEmpty() || players.size() == 0){
                             view.onGameFinished(null, null);
                         }else {
+                            Log.i(TAG, "onNext: winner " + players.get(0).getName() + ", score: " + players.get(0).getScore());
                             view.onGameFinished(latestTeams, players.get(0));
 //                            view.onGameFinished(null, null);
                         }

@@ -118,11 +118,12 @@ public class PrefsSubScreenFragment extends PreferenceFragmentCompat implements 
 
         if ( key.equals(getString(R.string.server_name_key))) {
             String serverName = preferences.getString(getString(R.string.server_name_key), null);
-            if (serverName == null || serverName.isEmpty()) {
+            if (serverName == null || serverName.isEmpty() || "".equals(serverName)) {
                 resetServerName(preference);
                 return;
             }
         }
+
         if (preference instanceof ListPreference) {
             ListPreference listPreference = (ListPreference) preference;
             listPreference.setSummary(listPreference.getEntry());

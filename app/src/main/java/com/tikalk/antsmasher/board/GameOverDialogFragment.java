@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -46,8 +48,7 @@ public class GameOverDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         gameOverDialogListener = (GameOverDialogListener) getActivity();
-        Dialog dialog = buildDialog(getActivity());
-        return dialog;
+        return buildDialog(getActivity());
     }
 
     private Dialog buildDialog(Context context) {
@@ -133,6 +134,17 @@ public class GameOverDialogFragment extends DialogFragment {
             }
         });
         return dialog;
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.add(this, tag);
+            ft.commit();
+        } catch (IllegalStateException e) {
+            Log.d("TAG_GameOverDialog", "Exception", e);
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -89,7 +90,6 @@ public class BoardActivity extends AppCompatActivity implements
     private long teamId;
     private long playerId;
     private Vibrator vibrator;
-    boolean gameStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,6 +240,7 @@ public class BoardActivity extends AppCompatActivity implements
             case STARTED:
                 break;
             case FINISHED:
+                Log.i(TAG, "onResume: game finished");
                 break;
         }
 
@@ -293,9 +294,11 @@ public class BoardActivity extends AppCompatActivity implements
         }else {
             args.putString(GameOverDialogFragment.EXTRA_LABEL, getString(R.string.game_over));
         }
-
         dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), "GameOver");
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(dialog, null);
+        ft.commitAllowingStateLoss();
     }
 
     @Override
@@ -395,4 +398,5 @@ public class BoardActivity extends AppCompatActivity implements
             }
         });
     }
+
 }
