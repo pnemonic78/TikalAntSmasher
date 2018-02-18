@@ -89,9 +89,7 @@ public class BoardViewModel extends AndroidViewModel implements
          * Notification that the game has finished.
          */
         void onGameFinished(List<Team> teams, Player winner);
-       
         void smashAnt(@Nullable Ant ant, boolean user);
-
         void showFetchGameError(Throwable e);
     }
 
