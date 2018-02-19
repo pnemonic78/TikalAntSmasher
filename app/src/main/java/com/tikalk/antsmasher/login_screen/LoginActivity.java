@@ -8,10 +8,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import com.tikalk.antsmasher.AntApplication;
+import com.tikalk.antsmasher.BuildConfig;
 import com.tikalk.antsmasher.R;
 import com.tikalk.antsmasher.base.Presenter;
 import com.tikalk.antsmasher.data.PrefsHelper;
@@ -30,6 +32,8 @@ public class LoginActivity extends AppCompatActivity implements
 
     public static final String EXTRA_DISMISS = "dismiss_after";
 
+    TextView tvAppVersion;
+
     @Inject
     protected LoginPresenter mLoginPresenter;
 
@@ -45,6 +49,7 @@ public class LoginActivity extends AppCompatActivity implements
         Log.v(TAG, "onCreate: ");
 
         ((AntApplication) getApplication()).getApplicationComponent().inject(this);
+        tvAppVersion = findViewById(R.id.tvAppVersion);
         mLoginPresenter.setView(this);
         handleIntent(getIntent());
     }
@@ -75,6 +80,8 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        String versionName = BuildConfig.VERSION_NAME;
+        tvAppVersion.setText("Ver: " + versionName);
         mLoginPresenter.login();
     }
 
